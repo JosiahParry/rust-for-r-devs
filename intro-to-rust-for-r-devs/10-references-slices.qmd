@@ -127,7 +127,8 @@ In general: slice > reference > owned
 <details>
 <summary>View solution</summary>
 
-```{.rust include="../intro-to-rust/examples/10-references-slices.rs"}
+```{.rust}
+{{< include ../intro-to-rust/examples/10-references-slices.rs >}}
 ```
 
 </details>

@@ -1,0 +1,3 @@
+- `usethis::create_package("shortuuid")`
+- `rextendr::use_extendr()`
+- `rextendr::use_crate("short-uuid")`

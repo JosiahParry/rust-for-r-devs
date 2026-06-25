@@ -118,7 +118,8 @@ println!("Hello, {name}!");
 
 In `src/main.rs`
 
-```{.rust include="../intro-to-rust/examples/02-hello-world.rs"}
+```{.rust}
+{{< include ../intro-to-rust/examples/02-hello-world.rs >}}
 ```
 
 </details>

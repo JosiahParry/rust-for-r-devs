@@ -102,7 +102,8 @@ Modify `src/main.rs` to add two or more incompatible types.
 <details>
     <summary>View solution</summary>
 
-```{.rust include="../intro-to-rust/examples/03-types.rs"}
+```{.rust}
+{{< include ../intro-to-rust/examples/03-types.rs >}}
 ```
 
 </details>

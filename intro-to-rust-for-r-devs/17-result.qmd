@@ -1,0 +1,82 @@
+# `Ok()` or `Err()`?
+
+::: callout-tip
+## Objective
+
+Understand how Rust handles fallible operations with `Result<T, E>`. Learn to recover from errors with `match` and to propagate them with the `?` operator.
+:::
+
+In R, when something goes wrong we `stop()` and throw an error (an _exception_). Rust does not have exceptions. Instead, errors are **data**: a function that might fail returns a `Result`.
+
+## `Result`
+
+Just like `Option`, a `Result<T, E>` is a special `enum`:
+
+```rust
+enum Result {
+    Ok(T),
+    Err(E),
+}
+```
+
+The letters `T` and `E` are placeholders for types:
+
+- `T` is the type of the value when there is **no error**—the value inside `Ok(T)`.
+- `E` is the type of the value when there **is** an error—the value inside `Err(E)`.
+
+For example, a `divide()` function might return `Result<f64, String>`: an `f64` on success, or a `String` error message on failure.
+
+```rust
+fn divide(a: f64, b: f64) -> Result<f64, String> {
+    if b == 0.0 {
+        Err(String::from("cannot divide by zero"))
+    } else {
+        Ok(a / b)
+    }
+}
+```
+
+## Recovering with `match`
+
+Because the error is just data, we can `match` on the variants and decide _how_ to behave when something goes wrong. This makes the error **recoverable**.
+
+```rust
+match divide(10.0, 0.0) {
+    Ok(value) => println!("The answer is {value}"),
+    Err(msg) => println!("Error: {msg}"),
+}
+```
+
+## Propagating with `?`
+
+Sometimes we don't want to recover—we just want to **bubble the error up** to whoever called us. The `?` operator does exactly this:
+
+- if the value is `Ok(T)`, `?` unwraps it and gives you the `T`,
+- if the value is `Err(E)`, `?` returns that `Err(E)` immediately and stops the computation.
+
+Because `?` can return an error, it can only be used inside a function that itself returns a `Result`. That includes `main()`:
+
+```rust
+fn main() -> Result<(), String> {
+    let result = divide(10.0, 2.0)?;
+    println!("The answer is {result}");
+    Ok(())
+}
+```
+
+## Exercise
+
+- Write a `divide()` function that returns `Result<f64, String>`
+  - Return an `Err` with a message when dividing by zero
+  - Otherwise return the quotient in `Ok`
+- In `main()`, use `match` to handle a division by zero
+- Change `main` to return `Result<(), String>` and use `?` to propagate the error from a successful division
+
+<details>
+<summary>View solution</summary>
+
+```{.rust}
+{{< include ../intro-to-rust/examples/17-result.rs >}}
+```
+
+</details>

@@ -67,6 +67,7 @@ The exercise does not involve `.unwrap()` because it's a bad habbit. Let's try a
 
 <details>
 <summary>View solution</summary>
-```{.rust include="../intro-to-rust/examples/16-options.rs"}
+```{.rust}
+{{< include ../intro-to-rust/examples/16-options.rs >}}
 ```
 </details>

@@ -129,6 +129,7 @@ fn main() {
 <details>
     <summary>View solution</summary>
 
-```{.rust include="../intro-to-rust/examples/13-structs.rs"}
+```{.rust}
+{{< include ../intro-to-rust/examples/13-structs.rs >}}
 ```
 </details>

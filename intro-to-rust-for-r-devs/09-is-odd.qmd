@@ -68,7 +68,8 @@ Use `x.len()` to get the length and `as f64` to convert it to a float.
 <details>
 <summary>View solution</summary>
 
-```{.rust include="../intro-to-rust/examples/09-is-odd.rs"}
+```{.rust}
+{{< include ../intro-to-rust/examples/09-is-odd.rs >}}
 ```
 
 </details>

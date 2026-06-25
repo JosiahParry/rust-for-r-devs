@@ -158,7 +158,8 @@ impl Point {
 <details>
 <summary>View solution</summary>
 
-```{.rust include="../intro-to-rust/examples/15-enums.rs"}
+```{.rust}
+{{< include ../intro-to-rust/examples/15-enums.rs >}}
 ```
 
 </details>

@@ -61,6 +61,7 @@ For this, create a variable `i`. The rules are:
 
 <details>
 <summary>View solution</summary>
-```{.rust include="../intro-to-rust/examples/04-fizz-buzz.rs"}
+```{.rust}
+{{< include ../intro-to-rust/examples/04-fizz-buzz.rs >}}
 ```
 </details>

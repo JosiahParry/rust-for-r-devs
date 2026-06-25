@@ -154,7 +154,8 @@ fn variance(x: &[f64]) -> f64 {
 <details>
 <summary>View solution</summary>
 
-```{.rust include="../intro-to-rust/examples/12-iter-map.rs"}
+```{.rust}
+{{< include ../intro-to-rust/examples/12-iter-map.rs >}}
 ```
 
 </details>
@@ -177,7 +178,8 @@ $$
 <details>
 <summary>View solution</summary>
 
-```{.rust include="../intro-to-rust/examples/12-iter-map.rs"}
+```{.rust}
+{{< include ../intro-to-rust/examples/12-iter-map.rs >}}
 ```
 
 </details>

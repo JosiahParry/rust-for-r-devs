@@ -44,7 +44,7 @@
     "href": "index.html#install-rextendr",
     "title": "Rust for R Developers",
     "section": "Install {rextendr}",
-    "text": "Install {rextendr}\nWe will be using the rextendr package to build Rust powerd R-packages.\n\n\n\n\n\n\nOther R package dependencies\n\n\n\nWe also will be relying on other packages in the R ecosytem to make developing easier. Please install:\n\ndevtools\nusethis\n\ninstall.packages(c(\"devtools\", \"usethis\"))\n\n\nInstall the package using:\nif (!requireNamespace(\"remotes\")) {\n    install.packages(\"remotes\")\n}\n\nremotes::install_github(\"extendr/rextendr\")\nOnce rextendr is installed, run the below command. You are good to go if:\n\n✅ cargo version is printed (should be 1.80 or greater)\n✅ rustup has a recent version printed\n✅ You have an active default toolchain\n\n\n\n\n\n\n\nIf you’re using windows ensure that x86_64-pc-windows-gnu is your default target. See the above command if it is not.\nR does not support packages compiled with Microsoft Visual C++ (MSVC) so this is required.\n\n\n\n\nrextendr::rust_sitrep()\n\nRust infrastructure sitrep:\n✔ \"rustup\": 1.27.1 (2024-04-24)\n✔ \"cargo\": 1.87.0 (99624be96 2025-05-06)\nℹ host: aarch64-apple-darwin\nℹ toolchains: stable-aarch64-apple-darwin (default) and\n  nightly-2023-07-27-aarch64-apple-darwin\nℹ target: aarch64-apple-darwin",
+    "text": "Install {rextendr}\nWe will be using the rextendr package to build Rust powerd R-packages.\n\n\n\n\n\n\nCautionOther R package dependencies\n\n\n\nWe also will be relying on other packages in the R ecosytem to make developing easier. Please install:\n\ndevtools\nusethis\n\ninstall.packages(c(\"devtools\", \"usethis\"))\n\n\nInstall the package using:\nif (!requireNamespace(\"remotes\")) {\n    install.packages(\"remotes\")\n}\n\nremotes::install_github(\"extendr/rextendr\")\nOnce rextendr is installed, run the below command. You are good to go if:\n\n✅ cargo version is printed (should be 1.80 or greater)\n✅ rustup has a recent version printed\n✅ You have an active default toolchain\n\n\n\n\n\n\n\nIf you’re using windows ensure that x86_64-pc-windows-gnu is your default target. See the above command if it is not.\nR does not support packages compiled with Microsoft Visual C++ (MSVC) so this is required.\n\n\n\n\nrextendr::rust_sitrep()\n\nRust infrastructure sitrep:\n✔ \"rustup\": 1.28.2 (e4f3ad6f8 2025-04-28)\n✔ \"cargo\": 1.85.1 (d73d2caf9 2024-12-31)\nℹ host: aarch64-apple-darwin\nℹ toolchains: stable-aarch64-apple-darwin (active, default),\n  nightly-aarch64-apple-darwin, 1.65.0-aarch64-apple-darwin,\n  1.72.1-aarch64-apple-darwin, 1.74.1-aarch64-apple-darwin,\n  1.75.0-aarch64-apple-darwin, 1.76.0-aarch64-apple-darwin, and\n  1.80.1-aarch64-apple-darwin\n! One of these toolchains should be default: stable-aarch64-apple-darwin\n  (active, default), nightly-aarch64-apple-darwin, 1.65.0-aarch64-apple-darwin,\n  1.72.1-aarch64-apple-darwin, 1.74.1-aarch64-apple-darwin,\n  1.75.0-aarch64-apple-darwin, 1.76.0-aarch64-apple-darwin, and\n  1.80.1-aarch64-apple-darwin\nℹ Run e.g. `rustup default stable-aarch64-apple-darwin (active, default)`",
     "crumbs": [
       "Get set up"
     ]
@@ -1196,7 +1196,7 @@
     "href": "building-rust-based-r-pkgs/rust-deps.html#exercise",
     "title": "23  Adding dependencies",
     "section": "Exercise",
-    "text": "Exercise\n\nAdd the geohash crate as a dependency\nImport the Coord struct and the encode function from geohash in lib.rs\n\n\n\nView solution\n\nFrom the R terminal run:\nrextendr::use_crate(\"geohash\")\nThis will add the geohash dependency.\nOpen src/rust/src/lib.rs and add the following below use extendr_api::prelude::*;\nuse geohash::{Coord, encode};",
+    "text": "Exercise\n\nAdd the geohash crate as a dependency\nImport the Coord struct and the encode function from geohash in lib.rs\n\n\n\nView solution\n\nFrom the R terminal run:\nrextendr::use_crate(\"geohash\")\nThis will add the geohash dependency.\nOpen src/rust/src/lib.rs and add the following below use extendr_api::prelude::*;\nuse geohash::{Coord, Direction, decode, encode, neighbor};",
     "crumbs": [
       "Building Rust based R Packages",
       "<span class='chapter-number'>23</span>  <span class='chapter-title'>Adding dependencies</span>"
@@ -1350,7 +1350,7 @@
     "href": "building-rust-based-r-pkgs/vectorize.html#exercise",
     "title": "27  Vectorizing",
     "section": "Exercise",
-    "text": "Exercise\n\nModify x and y to be &[f64]\nChange the return type to be Vec&lt;String&gt;\nCreate a zipped iterator for x and y\nMap through the iterator and:\n\ndestructure the tuple in the closure (as in the above example)\nCreate a Coord struct in each iteration\nencode() the coordinate\nunwrap the result\n\nCollect the iterator into a Vec&lt;String&gt;\nTest this in R\n\n\n\n\n\n\n\nGenerating random points\n\n\n\nTo help you test this function, I recommend using the following code:\nn &lt;- 10\nx &lt;- runif(n, -180, 180)\ny &lt;- runif(n, -90, 90)\n\ngh_encode(x, y, 10L)\n\n\n\n\nView solution\n\n#[extendr]\nfn gh_encode(x: &[f64], y: &[f64], length: usize) -&gt; Vec&lt;String&gt; {\n\n    if length == 0 || length &gt; 12 {\n        throw_r_error(\"`length` must be between 1 and 12\");\n    }\n\n    x\n        .into_iter()\n        .zip(y.into_iter())\n        .map(|(xi, yi)| {\n            let coord = Coord { x: xi, y: yi };\n            encode(coord, length)\n                .expect(\"Failed to encode the geohash\")\n        })\n        .collect::&lt;Vec&lt;_&gt;()\n}\nRun rextendr::document() and devtools::load_all() to register the changes to your function.\nn &lt;- 10\nx &lt;- runif(n, -180, 180)\ny &lt;- runif(n, -90, 90)\n\ngh_encode(x, y, 10L)",
+    "text": "Exercise\n\nModify x and y to be Vec&lt;f64&gt;\nChange the return type to be Vec&lt;String&gt;\nCreate a zipped iterator for x and y\nMap through the iterator and:\n\ndestructure the tuple in the closure (as in the above example)\nCreate a Coord struct in each iteration\nencode() the coordinate\nunwrap the result\n\nCollect the iterator into a Vec&lt;String&gt;\nTest this in R\n\n\n\n\n\n\n\nNoteGenerating random points\n\n\n\nTo help you test this function, I recommend using the following code:\nn &lt;- 10\nx &lt;- runif(n, -180, 180)\ny &lt;- runif(n, -90, 90)\n\ngh_encode(x, y, 10L)\n\n\n\n\nView solution\n\n#[extendr]\nfn gh_encode(x: Vec&lt;f64&gt;, y: Vec&lt;f64&gt;, length: usize) -&gt; Vec&lt;String&gt; {\n\n    if length == 0 || length &gt; 12 {\n        throw_r_error(\"`length` must be between 1 and 12\");\n    }\n\n    x\n        .into_iter()\n        .zip(y.into_iter())\n        .map(|(xi, yi)| {\n            let coord = Coord { x: xi, y: yi };\n            encode(coord, length)\n                .expect(\"Failed to encode the geohash\")\n        })\n        .collect::&lt;Vec&lt;_&gt;()\n}\nRun rextendr::document() and devtools::load_all() to register the changes to your function.\nn &lt;- 10\nx &lt;- runif(n, -180, 180)\ny &lt;- runif(n, -90, 90)\n\ngh_encode(x, y, 10L)",
     "crumbs": [
       "Building Rust based R Packages",
       "<span class='chapter-number'>27</span>  <span class='chapter-title'>Vectorizing</span>"
@@ -1394,7 +1394,7 @@
     "href": "building-rust-based-r-pkgs/r-type-system.html#wrapper-types",
     "title": "28  R’s Type System",
     "section": "Wrapper types",
-    "text": "Wrapper types\nTo work with vectors, we work with their wrapper types. These are:\n\nDoubles\nIntegers\nLogicals\nStrings\n\nWe should always prefer these types over using Vec&lt;f64&gt; or Vec&lt;i32&gt;.\n\n\n\n\n\n\nWhen in doubt, clone it out\n\n\n\n\n\nCloning an extendr Robj (or other wrapper type) is quite cheap. When cloning an Robj, we are only incrementing a reference count and not performing a full copy like we do when working in R.\n\n\n\n\n\n\nWrapper types",
+    "text": "Wrapper types\nTo work with vectors, we work with their wrapper types. These are:\n\nDoubles\nIntegers\nLogicals\nStrings\n\nWe should always prefer these types over using Vec&lt;f64&gt; or Vec&lt;i32&gt;.\n\n\n\n\n\n\nNoteWhen in doubt, clone it out\n\n\n\n\n\nCloning an extendr Robj (or other wrapper type) is quite cheap. When cloning an Robj, we are only incrementing a reference count and not performing a full copy like we do when working in R.\n\n\n\n\n\n\nWrapper types",
     "crumbs": [
       "Building Rust based R Packages",
       "<span class='chapter-number'>28</span>  <span class='chapter-title'>R's Type System</span>"
@@ -1405,7 +1405,7 @@
     "href": "building-rust-based-r-pkgs/r-type-system.html#exercise",
     "title": "28  R’s Type System",
     "section": "Exercise",
-    "text": "Exercise\n\nRewrite gh_encode() to use Doubles for both the x and y argument\nStill return Vec&lt;String&gt;\n\n\nSolution\n\n\nView hint\n\nUse .inner() to access the f64 value from xi and yi.\n\n\n\nView solution\n\n#[extendr]\nfn gh_encode(x: Doubles, y: Doubles, length: usize) -&gt; Vec&lt;String&gt; {\n    if length == 0 || length &gt; 12 {\n        throw_r_error(\"`length` must be between 1 and 12\");\n    }\n\n    x.into_iter()\n        .zip(y.into_iter())\n        .map(|(xi, yi)| {\n            let coord = Coord {\n                x: xi.inner(),\n                y: yi.inner(),\n            };\n            encode(coord, length).unwrap()\n        })\n        .collect::&lt;Vec&lt;_&gt;&gt;()\n}",
+    "text": "Exercise\n\nRewrite gh_encode() to use Doubles for both the x and y argument\nUse .inner() to access the inner f64 value in the .map() closure\nStill return Vec&lt;String&gt;\n\n\nSolution\n\n\nView solution\n\n#[extendr]\nfn gh_encode(x: Doubles, y: Doubles, length: usize) -&gt; Vec&lt;String&gt; {\n    if length == 0 || length &gt; 12 {\n        throw_r_error(\"`length` must be between 1 and 12\");\n    }\n\n    x.into_iter()\n        .zip(y.into_iter())\n        .map(|(xi, yi)| {\n            let coord = Coord {\n                x: xi.inner(),\n                y: yi.inner(),\n            };\n            encode(coord, length).unwrap()\n        })\n        .collect::&lt;Vec&lt;_&gt;&gt;()\n}",
     "crumbs": [
       "Building Rust based R Packages",
       "<span class='chapter-number'>28</span>  <span class='chapter-title'>R's Type System</span>"
@@ -1728,6 +1728,1007 @@
     "crumbs": [
       "Building Rust based R Packages",
       "<span class='chapter-number'>37</span>  <span class='chapter-title'>Vibe check</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/01-why-rust.html",
+    "href": "intro-to-rust-for-r-devs/01-why-rust.html",
+    "title": "1  Why Rust?",
+    "section": "",
+    "text": "Reasoning\nRust is a programming language that’s fast, safe, and surprisingly friendly to use. Rust turns your code into a standalone program that runs directly on your computer. This makes it much faster and more efficient, similar to languages like C or C++. But where those languages can be hard to use and easy to break, Rust was built to be safer and more helpful.\nRust is especially good at preventing bugs related to memory. There’s no garbage collector in Rust so it is quite memory efficient. Moreover, Rust is designed with the developer in mind. The rust compiler provides error messages that rival—or maybe even surpass—the quality of tidyverse error messaging.",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Why Rust?</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/01-why-rust.html#tldr",
+    "href": "intro-to-rust-for-r-devs/01-why-rust.html#tldr",
+    "title": "1  Why Rust?",
+    "section": "TL;DR",
+    "text": "TL;DR\n\nR is interpreted. Code runs line by line.\nR (and Python) are built on C.\nC is compiled — it builds a binary that runs directly on your machine.\nRust is also compiled, like C, C++, Go, Java, and Fortran.\nThese languages are “close to the metal” — fast, efficient, and powerful.\nRust matches C++ in speed, but with some key advantages:\n\nMemory safety without a garbage collector (unlike Go), thanks to the borrow checker.\nA great developer experience:\n\nHelpful, friendly compiler errors (Tidyverse-level DX).\nModern tooling (cargo, rustdoc, rustfmt, rust-analyzer, etc.).\n\n\nRust is easy to get started with and rewards best practices.\n\nWe won’t go deep into memory safety or concurrency today\n\nRust uses errors as data, unlike R and C++, Rust does not support exceptions",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Why Rust?</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/02-hello-world.html",
+    "href": "intro-to-rust-for-r-devs/02-hello-world.html",
+    "title": "2  Hello, World!",
+    "section": "",
+    "text": "Crate anatomy\nRust uses a tool called cargo for building, checking, and managing dependencies. This is installed for you when you used rustup to install Rust.\nTo create a new Rust crate, use cargo new name-of-crate. This creates a new directory called name-of-crate. Be sure to cd into that directory.\nTwo types of crates: binary, library.\nBinary crates are standalone applications like command line tools, or things that run once—simiar to a script that you run with Rscript main.R",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Hello, World!</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/02-hello-world.html#crate-anatomy",
+    "href": "intro-to-rust-for-r-devs/02-hello-world.html#crate-anatomy",
+    "title": "2  Hello, World!",
+    "section": "",
+    "text": "This first workshop we will work only with a binary crate. We will create a library in the second half of the day.",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Hello, World!</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/02-hello-world.html#crate-anatomy-1",
+    "href": "intro-to-rust-for-r-devs/02-hello-world.html#crate-anatomy-1",
+    "title": "2  Hello, World!",
+    "section": "Crate anatomy",
+    "text": "Crate anatomy\nA new crate looks like this:\nintro-to-rust/\n├── Cargo.toml      # Metadata & dependencies (like DESCRIPTION)\n├── Cargo.lock      # Dependency versions (like renv.lock)\n└── src/\n    └── main.rs     # Entry point — like main.R",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Hello, World!</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/02-hello-world.html#main.rs",
+    "href": "intro-to-rust-for-r-devs/02-hello-world.html#main.rs",
+    "title": "2  Hello, World!",
+    "section": "main.rs",
+    "text": "main.rs\nWhen you create a new rust binary the file src/main.rs is prepopulated with:\n\n\n\n\n\n\nTipsrc/main.rs\n\n\n\nThe main() function defines what is executed when your binary is run.\nfn main() {\n    println!(\"Hello, world!\");\n}\n\n\nThere are a few things going on in here:\n\nFunctions are declared using the fn keyword\nThe main() function is the entrypoint of the program (and required)\nBlocks of code are delimted using curly braces (like R & C)\nStatements end with ;\nprintln!() is a macro (notice the !) which is used to print to stdout\n\n\n\nWhen a program writes to the console it does so through file connections called standard output (stdout) and standard error (stderr).\nWhen we print a message with print() or message() in R, we print to stdout. When we make a warning or error using stop() or warning() in R, that is writing to stderr.\n\n\n\n\n\n\nVariables can only be defined inside of the main() function.",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Hello, World!</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/02-hello-world.html#println",
+    "href": "intro-to-rust-for-r-devs/02-hello-world.html#println",
+    "title": "2  Hello, World!",
+    "section": "println!()",
+    "text": "println!()\n\nMacros have a !, like println!().\nThink of it like print() in R, but explicit.\nIt supports format strings:\n\n\n\n\nUsing placeholder\nlet name = \"Josiah\";\nprintln!(\"Hello, {}!\", name);\n\n\nDirect interpolation\nlet name = \"Josiah\";\nprintln!(\"Hello, {name}!\");",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Hello, World!</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/02-hello-world.html#exercise",
+    "href": "intro-to-rust-for-r-devs/02-hello-world.html#exercise",
+    "title": "2  Hello, World!",
+    "section": "Exercise",
+    "text": "Exercise\n\nIn your terminal, create a new rust crate called intro-to-rust\nOpen the new Rust crate’s folder in Positron\nRun the hello world program using cargo run\nCreate a variable called name inside of the main() function with your name\nPrint Hello, {name}! using println!()\nTo run it navigate to your terminal and then enter cargo run.\n\n\nSolution\n\n\nView solution\n\nIn src/main.rs\nfn main() {\n    let name = \"Josiah\";\n    println!(\"Hello, {name}!\");\n}",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Hello, World!</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/03-types.html",
+    "href": "intro-to-rust-for-r-devs/03-types.html",
+    "title": "3  Basic Types",
+    "section": "",
+    "text": "Integers\nIn R everything is a vector. A vector is a collection of values. There is no scalar type for a double/ character / integer / logical vector. Those are just length 1 vectors.\nIn Rust, however, scalars are the building blocks of everything. When a collection is needed those are made directly from scalars. You will often hear of these as primitives.\nToday we will only be using a handful of these primitives but it is important to understand what they are—in general.\nIntegers are either signed or unsigned.\nA signed integer can contain a negative value. Whereas an unsigned integer can contain only positive numbers.\nThe letter prefix is the type of primitive. The following number indicates how many bits can be used to store the values. Unsigned integers can contain more possible values because they do not have to support negative numbers.",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Basic Types</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/03-types.html#integers",
+    "href": "intro-to-rust-for-r-devs/03-types.html#integers",
+    "title": "3  Basic Types",
+    "section": "",
+    "text": "Signed Integers: i8, i16, i32, i64, i128\nUnsigned Integers: u8, u16, u32, u64, u128\n\n\n\n\n\n\n\nIn R, an integer vector is comprised of i32 values.\n\n\n\n\ni32::MAX // 2147483647\nu32::MAX // 4294967295",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Basic Types</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/03-types.html#floating-point",
+    "href": "intro-to-rust-for-r-devs/03-types.html#floating-point",
+    "title": "3  Basic Types",
+    "section": "Floating point",
+    "text": "Floating point\nIn many cases where we need to do math we will use a floating point number. Floating points are signed and allow for decimal values.\nThere are two types: f32 and f64.\n\n\n\n\n\n\nIn R, a double vector is comprised of f64 values.",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Basic Types</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/03-types.html#strong-typing",
+    "href": "intro-to-rust-for-r-devs/03-types.html#strong-typing",
+    "title": "3  Basic Types",
+    "section": "Strong typing",
+    "text": "Strong typing\nRust will infer a value’s type exceptionally well! However, we may want to specify the type manually as well. We can do this 2 primary ways:\n\nIn assignment using : for example let x: f64 = 10;\nOr by specifying the suffix e.g. 10f64 or 10_i32\n\n\n\n\n\n\n\nYou can use _ as a visual separator when specifying numbers in Rust. The following are all identical values:\nlet x: i32 = 1000;\nlet x = 1000i32;\nlet x = 1_000_i32;",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Basic Types</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/03-types.html#type-casting",
+    "href": "intro-to-rust-for-r-devs/03-types.html#type-casting",
+    "title": "3  Basic Types",
+    "section": "Type casting",
+    "text": "Type casting\nIn Rust, math expressions can only be performed between like-types. You cannot add 2.0 + 3_f64. To accomplish this we must cast to the same types.\nPrimitive types can be cast into one another using the as keyword. To add an f64 to an i32 we should ensure they’re the same type.\nfn add2(x: f64, y: i32) -&gt; f64 {\n   x + y as f64\n}",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Basic Types</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/03-types.html#unit-type",
+    "href": "intro-to-rust-for-r-devs/03-types.html#unit-type",
+    "title": "3  Basic Types",
+    "section": "Unit type",
+    "text": "Unit type\nIn Rust there is no concept of NULL. Instead there is the unit type which is represented as ().\n\n\nThe unit type is technically a tuple without any fields. If the internet is to be believed it is called “unit” becaue it can only have one value and is related to the “singleton” or unit set in set theory.\nFunctions that do not return anything technically return ().",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Basic Types</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/03-types.html#exercise",
+    "href": "intro-to-rust-for-r-devs/03-types.html#exercise",
+    "title": "3  Basic Types",
+    "section": "Exercise",
+    "text": "Exercise\nModify src/main.rs to add two or more incompatible types.\n\nDefine a variable x to be an f64 value\nDefine y to be an i32 value\nAdd them up and store them in the variable z\nUse println!() to print the value of z\n\n\nSolution\n\n\nView solution\n\nfn main() {\n    let x = 3.14;\n    let y = 47_i32;\n    let z = x + y as f64;\n    println!(\"The value of z is {z}\");\n}",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Basic Types</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/04-fizz-buzz.html",
+    "href": "intro-to-rust-for-r-devs/04-fizz-buzz.html",
+    "title": "4  Control Flow",
+    "section": "",
+    "text": "Numeric operators",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Control Flow</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/04-fizz-buzz.html#numeric-operators",
+    "href": "intro-to-rust-for-r-devs/04-fizz-buzz.html#numeric-operators",
+    "title": "4  Control Flow",
+    "section": "",
+    "text": "+ addition\n- subtraction\n* multiplication\n/ division\n% remainder",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Control Flow</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/04-fizz-buzz.html#logical-operators",
+    "href": "intro-to-rust-for-r-devs/04-fizz-buzz.html#logical-operators",
+    "title": "4  Control Flow",
+    "section": "Logical Operators:",
+    "text": "Logical Operators:\nLogical operators are quite similar to R. The difference is that these operations are not vectorised. Furthermore, in Rust, a logical is called bool for booleans. bools can take on only two values: true or false.\n\n== check equality\n!= check inequality\n! negate a logical value\n&& logical AND comparison\n|| logical OR comparison",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Control Flow</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/04-fizz-buzz.html#control-flow",
+    "href": "intro-to-rust-for-r-devs/04-fizz-buzz.html#control-flow",
+    "title": "4  Control Flow",
+    "section": "Control flow",
+    "text": "Control flow\nRust uses if, else, and else if statements just like R. Where each branch is delimted by curly braces.\n\n\n\n\n\n\nEach branch of the if statement must return the same type. For this portion of the workshop, be sure to terminate each statement with ; inside of the if statement so that nothing (unit type) is returned.\n\n\n\nif x == y {\n  // do something\n} else {\n  // do something else\n}\nThe key difference is that the use of parentheses is not necessary for the conditional statement.",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Control Flow</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/04-fizz-buzz.html#exercise",
+    "href": "intro-to-rust-for-r-devs/04-fizz-buzz.html#exercise",
+    "title": "4  Control Flow",
+    "section": "Exercise",
+    "text": "Exercise\nThis exercise you will create the famous FizzBuzz program.\nFor this, create a variable i. The rules are:\n\nwhen i is a multiple of 3, print Fizz\nwhen i is a multiple of 5, print Buzz\nwhen i is a multiple of both 3 and 5, print FizzBuzz\n\n\nSolution\n\n\nView solution\n\nfn main() {\n    // let i = 15; // FizzBuzz\n    // let i = 3; // Fizz\n    // let i = 5; // Buzz\n    let i = 47; // Nothing\n    if (i % 3 == 0) && (i % 5 == 0) {\n        println!(\"FizzBuzz\");\n    } else if i % 3 == 0 {\n        println!(\"Fizz\");\n    } else if i % 5 == 0 {\n        println!(\"Buzz\");\n    }\n}",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Control Flow</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/05-collections.html",
+    "href": "intro-to-rust-for-r-devs/05-collections.html",
+    "title": "5  Arrays and Vectors",
+    "section": "",
+    "text": "Arrays\nArrays in Rust are fixed in size and hold values of the same type. Since the size is known ahead of time, it makes them fast but inflexible.\nThe type of an array is specified as [type; length], e.g.",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Arrays and Vectors</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/05-collections.html#arrays",
+    "href": "intro-to-rust-for-r-devs/05-collections.html#arrays",
+    "title": "5  Arrays and Vectors",
+    "section": "",
+    "text": "fn main() {\n    let arr = [10, 20, 30, 40];\n    println!(\"Array: {:?}\", arr);\n}\n\n\n\n\n\n\nThe {:?} syntax is used for a Debug representation of a variable. Using {} is used for Displaying data.\nMore often than not, using {:?} will be your best option.\n\n\n\n\nArrays use square brackets: [1, 2, 3]\nTheir size is known at compile time.\nYou can’t add or remove elements.\nMostly used when performance is critical and size is known.\n\n\nlet arr: [i32; 4] = [10, 20, 30, 40];",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Arrays and Vectors</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/05-collections.html#vectors",
+    "href": "intro-to-rust-for-r-devs/05-collections.html#vectors",
+    "title": "5  Arrays and Vectors",
+    "section": "Vectors",
+    "text": "Vectors\nVectors are like growable arrays. They are much more common in everyday Rust code. To create a vector with known values, use the vec![] macro. Like an array, they must all be the same type.\nfn main() {\n    let v = vec![1, 2, 3, 4, 5];\n    println!(\"Vector: {:?}\", v);\n}\nThe type of a vector is specified using Vec&lt;T&gt; where T is shorthand for any type.\nAn empty vector can be created using Vec::new() or vec![]. If creating an empty vector, the type must be inferred or made explicit. Vectors also have methods. Two handy ones are .len() for length, and .is_empty() (equivalent of .len() == 0)\n\n\n\n\n\n\nImportantCannot compile\n\n\n\nfn main() {\n    let x = Vec::new();\n    println!(\"x is empty: {}\", x.is_empty());\n}\n\n\nThis cannot compile because the type of x is not known. Rust can infer the type if the vector is used elsewhere where the type is known. To make it compile we must specify the type.\nfn main() {\n    let x: Vec&lt;f64&gt; = Vec::new();\n    println!(\"x is empty: {}\", x.is_empty());\n}",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Arrays and Vectors</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/05-collections.html#exercise",
+    "href": "intro-to-rust-for-r-devs/05-collections.html#exercise",
+    "title": "5  Arrays and Vectors",
+    "section": "Exercise",
+    "text": "Exercise\n\nCreate an array of 4 integers and print it.\nCreate a vector with 5 numbers and print it using {:?}.\nCompare the length of the array and the vector.\nBonus: create an empty i32 vector.\n\n\nSolution\n\n\nView solution\n\nfn main() {\n    let arr = [1, 2, 3, 4];\n    println!(\"Array: {:?}\", arr);\n\n    let v = vec![10, 20, 30, 40, 50];\n    println!(\"Vector: {:?}\", v);\n\n    // Bonus: an empty i32 vector\n    let _empty: Vec&lt;i32&gt; = Vec::new();\n}",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Arrays and Vectors</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/06-for-loops.html",
+    "href": "intro-to-rust-for-r-devs/06-for-loops.html",
+    "title": "6  for-loops",
+    "section": "",
+    "text": "for loop syntax\nIn Rust, for loops are the easiest way to go over each item in a vector or array.\nWhen we iterate through a collection, each item takes on the value of the name you provide before in. For example for x in my_vec creates a binding to x at each iteration.",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>`for`-loops</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/06-for-loops.html#for-loop-syntax",
+    "href": "intro-to-rust-for-r-devs/06-for-loops.html#for-loop-syntax",
+    "title": "6  for-loops",
+    "section": "",
+    "text": "for value in collection {\n    // do something with value\n}\n\nfn main() {\n    let nums = vec![1, 2, 3];\n    for n in nums {\n        println!(\"n is: {}\", n);\n    }\n}",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>`for`-loops</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/06-for-loops.html#scope",
+    "href": "intro-to-rust-for-r-devs/06-for-loops.html#scope",
+    "title": "6  for-loops",
+    "section": "Scope",
+    "text": "Scope\nR has some of the most flexible and unique scoping rules. Rust isn’t as kind. The rules are essentially:\n\nValues outside of the for loop are accessible inside of it.\nValues created inside of the for loop cannot be accessed outside of it.\n\n\nExample: Outer value used inside loop\n\n\n\n\n\n\nTipThis does compile\n\n\n\nfn main() {\n    let greeting = \"Hi\";\n    let names = vec![\"Alice\", \"Bob\"];\n\n    for name in names {\n        println!(\"{greeting}, {name}!\");\n    }\n}\n\n\n\n\nExample: Inner value not usable outside loop\n\n\n\n\n\n\nImportantThis does not compile!\n\n\n\nfn main() {\n    let numbers = vec![1, 2, 3];\n\n    for n in numbers {\n        let doubled = n * 2;\n        println!(\"{n} doubled is {doubled}\");\n    }\n\n    // ❌ `doubled` doesn't exist here\n    // println!(\"Last doubled: {}\", doubled);\n}",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>`for`-loops</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/06-for-loops.html#exercise",
+    "href": "intro-to-rust-for-r-devs/06-for-loops.html#exercise",
+    "title": "6  for-loops",
+    "section": "Exercise",
+    "text": "Exercise\nUsing a vector of integers, write a loop that prints:\n\n“Fizz” if divisible by 3\n“Buzz” if divisible by 5\n“FizzBuzz” if divisible by both\nThe number otherwise\n\nUse this vector: vec![1, 2, 3, 4, 5, 15]\n\nSolution\n\n\nView hint\n\nfn main() {\n    let nums = vec![1, 2, 3, 4, 5, 15];\n\n    for n in nums {\n       // add fizz-buzz logic here referring to `n`\n    }\n}\n\n\n\nView solution\n\nfn main() {\n    let nums = vec![1, 2, 3, 4, 5, 15];\n\n    for n in nums {\n        if n % 15 == 0 {\n            println!(\"FizzBuzz\");\n        } else if n % 3 == 0 {\n            println!(\"Fizz\");\n        } else if n % 5 == 0 {\n            println!(\"Buzz\");\n        } else {\n            println!(\"{}\", n);\n        }\n    }\n}",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>`for`-loops</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/07-mutability.html",
+    "href": "intro-to-rust-for-r-devs/07-mutability.html",
+    "title": "7  Mutability",
+    "section": "",
+    "text": "Example\nIn R everything is immutable (except environments). Immutable objects cannot be altered.\nIn Rust, variables are immutable by default. This means once a value is assigned to a variable, it cannot be changed. To make a variable mutable, you must explicitly use the mut keyword.\nBy requiring mut, the compiler ensures that accidental mutations are caught at compile time.\nRevisiting our loop from earlier:",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Mutability</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/07-mutability.html#example",
+    "href": "intro-to-rust-for-r-devs/07-mutability.html#example",
+    "title": "7  Mutability",
+    "section": "",
+    "text": "fn main() {\n    // create a vector\n    let numbers = vec![1, 2, 3];\n    // create a mutable value\n    let mut doubled = 0;\n\n    // iterate through numbers to update doubled\n    for n in numbers {\n        doubled = n * 2;\n        println!(\"{} doubled is {}\", n, doubled);\n    }\n\n    // ✅ compiles because `doubled` was declared\n    // _outside_ of the inner loop scope\n    println!(\"Last doubled: {}\", doubled);\n}",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Mutability</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/07-mutability.html#exercise",
+    "href": "intro-to-rust-for-r-devs/07-mutability.html#exercise",
+    "title": "7  Mutability",
+    "section": "Exercise",
+    "text": "Exercise\n\nCreate a vector of 5 or more f64 values (Vec&lt;f64&gt;)\nUse a for loop to calculate the sum of the vector\nCalculate the mean from the sum of the vector and the length of the vector\nPrint the result\n\n\n\n\n\n\n\nYou can use += shorthand to add and assign all at the same time. For example x += 10 is equivalent to x = x + 10.\n\n\n\n\nSolution\n\n\nView solution\n\nfn main() {\n    let x = vec![1.0, 2.0, 3.0, 4.0];\n\n    let n = x.len() as f64;\n    let mut total = 0.0;\n\n    for xi in x {\n        total += xi;\n    }\n\n    println!(\"The mean is: {}\", total / n);\n}",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Mutability</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/08-mutable-vectors.html",
+    "href": "intro-to-rust-for-r-devs/08-mutable-vectors.html",
+    "title": "8  Mutable Vectors",
+    "section": "",
+    "text": "Creating empty vectors\nIn Rust, vectors (Vec&lt;T&gt;) are growable arrays. To modify a vector after creating it, the vector itself must be declared as mut.\nYou can create an empty vector and let Rust infer the type based on usage:",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Mutable Vectors</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/08-mutable-vectors.html#exercise",
+    "href": "intro-to-rust-for-r-devs/08-mutable-vectors.html#exercise",
+    "title": "8  Mutable Vectors",
+    "section": "Exercise",
+    "text": "Exercise\n\nCreate an empty vector\nAppend the values 1.0, 2.0, and 3.0 using .push()\nClear the vector to make it empty\nLastly, extend it with another vector e.g. [4.0, 5.0]\nSort the vector\nPrint the final result.\n\n\nSolution\n\n\nView solution\n\nfn main() {\n    let mut x = Vec::new();\n    x.push(1.0);\n    x.push(2.0);\n    x.push(3.0);\n    x.clear();\n    x.extend(vec![4.0, 5.0]);\n    x.sort_by(|a, b| a.partial_cmp(b).unwrap());\n    println!(\"{:?}\", x);\n}",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Mutable Vectors</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/09-is-odd.html",
+    "href": "intro-to-rust-for-r-devs/09-is-odd.html",
+    "title": "9  Functions",
+    "section": "",
+    "text": "Example\nWe’ve already been modifying the main() function this whole time. We can create and use additional functions too.\nIn R, functions are yet another type of object that we create using &lt;- function(). In Rust, they are declared using fn keyword. Just like everything else in Rust, arguments are typed. Arguments take the structure of arg: type.\nMuch like R, the last object in a function body is return automatically. You do not need to use the return keyword unless you are performing an early return.\nIdentifying if a number is odd or even isn’t always so easy!\nFirst define a function called is_even() that takes an i32 (integer) and returns a bool.\nWe can use our already defined function inside of another:",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Functions</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/09-is-odd.html#example",
+    "href": "intro-to-rust-for-r-devs/09-is-odd.html#example",
+    "title": "9  Functions",
+    "section": "",
+    "text": "is-odd npm\n\n\n\n\n\nIt may not be entirely obvious, but functions can be declared outside of the main() function.\nfn is_even(x: i32) -&gt; bool {\n    x % 2 == 0\n}\n\nfn is_odd(x: i32) -&gt; bool {\n    !is_even(x)\n}",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Functions</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/09-is-odd.html#exercise",
+    "href": "intro-to-rust-for-r-devs/09-is-odd.html#exercise",
+    "title": "9  Functions",
+    "section": "Exercise",
+    "text": "Exercise\nCreate a function called mean() that calculates the mean of a Vec&lt;f64&gt;.\n\nIn main(), create a vector x with 5 or more f64 values.\nCall mean(x) and print the result.\n\n\n\n\n\n\n\nUse x.len() to get the length and as f64 to convert it to a float.\n\n\n\n\nSolution\n\n\nView solution",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Functions</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/10-references-slices.html",
+    "href": "intro-to-rust-for-r-devs/10-references-slices.html",
+    "title": "10  Ownership",
+    "section": "",
+    "text": "Moves\nRust is notorious for its borrow checker. The borrow check is Rust’s secret sauce which helps ensure memory safety. At compile time, Rust looks through all of your code to enforce ownership. The key is that\nIf a variable has been used it has been moved. There are a number of ways to reuse variables.\nA move occurs whenever a variable is used by a function or a method.\nSince x was moved (used) by assigning it to y, the original value cannot be used.",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Ownership</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/10-references-slices.html#moves",
+    "href": "intro-to-rust-for-r-devs/10-references-slices.html#moves",
+    "title": "10  Ownership",
+    "section": "",
+    "text": "fn main() {\n    let x = vec![1.0, 2.0, 3.0];\n    let y = x; // ⬅️ ownership moved\n    println!(\"{:?}\", x); // ❌ error: value used after move\n}",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Ownership</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/10-references-slices.html#cloning",
+    "href": "intro-to-rust-for-r-devs/10-references-slices.html#cloning",
+    "title": "10  Ownership",
+    "section": "Cloning",
+    "text": "Cloning\nThe simplest but least efficient way to reuse a variable is to clone it. This is what R does.\n\n\n\n\n\n\nRemember: when in doubt, clone it out!\n\n\n\nAlmost everything in Rust can be cloned by using the .clone() method.\n\n\n\n\n\n\nImportantCannot compile\n\n\n\nlet x  = v![0.0, 3.14, 10.1, 44.8];\n\nlet avg1 = mean(x); // ⬅️ x moved here!\nlet avg2 = mean(x); // ❌ compiler error\n\n\nIf we first clone x before using mean() we can use x again.\nlet x  = v![0.0, 3.14, 10.1, 44.8];\n\nlet avg1 = mean(x.clone()); // ⬅️ x cloned here!\nlet avg2 = mean(x); // ✅ compiler happy",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Ownership</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/10-references-slices.html#borrowing",
+    "href": "intro-to-rust-for-r-devs/10-references-slices.html#borrowing",
+    "title": "10  Ownership",
+    "section": "Borrowing",
+    "text": "Borrowing\nWhile variables may only be used once, they can be borrowed infinitely (until they go out of scope). A variable can be used by reference when the & symbol is placed in front of it—e.g. arg: &Vec&lt;f64&gt;.\nfn main() {\n    let x = vec![1.0, 2.0, 3.0];\n    let avg = mean(&x); // 👈 borrowing `x`\n    println!(\"x is still usable: {:?}\", x);\n}\nIf you borrow a variable you cannot mutate it or move it.",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Ownership</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/10-references-slices.html#slices",
+    "href": "intro-to-rust-for-r-devs/10-references-slices.html#slices",
+    "title": "10  Ownership",
+    "section": "Slices",
+    "text": "Slices\nSlices are a special type of borrowing. Slices are a reference to contiguous section of the same type. They’re recognized by the syntax &[T].\nSlices always have a known length (accessed via .len()) and can be used from more than one type.\n\nExample\nBoth an array [f64; N] and a Vec&lt;f64&gt; can be turned into a &[f64]\nlet x = [0.0, 20.0, 742.3];\nlet y = vec![1.0, 2.0, 3.0];\n\nlet avg_x = mean(&x)\nlet avg_y = mean(&y);\nSlices are more flexible and more light-weight than borrowing a full vector and should be preferred whenever possible.\nIn general: slice &gt; reference &gt; owned",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Ownership</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/10-references-slices.html#exercise-1",
+    "href": "intro-to-rust-for-r-devs/10-references-slices.html#exercise-1",
+    "title": "10  Ownership",
+    "section": "Exercise 1",
+    "text": "Exercise 1\n\nCalculate the mean of the same Vec&lt;f64&gt; twice\nPrint the vector at the end",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Ownership</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/10-references-slices.html#exercise-2",
+    "href": "intro-to-rust-for-r-devs/10-references-slices.html#exercise-2",
+    "title": "10  Ownership",
+    "section": "Exercise 2",
+    "text": "Exercise 2\n\nRewrite the mean() function to accept a reference to a Vec&lt;f64&gt; instead of taking ownership\nThen call it with a borrowed vector.",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Ownership</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/10-references-slices.html#exercise-3",
+    "href": "intro-to-rust-for-r-devs/10-references-slices.html#exercise-3",
+    "title": "10  Ownership",
+    "section": "Exercise 3",
+    "text": "Exercise 3\n\nRewrite mean() to accept a slice (&[f64]) instead of a Vec&lt;f64&gt; reference.\nCreate an array of f64 values called y\nCalculate the mean on both x and y\nPrint both averages\n\n\nSolution\n\n\nView solution",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Ownership</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/11-iterators.html",
+    "href": "intro-to-rust-for-r-devs/11-iterators.html",
+    "title": "11  Iterators",
+    "section": "",
+    "text": "Consuming vs. Borrowing\nSo far we have been using a for loop to iterate through our items. However, it is not the only way to iterate. Instead, we can use iterators. Iterators often are simpler and easier to use—particularly when modifying each element in a Vec&lt;T&gt;.\nIterators can be created from basic collections like vectors or arrays as well as more advanced types such as HashMaps. They produce a sequence of items that can be accessed (or modified) one at a time.\nWhen we use a for loop with a collection, we are consuming (moving) the underlying vector. Under the hood, using a for loop actually creates an iterator by calling the .into_iter() method.\nfor xi in x is identical to calling for xi in x.into_iter() for example:\nRemember: .into_iter() consumes the original value.\nAlternatively, the .iter() method can be called which borrows the collection and produces an iterator where each item is a refernce.",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Iterators</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/11-iterators.html#consuming-vs.-borrowing",
+    "href": "intro-to-rust-for-r-devs/11-iterators.html#consuming-vs.-borrowing",
+    "title": "11  Iterators",
+    "section": "",
+    "text": "fn main() {\n    let nums = vec![3, 6, 9];\n\n    for n in nums.into_iter() {\n        println!(\"Value: {n}\");\n    }\n\n    // nums has been moved ❌\n    // println!(\"nums: {:?}\", nums);\n}\n\n\nfn main() {\n    let nums = vec![3, 6, 9];\n\n    for n in nums.iter() {\n        println!(\"Reference to value: {}\", n);\n    }\n    // nums is still usable ✅\n    println!(\"nums: {:?}\", nums);\n}",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Iterators</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/11-iterators.html#basic-iterator-methods",
+    "href": "intro-to-rust-for-r-devs/11-iterators.html#basic-iterator-methods",
+    "title": "11  Iterators",
+    "section": "Basic Iterator Methods",
+    "text": "Basic Iterator Methods\nOnce you have an iterator, there are a number of methods that can be used. Some of the helpful ones are:\n\n.sum() — Add all the values together.\n.min() — Find the smallest value.\n.max() — Find the largest value.\n.enumerate() — Pairs each value with its index.\n\n\n\nThe .min() and .max() methods cannot reliably return the min/max of a Vec&lt;f64&gt; because of floating point weirdness. Instead they return Option&lt;&gt; which we will discuss later. Just know that they exist.\nThe sum() method would’ve been nice earlier, huh 😉. The .sum() method needs to have a type specified when using it. So we can specify the type when assigning the variable such as:\nfn main() {\n    let nums = vec![2, 4, 8];\n    let total: i32 = nums.iter().sum();\n    println!(\"Sum is: {}\", total);\n}",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Iterators</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/11-iterators.html#enumerated-iterators",
+    "href": "intro-to-rust-for-r-devs/11-iterators.html#enumerated-iterators",
+    "title": "11  Iterators",
+    "section": "Enumerated iterators",
+    "text": "Enumerated iterators\nOften it is quite nice to have the index associated with each item in an iterator. To do so, we can use .enumerate() after calling either .iter() or .into_iter(). This modifies each element to be a tuple with (i, xi).\n\n\n\n\n\n\nThe .enumerate() method returns the type usize which is a special type of unsigned integer. You can cast them to integers or floats using i as i32, for example.\n\n\n\nRust is 0 indexed so the first value of the enumeration is going to be 0.\nFor example:\nfn is_even(x: i32) -&gt; bool {\n    x % 2 == 0\n}\n\nfn main() {\n    let x = vec![2, 4, 8];\n\n    for (i, xi) in x.iter().enumerate() {\n        if is_even(i as i32) {\n            println!(\"i is even with value {xi}\");\n        }\n    }\n}",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Iterators</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/11-iterators.html#exercise-1",
+    "href": "intro-to-rust-for-r-devs/11-iterators.html#exercise-1",
+    "title": "11  Iterators",
+    "section": "Exercise 1",
+    "text": "Exercise 1\n\nModify the mean() function to calculate the mean using .iter()\nCreate a vector of 5 or more f64 values\nCalculate the mean and print the result",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Iterators</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/11-iterators.html#exercise-2",
+    "href": "intro-to-rust-for-r-devs/11-iterators.html#exercise-2",
+    "title": "11  Iterators",
+    "section": "Exercise 2",
+    "text": "Exercise 2\n\nPrint the index and value for each item in a vector for only even values\n\n\nSolution\n\n\nView solution\n\nfn mean(x: &[f64]) -&gt; f64 {\n    let total: f64 = x.iter().sum();\n    total / x.len() as f64\n}\n\nfn main() {\n    // Exercise 1: mean via `.iter()`\n    let nums = vec![1.0, 2.0, 3.0, 4.0, 5.0];\n    println!(\"Mean is: {}\", mean(&nums));\n\n    // Exercise 2: print index + value for even values only\n    let nums = vec![1, 2, 3, 4, 5, 6];\n    for (i, n) in nums.iter().enumerate() {\n        if n % 2 == 0 {\n            println!(\"Index {i}: {n} is even\");\n        }\n    }\n}",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Iterators</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/12-iter-map.html",
+    "href": "intro-to-rust-for-r-devs/12-iter-map.html",
+    "title": "12  Mapping over Iterators",
+    "section": "",
+    "text": "Using .map()\nOften we want to transform the values in a vector. To do this in Rust, we can use the .map() method. .map() lets us apply an operation on each element of the iterator.\nIn R, we often use the purrr::map() function or the apply() family of functions to do this.\nWe apply .map() to an iterator. For example, to square each element in a vector we can write:\nUsing .map() returns another iterator. We can chain operations over iterators by using multiple .map() statements.",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Mapping over Iterators</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/12-iter-map.html#using-.map",
+    "href": "intro-to-rust-for-r-devs/12-iter-map.html#using-.map",
+    "title": "12  Mapping over Iterators",
+    "section": "",
+    "text": "// providing explicit type annotation in one\n// value so the compiler knows its f64 and not f32\nlet x: Vec&lt;f64&gt; = vec![5.9, 6.8, 4.5, 7.3, 6.2];\n\nx.iter().map(|xi| xi.powi(2))",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Mapping over Iterators</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/12-iter-map.html#closures",
+    "href": "intro-to-rust-for-r-devs/12-iter-map.html#closures",
+    "title": "12  Mapping over Iterators",
+    "section": "Closures",
+    "text": "Closures\nIn the above example we used a closure to modify each element of the iterator. Closures are Rust’s version of an anonymous function.\nA closure takes the structure |arg| expression. They can also be multiple lines by wrapping the expression in a braces:\nx\n    .iter()\n    .map(|xi| {\n        let squared = xi.powi(2);\n        xi.sqrt()\n    })\nSince iterators only contain one item, the closure only has one argument. However, you can use destructuring in the closure. For example if using .enumerate() we want to access i we can do so:\nx\n    .iter()\n    .enumerate()\n    .map(|(i, xi)| {\n        // do stuff here\n    })",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Mapping over Iterators</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/12-iter-map.html#collecting-results",
+    "href": "intro-to-rust-for-r-devs/12-iter-map.html#collecting-results",
+    "title": "12  Mapping over Iterators",
+    "section": "Collecting results",
+    "text": "Collecting results\nIn R when we use map() the results are always returned as a vector. In Rust, we have to explcitly collect the iterator into our own type using .collect().\nTypically iterators are collected into a Vec&lt;T&gt;. Rust cant always infer the type that you want to collect into so we must tell the compiler what type we want.\nWe can do this during assignment:\nlet x_squared: Vec&lt;f64&gt; = x.iter().map(|xi| xi.powi(2)).collect();",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Mapping over Iterators</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/12-iter-map.html#turbofish",
+    "href": "intro-to-rust-for-r-devs/12-iter-map.html#turbofish",
+    "title": "12  Mapping over Iterators",
+    "section": "Turbofish 🐠💨",
+    "text": "Turbofish 🐠💨\nAlternatively, we can use “turbofish” syntax. We can specify the type directly in the .collect() function. .collect() is a generic method. And in the words of the Rust standard library documentation (emphasis mine)\n\n“Because collect() is so general, it can cause problems with type inference. As such, collect() is one of the few times you’ll see the syntax affectionately known as the ‘turbofish’: ::&lt;&gt;. This helps the inference algorithm understand specifically which collection you’re trying to collect into.”\n\nTurbofish takes the structure of .collect::&lt;TYPE&gt;().\n\nExamples\n\n\n\nExplicit typing\nfn main() {\n    let nums = vec![1, 2, 3];\n\n    // Add 1 to each element\n    let incremented: Vec&lt;_&gt; = nums.iter()\n        .map(|x| x + 1)\n        .collect();\n\n    println!(\"{:?}\", incremented);\n}\n\n\nInference w/ turbofish\nfn main() {\n    let nums = vec![1, 2, 3];\n\n    // Add 1 to each element\n    let incremented = nums.iter()\n        .map(|x| x + 1)\n        .collect::&lt;Vec&lt;_&gt;&gt;();\n\n    println!(\"{:?}\", incremented);\n}\n\n\n\nTurbofish is a bit more awkward at first, but it is more flexible and doesn’t require modification whenever the inner type changes.",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Mapping over Iterators</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/12-iter-map.html#exercise-1",
+    "href": "intro-to-rust-for-r-devs/12-iter-map.html#exercise-1",
+    "title": "12  Mapping over Iterators",
+    "section": "Exercise 1",
+    "text": "Exercise 1\nCalculate the variance of a slice of f64 values.\n\\[\n\\text{variance} = \\frac{\\sum_{i=1}^n (x_i - \\bar{x})^2}{n - 1}\n\\]\n\nCreate a function variance() that:\n\nUses .map() to calculate squared differences from the mean\nUses .sum() to add them up\nDivides by n - 1\n\n\n\n\n\n\n\n\n\nUse .powi(2) to square values.\nUse your previously defined mean() function inside variance().\n\n\n\n\n\n\nView hint\n\nfn variance(x: &[f64]) -&gt; f64 {\n    let n = x.len() as f64;\n    let avg = mean(x);\n    let sq_diffs: f64 = x\n        .iter()\n        .map(|xi| ___ )  // squared difference here\n        .__();           // sum method here\n\n    sq_diffs / (n - 1.0)\n}\n\n\nSolution\n\n\nView solution\n\nfn mean(x: &[f64]) -&gt; f64 {\n    let total: f64 = x.iter().sum();\n    total / x.len() as f64\n}\n\n// Exercise 1: variance via `.map()` + `.sum()`\nfn variance(x: &[f64]) -&gt; f64 {\n    let n = x.len() as f64;\n    let avg = mean(x);\n    let sq_diffs: f64 = x.iter().map(|xi| (xi - avg).powi(2)).sum();\n    sq_diffs / (n - 1.0)\n}\n\n// Exercise 2: z-score standardization via `.map()` + `.collect()`\nfn standardize(x: &[f64]) -&gt; Vec&lt;f64&gt; {\n    let avg = mean(x);\n    let std_dev = variance(x).sqrt();\n    x.iter().map(|xi| (xi - avg) / std_dev).collect()\n}\n\nfn main() {\n    let x = vec![2.0, 4.0, 4.0, 4.0, 5.0, 5.0, 7.0, 9.0];\n    println!(\"Variance is: {:.2}\", variance(&x));\n\n    let standardized = standardize(&x);\n    println!(\"Standardized: {:?}\", standardized);\n}",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Mapping over Iterators</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/12-iter-map.html#exercise-2",
+    "href": "intro-to-rust-for-r-devs/12-iter-map.html#exercise-2",
+    "title": "12  Mapping over Iterators",
+    "section": "Exercise 2",
+    "text": "Exercise 2\nCreate a function standardize() to perform z-score standardization on a vector of f64.\n\\[\nz_i = \\frac{x_i - \\mu}{\\sigma}\n\\]\n\nUse .iter() and .map() to calculate mean and variance.\nUse .into_iter(), .map(), and .collect() to build the standardized vector.\nReturn a new Vec&lt;f64&gt; of standardized values.\n\n\nSolution\n\n\nView solution\n\nfn mean(x: &[f64]) -&gt; f64 {\n    let total: f64 = x.iter().sum();\n    total / x.len() as f64\n}\n\n// Exercise 1: variance via `.map()` + `.sum()`\nfn variance(x: &[f64]) -&gt; f64 {\n    let n = x.len() as f64;\n    let avg = mean(x);\n    let sq_diffs: f64 = x.iter().map(|xi| (xi - avg).powi(2)).sum();\n    sq_diffs / (n - 1.0)\n}\n\n// Exercise 2: z-score standardization via `.map()` + `.collect()`\nfn standardize(x: &[f64]) -&gt; Vec&lt;f64&gt; {\n    let avg = mean(x);\n    let std_dev = variance(x).sqrt();\n    x.iter().map(|xi| (xi - avg) / std_dev).collect()\n}\n\nfn main() {\n    let x = vec![2.0, 4.0, 4.0, 4.0, 5.0, 5.0, 7.0, 9.0];\n    println!(\"Variance is: {:.2}\", variance(&x));\n\n    let standardized = standardize(&x);\n    println!(\"Standardized: {:?}\", standardized);\n}",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Mapping over Iterators</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/13-structs.html",
+    "href": "intro-to-rust-for-r-devs/13-structs.html",
+    "title": "13  Defining Struct(ure)s",
+    "section": "",
+    "text": "Deriving behavior\nYou can define a type as being a collection of other types by using the struct keyword.\nstructs are named using PascalCase, as opposed to fns which are named using snake_case convention. Structs are constructed using a “literal” syntax. Where we write the name of the struct followed by curlys and the fields like so:\nBy default, new structs do not get any special behavior. Meaning they cannot be printed using println!():\nRust contains a special type called a trait. They’re akin to S3 generics. They are a a collection of methods that can be implemented by foreign types.\nIn this case, Debug is a trait that allows for debug printing using println!(). Our new type does not implement this by default. However, we can derive this behavior because everything inside of the struct does.\nTo derive behavior we use the #[derive()] attribute.\nThe Debug trait allows debug printing of the type Person via dbg!() or println!(\"{p:?}).",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Defining Struct(ure)s</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/13-structs.html#deriving-behavior",
+    "href": "intro-to-rust-for-r-devs/13-structs.html#deriving-behavior",
+    "title": "13  Defining Struct(ure)s",
+    "section": "",
+    "text": "#[derive(Debug, Clone)]\nstruct Person {\n    name: String,\n    age: i32\n}\n\nfn main() {\n    let me = Person { name: \"Josiah\".to_string(), age: 29 };\n    println!(\"{me:?}\");\n}\nPerson { name: \"Josiah\", age: 29 }",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Defining Struct(ure)s</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/13-structs.html#accessing-fields",
+    "href": "intro-to-rust-for-r-devs/13-structs.html#accessing-fields",
+    "title": "13  Defining Struct(ure)s",
+    "section": "Accessing Fields",
+    "text": "Accessing Fields\nFields of a struct can be accessed directly, or by reference. Field can be accessed using var.field_name.\nIf a field is accessed and moved, the struct cannot be moved. The same rules of borrowing apply to a struct. You can borrow a field as much as you want but you can only move it once. Otherwise, the entire struct cannot be used.\nfn main() {\n    let me = Person { name: \"Josiah\".to_string(), age: 29 };\n    let name = me.name;\n    println!(\"{me:?}\");\n}\nerror[E0382]: borrow of partially moved value: `me`\n  --&gt; src/main.rs:10:15\n   |\n9  |     let name = me.name;\n   |                ------- value partially moved here\n10 |     println!(\"{me:?}\");\n   |               ^^^^^^ value borrowed here after partial move",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Defining Struct(ure)s</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/13-structs.html#destructuring",
+    "href": "intro-to-rust-for-r-devs/13-structs.html#destructuring",
+    "title": "13  Defining Struct(ure)s",
+    "section": "Destructuring",
+    "text": "Destructuring\nIt is possible to destructure a struct during assignment creating many variables at one time.\nTo destructure during assignment you use the syntax let StructName { field, field } = variable;\nfn main() {\n    let me = Person { name: \"Josiah\".to_string(), age: 29 };\n    let Person { name, age } = me;\n    println!(\"{name} is {age} years old\");\n}",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Defining Struct(ure)s</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/13-structs.html#exercise",
+    "href": "intro-to-rust-for-r-devs/13-structs.html#exercise",
+    "title": "13  Defining Struct(ure)s",
+    "section": "Exercise",
+    "text": "Exercise\n\nDefine a struct called Point which has two fields x, and y that are f64\nDerive Debug and Clone\nIn main() create a new Point struct\nDebug print the new point\nDestructure the point into x and y\n\n\n\nView solution\n\n#[derive(Debug, Clone)]\nstruct Point {\n    x: f64,\n    y: f64,\n}\n\nfn main() {\n    let point = Point { x: 3.0, y: 0.14 };\n    println!(\"The point is {:?}\", point);\n    let Point { x, y } = point;\n    println!(\"x is {x}, y is {y}\");\n}",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Defining Struct(ure)s</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/14-struct-methods.html",
+    "href": "intro-to-rust-for-r-devs/14-struct-methods.html",
+    "title": "14  Struct Methods",
+    "section": "",
+    "text": "Associated Functions\nTypically methods are used on instantiations of a variable such as:\nSometimes it makes sense to use an associated function. These are functions that are called from the type itself e.g. Type::function(). They’re typically used for constructors. For example\nThey’re created using an impl block.",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>14</span>  <span class='chapter-title'>Struct Methods</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/14-struct-methods.html#associated-functions",
+    "href": "intro-to-rust-for-r-devs/14-struct-methods.html#associated-functions",
+    "title": "14  Struct Methods",
+    "section": "",
+    "text": "let me = Person { name: \"Josiah\".to_string(), age: 29 };\nlet birth_year = me.year_of_birth();\n\nlet me = Person::new(\"Josiah\".to_string(), 29);",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>14</span>  <span class='chapter-title'>Struct Methods</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/14-struct-methods.html#implement-methods",
+    "href": "intro-to-rust-for-r-devs/14-struct-methods.html#implement-methods",
+    "title": "14  Struct Methods",
+    "section": "implement methods",
+    "text": "implement methods\nimpl is short for implement. We can implement methods for structs using the following syntax:\nimpl TypeName {\n    fn method() {\n        todo!()\n    }\n}\nAssociated functions are methods that do not reference the type itself. To create a new() constructor function that returns the type we can set the return type to Self:\nimpl Person {\n    fn new(name: String, age: i32) -&gt; Self {\n        Person { name, age }\n    }\n}\nThis gives us the ability to use Person::new()",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>14</span>  <span class='chapter-title'>Struct Methods</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/14-struct-methods.html#self-references",
+    "href": "intro-to-rust-for-r-devs/14-struct-methods.html#self-references",
+    "title": "14  Struct Methods",
+    "section": "Self references",
+    "text": "Self references\nHowever, it often makes sense to call methods from an instantiation itself.\nWe can do this by setting the first argument to &self which provides a reference to the struct the method is called on.\nimpl Person {\n    fn greet(&self) {\n        println!(\"Hello, my name is {} and I am {} years old.\", self.name, self.age);\n    }\n}\nUsing a &self reference means you cannot move the inner fields, only borrow them.\nWe can also have arguments that refer to other instantiations of the same type via &Self or Self. For example to compare ages of people:\nimpl Person {\n    fn is_older_than(&self, other_person: &Self) -&gt; bool {\n        self.age &gt; other_person.age\n    }\n}",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>14</span>  <span class='chapter-title'>Struct Methods</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/14-struct-methods.html#mutable-self",
+    "href": "intro-to-rust-for-r-devs/14-struct-methods.html#mutable-self",
+    "title": "14  Struct Methods",
+    "section": "Mutable self",
+    "text": "Mutable self\nOften it makes sense to modify the fields of a struct. This is when a mutable reference is handy via &mut self.\nFor example we can implement methods to rename() and celebrate_birthday():\nimpl Person {\n    fn rename(&mut self, new_name: &str) {\n        self.name = new_name.to_string();\n    }\n\n    fn celebrate_birthday(&mut self) {\n        self.age += 1;\n    }\n}",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>14</span>  <span class='chapter-title'>Struct Methods</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/14-struct-methods.html#exercise",
+    "href": "intro-to-rust-for-r-devs/14-struct-methods.html#exercise",
+    "title": "14  Struct Methods",
+    "section": "Exercise",
+    "text": "Exercise\n\nImplement a Point::new() associated function\n\nUsing arguments x: f64 and y: f64\nIt should return Self\n\nDefine a method euclidean_distance() which calculates the distance between itself and another Point\n\nUse arguments &self and destination: &Self\nReturn f64\nDistance is calculated as \\(\\sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2}\\)\nUse .powi(2) to square a value and x.sqrt() to get the square root\n\nIn main.rs create two Point structs and calculate the distance between them.",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>14</span>  <span class='chapter-title'>Struct Methods</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/14-struct-methods.html#bonus-exercise-2",
+    "href": "intro-to-rust-for-r-devs/14-struct-methods.html#bonus-exercise-2",
+    "title": "14  Struct Methods",
+    "section": "Bonus: Exercise 2",
+    "text": "Bonus: Exercise 2\nEuclidean distance is useful only on a rectangle. What about on a sphere? Haversine distance is used to calculate the distance on a sphere. The Haversine formula computes the distance between two points on a sphere given their longitudes and latitudes.\nIt is defined by the following (messy) equation:\n\\[a = \\sin^2\\left(\\frac{\\Delta\\phi}{2}\\right) + \\cos\\phi_1 \\cdot \\cos\\phi_2 \\cdot \\sin^2\\left(\\frac{\\Delta\\lambda}{2}\\right)\\]\n\\[c = 2 \\cdot \\text{atan2}(\\sqrt{a}, \\sqrt{1-a})\\]\n\\[d = R \\cdot c\\]\nWhere:\n\n\\(\\phi\\) represents latitude (in radians) (use .to_radians())\n\\(\\lambda\\) represents longitude (in radians) (use .to_radians())\n\\(R\\) is the Earth’s radius (you can use 6_371_008_7714f64 meters as a mean radius)\n\\(\\Delta\\phi\\) is the difference in latitude between the two points (\\(\\phi_2 - \\phi_1\\))\n\\(\\Delta\\lambda\\) is the difference in longitude between the two points (\\(\\lambda_2 - \\lambda_1\\))\n\\(\\text{atan2}(y, x)\\) is the arctangent of \\(y/x\\), using the signs of both arguments to determine the correct quadrant.\n\nHints for Implementation:\n\nRemember to convert your latitude and longitude values from degrees to radians using the .to_radians() method on f64.\nThe c part of the formula, \\(2 \\cdot \\text{atan2}(\\sqrt{a}, \\sqrt{1-a})\\), can also be implemented using 2 * a.sqrt().asin() in Rust, which is a common simplification when a is within the valid domain for asin.\n\n\n\nView solution\n\n#[derive(Debug, Clone)]\nstruct Point {\n    x: f64,\n    y: f64,\n}\n\nimpl Point {\n    fn new(x: f64, y: f64) -&gt; Self {\n        Self { x, y }\n    }\n\n    fn euclidean_distance(&self, destination: &Self) -&gt; f64 {\n        let x_diff = (self.x - destination.x).powi(2);\n        let y_diff = (self.y - destination.y).powi(2);\n        (x_diff + y_diff).sqrt()\n    }\n\n    // Bonus: distance on a sphere via the Haversine formula\n    fn haversine_distance(&self, destination: &Self) -&gt; f64 {\n        let radius = 6_371_008.7714; // Earth's mean radius in meters\n        let theta1 = self.y.to_radians(); // Latitude of point 1\n        let theta2 = destination.y.to_radians(); // Latitude of point 2\n        let delta_theta = (destination.y - self.y).to_radians(); // Delta Latitude\n        let delta_lambda = (destination.x - self.x).to_radians(); // Delta Longitude\n\n        let a = (delta_theta / 2f64).sin().powi(2)\n            + theta1.cos() * theta2.cos() * (delta_lambda / 2f64).sin().powi(2);\n\n        2f64 * a.sqrt().asin() * radius\n    }\n}\n\nfn main() {\n    let a = Point::new(0.0, 5.0);\n    let b = Point::new(-10.0, 1.5);\n    let distance = a.euclidean_distance(&b);\n    println!(\"Distance between a and b is {distance}\");\n\n    let haversine = a.haversine_distance(&b);\n    println!(\"Haversine distance between a and b is {haversine}\");\n}",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>14</span>  <span class='chapter-title'>Struct Methods</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/15-enums.html",
+    "href": "intro-to-rust-for-r-devs/15-enums.html",
+    "title": "15  Enum(eration)s",
+    "section": "",
+    "text": "Enums in R\nOftentimes a variable can only take on a small number of values. This is when an enumeration (enum) would be useful.\nenums are values that can only take on a select few variants. They are defined using the enum keyword.\nWe use enums all the time in R and almost exclusively as function arguments.",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Enum(eration)s</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/15-enums.html#enums-in-r",
+    "href": "intro-to-rust-for-r-devs/15-enums.html#enums-in-r",
+    "title": "15  Enum(eration)s",
+    "section": "",
+    "text": "The tidyverse design style guide has a great section on enums. See enumerate options.\nargs(cor)\nfunction(\n  x, y = NULL, use = \"everything\",\n  method = c(\"pearson\", \"kendall\", \"spearman\") # 👈🏼 enum!\n)\n\n\nI’ve written about this in more detail in my blog post Enums in R: towards type safe R\n\nExample\nFor example, it may make sense to create an enum that specifies a possible shape.\nenum Shape {\n    Triangle,\n    Rectangle,\n    Pentagon,\n    Hexagon,\n}",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Enum(eration)s</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/15-enums.html#variant-specific-behavior",
+    "href": "intro-to-rust-for-r-devs/15-enums.html#variant-specific-behavior",
+    "title": "15  Enum(eration)s",
+    "section": "Variant-specific behavior",
+    "text": "Variant-specific behavior\nThe Shape enum can take on only one of those 4 variants. An enum is created using the format EnumName::Variant.\nHow do we actually determine behavior based on a variant? This is done using pattern matching.\nThe keyword match lets us perform an action based on an enum’s variant. It works by listing each variant and the behavior to that happens when that variant is matched.\nThe pattern match format uses the syntax Enum::Variant =&gt; action. When using match each variant much be enumerated:\n\n\n=&gt; is often referred to as “fat arrow.” But if you say “chompky” I’ll also get it.\nmatch my_shape {\n    Shape::Triangle =&gt; todo!(),\n    Shape::Rectangle =&gt; todo!(),\n    Shape::Pentagon =&gt; todo!(),\n    Shape::Hexagon =&gt; todo!(),\n}\n\n\n\n\n\n\ntodo!() is a placeholder that can be used to make the compiler happy\n\n\n\n\nExample\nFor example we may want to print the number of verticies of a shape:\nlet my_shape = Shape::Triangle;\n\nmatch my_shape {\n    Shape::Triangle =&gt; println!(\"A triangle has 3 vertices\"),\n    Shape::Rectangle =&gt; println!(\"A rectangle has 4 vertices\"),\n    Shape::Pentagon =&gt; println!(\"A pentagon has 5 vertices\"),\n    Shape::Hexagon =&gt; println!(\"A hexagon has 6 vertices\"),\n}",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Enum(eration)s</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/15-enums.html#wildcard-matching",
+    "href": "intro-to-rust-for-r-devs/15-enums.html#wildcard-matching",
+    "title": "15  Enum(eration)s",
+    "section": "Wildcard matching",
+    "text": "Wildcard matching\nSometimes we want to customize behavior on only a subset of variants. We can use a catch all in the match statement _ =&gt; use the underscore to signify “everything else”.\nmatch my_shape {\n    Shape::Hexagon =&gt; println!(\"Hexagons are the bestagons\"),\n    _ =&gt; println!(\"Every other polygon is mid\"),\n}",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Enum(eration)s</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/15-enums.html#enums-can-impl-too",
+    "href": "intro-to-rust-for-r-devs/15-enums.html#enums-can-impl-too",
+    "title": "15  Enum(eration)s",
+    "section": "Enums can impl, too",
+    "text": "Enums can impl, too\nEnums can have methods too just like a struct using impl keyword\nimpl Shape {\n    fn is_bestagon(&self) -&gt; bool {\n        match self {\n            Self::Hexagon =&gt; true,\n            _ =&gt; false\n        }\n    }\n}",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Enum(eration)s</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/15-enums.html#exercise-1",
+    "href": "intro-to-rust-for-r-devs/15-enums.html#exercise-1",
+    "title": "15  Enum(eration)s",
+    "section": "Exercise 1",
+    "text": "Exercise 1\n\nCreate an enum called Measure with two variants Euclidean and Haversine\nCreate a method called ndim() which returns 2 for Euclidean and 3 for Haversine",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Enum(eration)s</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/15-enums.html#exercise-2",
+    "href": "intro-to-rust-for-r-devs/15-enums.html#exercise-2",
+    "title": "15  Enum(eration)s",
+    "section": "Exercise 2",
+    "text": "Exercise 2\n\nCreate a new method distance() for Point struct that returns an f64\n\nArguments: &self, destination: &Self, measure: &Measure\n\nWhen measure is Euclidean use the euclidean_distance() method\nWhen the variant is Haversine use the haversine_distance() method\n\nThe haversine method is defined as:\n\n\nCode for haversine_distance()\n\nimpl Point {\n    fn haversine_distance(&self, destination: &Self) -&gt; f64 {\n        let radius = 6_371_008.7714; // Earth's mean radius in meters\n        let theta1 = self.y.to_radians(); // Latitude of point 1\n        let theta2 = destination.y.to_radians(); // Latitude of point 2\n        let delta_theta = (destination.y - self.y).to_radians(); // Delta Latitude\n        let delta_lambda = (destination.x - self.x).to_radians(); // Delta Longitude\n\n        let a = (delta_theta / 2f64).sin().powi(2)\n            + theta1.cos() * theta2.cos() * (delta_lambda / 2f64).sin().powi(2);\n\n        2f64 * a.sqrt().asin() * radius\n    }\n}\n\n\n\nView solution\n\n#[derive(Debug, Clone)]\nstruct Point {\n    x: f64,\n    y: f64,\n}\n\nimpl Point {\n    fn new(x: f64, y: f64) -&gt; Self {\n        Self { x, y }\n    }\n\n    fn euclidean_distance(&self, destination: &Self) -&gt; f64 {\n        ((self.x - destination.x).powi(2) + (self.y - destination.y).powi(2)).sqrt()\n    }\n\n    fn haversine_distance(&self, destination: &Self) -&gt; f64 {\n        let radius = 6_371_008.7714; // Earth's mean radius in meters\n        let theta1 = self.y.to_radians();\n        let theta2 = destination.y.to_radians();\n        let delta_theta = (destination.y - self.y).to_radians();\n        let delta_lambda = (destination.x - self.x).to_radians();\n\n        let a = (delta_theta / 2f64).sin().powi(2)\n            + theta1.cos() * theta2.cos() * (delta_lambda / 2f64).sin().powi(2);\n\n        2f64 * a.sqrt().asin() * radius\n    }\n\n    // Exercise 2: pick the distance method based on the `Measure` variant\n    fn distance(&self, destination: &Self, measure: &Measure) -&gt; f64 {\n        match measure {\n            Measure::Euclidean =&gt; self.euclidean_distance(destination),\n            Measure::Haversine =&gt; self.haversine_distance(destination),\n        }\n    }\n}\n\n// Exercise 1: an enum with a method that matches on its variants\nenum Measure {\n    Euclidean,\n    Haversine,\n}\n\nimpl Measure {\n    fn ndim(&self) -&gt; i32 {\n        match self {\n            Self::Euclidean =&gt; 2,\n            Self::Haversine =&gt; 3,\n        }\n    }\n}\n\nfn main() {\n    let a = Point::new(0.0, 5.0);\n    let b = Point::new(-10.0, 1.5);\n\n    println!(\"Euclidean is {}-dimensional\", Measure::Euclidean.ndim());\n    println!(\"Haversine is {}-dimensional\", Measure::Haversine.ndim());\n\n    println!(\"Euclidean distance: {}\", a.distance(&b, &Measure::Euclidean));\n    println!(\"Haversine distance: {}\", a.distance(&b, &Measure::Haversine));\n}",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Enum(eration)s</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/16-options.html",
+    "href": "intro-to-rust-for-r-devs/16-options.html",
+    "title": "16  Some() or None?",
+    "section": "",
+    "text": "Option\nRust doesn’t have the concept of a NULL type. Null values are quite dangerous and have their own category of errors and security issues.\nRust makes it impossible to have a null value by formalizing the concept of missingness through the Option&lt;&gt;\nAn Option is a special enum that has two possible values:\nWhen a value is missing, the option’s variant is None. When the option contains some value, the value is contained inside of the Some(T) variant.",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>16</span>  <span class='chapter-title'>`Some()` or `None`?</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/16-options.html#option",
+    "href": "intro-to-rust-for-r-devs/16-options.html#option",
+    "title": "16  Some() or None?",
+    "section": "",
+    "text": "enum Option {\n    Some(T),\n    None\n}",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>16</span>  <span class='chapter-title'>`Some()` or `None`?</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/16-options.html#accessing-some-value",
+    "href": "intro-to-rust-for-r-devs/16-options.html#accessing-some-value",
+    "title": "16  Some() or None?",
+    "section": "Accessing Some() value",
+    "text": "Accessing Some() value\nSince Option&lt;T&gt; are “just” an enum, we can match on the variants to access the values.\n// create an Option&lt;Measure&gt; that contains a value\nlet measure = Some(Measure::Euclidean);\n\nmatch measure {\n    Some(v) =&gt; println!(\"The measure is not missing!\"),\n    None =&gt; println!(\"Oh no! The measure is missing\"),\n}\nWe put a placeholder value inside of Some(v) to create a binding to the inner value. It’s like a function argument, it can be called whatever you want it to be.",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>16</span>  <span class='chapter-title'>`Some()` or `None`?</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/16-options.html#danger-.unwrap-.expect",
+    "href": "intro-to-rust-for-r-devs/16-options.html#danger-.unwrap-.expect",
+    "title": "16  Some() or None?",
+    "section": "Danger! .unwrap() & .expect()",
+    "text": "Danger! .unwrap() & .expect()\nSometimes dealing with options is a headache, particularly when we’re in the early stages of developing.\nWe can use .unwrap() or .expect() to grab the inner value of an option without matching.\nThis is dangerous!! because we are ignoring the possibility of a None. Unwrapping on a None leads to a panic. Panics cause your program to abort.\nthread 'main' panicked at src/main.rs:4:41:\ncalled `Option::unwrap()` on a `None` value",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>16</span>  <span class='chapter-title'>`Some()` or `None`?</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/16-options.html#exercise",
+    "href": "intro-to-rust-for-r-devs/16-options.html#exercise",
+    "title": "16  Some() or None?",
+    "section": "Exercise",
+    "text": "Exercise\n\nModify the distance() method to take an Option&lt;&Measure&gt;\nWhen None use euclidean distance, otherwise use the provided distance measure\n\n\n\nThe exercise does not involve .unwrap() because it’s a bad habbit. Let’s try and form good habbits from the outset if possible.\n\n\nView solution\n\n#[derive(Debug, Clone)]\nstruct Point {\n    x: f64,\n    y: f64,\n}\n\nenum Measure {\n    Euclidean,\n    Haversine,\n}\n\nimpl Point {\n    fn new(x: f64, y: f64) -&gt; Self {\n        Self { x, y }\n    }\n\n    fn euclidean_distance(&self, destination: &Self) -&gt; f64 {\n        ((self.x - destination.x).powi(2) + (self.y - destination.y).powi(2)).sqrt()\n    }\n\n    fn haversine_distance(&self, destination: &Self) -&gt; f64 {\n        let radius = 6_371_008.7714; // Earth's mean radius in meters\n        let theta1 = self.y.to_radians();\n        let theta2 = destination.y.to_radians();\n        let delta_theta = (destination.y - self.y).to_radians();\n        let delta_lambda = (destination.x - self.x).to_radians();\n\n        let a = (delta_theta / 2f64).sin().powi(2)\n            + theta1.cos() * theta2.cos() * (delta_lambda / 2f64).sin().powi(2);\n\n        2f64 * a.sqrt().asin() * radius\n    }\n\n    // `measure` is now optional: `None` falls back to Euclidean distance\n    fn distance(&self, destination: &Self, measure: Option&lt;&Measure&gt;) -&gt; f64 {\n        match measure {\n            Some(m) =&gt; match m {\n                Measure::Euclidean =&gt; self.euclidean_distance(destination),\n                Measure::Haversine =&gt; self.haversine_distance(destination),\n            },\n            None =&gt; self.euclidean_distance(destination),\n        }\n    }\n}\n\nfn main() {\n    let a = Point::new(0.0, 5.0);\n    let b = Point::new(-10.0, 1.5);\n\n    println!(\"Default (None): {}\", a.distance(&b, None));\n    println!(\"Euclidean: {}\", a.distance(&b, Some(&Measure::Euclidean)));\n    println!(\"Haversine: {}\", a.distance(&b, Some(&Measure::Haversine)));\n}",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>16</span>  <span class='chapter-title'>`Some()` or `None`?</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/17-result.html",
+    "href": "intro-to-rust-for-r-devs/17-result.html",
+    "title": "17  Ok() or Err()?",
+    "section": "",
+    "text": "Result\nIn R, when something goes wrong we stop() and throw an error (an exception). Rust does not have exceptions. Instead, errors are data: a function that might fail returns a Result.\nJust like Option, a Result&lt;T, E&gt; is a special enum:\nThe letters T and E are placeholders for types:\nFor example, a divide() function might return Result&lt;f64, String&gt;: an f64 on success, or a String error message on failure.",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>17</span>  <span class='chapter-title'>`Ok()` or `Err()`?</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/17-result.html#result",
+    "href": "intro-to-rust-for-r-devs/17-result.html#result",
+    "title": "17  Ok() or Err()?",
+    "section": "",
+    "text": "enum Result {\n    Ok(T),\n    Err(E),\n}\n\n\nT is the type of the value when there is no error—the value inside Ok(T).\nE is the type of the value when there is an error—the value inside Err(E).\n\n\nfn divide(a: f64, b: f64) -&gt; Result&lt;f64, String&gt; {\n    if b == 0.0 {\n        Err(String::from(\"cannot divide by zero\"))\n    } else {\n        Ok(a / b)\n    }\n}",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>17</span>  <span class='chapter-title'>`Ok()` or `Err()`?</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/17-result.html#recovering-with-match",
+    "href": "intro-to-rust-for-r-devs/17-result.html#recovering-with-match",
+    "title": "17  Ok() or Err()?",
+    "section": "Recovering with match",
+    "text": "Recovering with match\nBecause the error is just data, we can match on the variants and decide how to behave when something goes wrong. This makes the error recoverable.\nmatch divide(10.0, 0.0) {\n    Ok(value) =&gt; println!(\"The answer is {value}\"),\n    Err(msg) =&gt; println!(\"Error: {msg}\"),\n}",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>17</span>  <span class='chapter-title'>`Ok()` or `Err()`?</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/17-result.html#propagating-with",
+    "href": "intro-to-rust-for-r-devs/17-result.html#propagating-with",
+    "title": "17  Ok() or Err()?",
+    "section": "Propagating with ?",
+    "text": "Propagating with ?\nSometimes we don’t want to recover—we just want to bubble the error up to whoever called us. The ? operator does exactly this:\n\nif the value is Ok(T), ? unwraps it and gives you the T,\nif the value is Err(E), ? returns that Err(E) immediately and stops the computation.\n\nBecause ? can return an error, it can only be used inside a function that itself returns a Result. That includes main():\nfn main() -&gt; Result&lt;(), String&gt; {\n    let result = divide(10.0, 2.0)?;\n    println!(\"The answer is {result}\");\n    Ok(())\n}",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>17</span>  <span class='chapter-title'>`Ok()` or `Err()`?</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/17-result.html#exercise",
+    "href": "intro-to-rust-for-r-devs/17-result.html#exercise",
+    "title": "17  Ok() or Err()?",
+    "section": "Exercise",
+    "text": "Exercise\n\nWrite a divide() function that returns Result&lt;f64, String&gt;\n\nReturn an Err with a message when dividing by zero\nOtherwise return the quotient in Ok\n\nIn main(), use match to handle a division by zero\nChange main to return Result&lt;(), String&gt; and use ? to propagate the error from a successful division\n\n\n\nView solution\n\n// `Result&lt;T, E&gt;` is an enum: `Ok(T)` on success, `Err(E)` on failure.\n// T is the type returned when things go well, E the type returned on error.\n// You can think of it as:  enum Result { Ok(MyReturnType), Err(MyErrorType) }\nfn divide(a: f64, b: f64) -&gt; Result&lt;f64, String&gt; {\n    if b == 0.0 {\n        Err(String::from(\"cannot divide by zero\"))\n    } else {\n        Ok(a / b)\n    }\n}\n\n// Because `main` itself can now return an error, we can use `?`.\n// `?` unwraps `Ok(T)` to its value, OR returns the `Err(E)` early\n// and stops the computation.\nfn main() -&gt; Result&lt;(), String&gt; {\n    // Recoverable: `match` lets us decide how to behave on an error.\n    // The error is just data, so we can handle it however we like.\n    match divide(10.0, 0.0) {\n        Ok(value) =&gt; println!(\"10 / 0 = {value}\"),\n        Err(msg) =&gt; println!(\"Error: {msg}\"),\n    }\n\n    // Propagating: `?` bubbles the error up instead of recovering.\n    let result = divide(10.0, 2.0)?;\n    println!(\"10 / 2 = {result}\");\n\n    Ok(())\n}",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>17</span>  <span class='chapter-title'>`Ok()` or `Err()`?</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/18-anyhow.html",
+    "href": "intro-to-rust-for-r-devs/18-anyhow.html",
+    "title": "18  Adding a crate: anyhow",
+    "section": "",
+    "text": "Library error types\nIn the last chapter our divide() function used a String for its error type. That worked because we invented the error. But most of the time we are calling code written by someone else.\nAlmost every library defines its own error types. These tend to be enums that list every kind of error that can occur. For example, parsing a string into an f64 with .parse::&lt;f64&gt;() returns a Result whose error type is std::num::ParseFloatError.\nThis is great for precision, but it becomes a chore: if one function can fail in three different ways, you’d have to juggle three different error types just to use ?.",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>18</span>  <span class='chapter-title'>Adding a crate: `anyhow`</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/18-anyhow.html#anyhow-to-the-rescue",
+    "href": "intro-to-rust-for-r-devs/18-anyhow.html#anyhow-to-the-rescue",
+    "title": "18  Adding a crate: anyhow",
+    "section": "anyhow to the rescue",
+    "text": "anyhow to the rescue\nRather than naming every possible error type, we can use a dependency called anyhow. It provides anyhow::Result&lt;T&gt;, which lets you return (almost) any error type—thanks to some magic from Rust’s trait system that we won’t get into today.\nThe practical upshot: with anyhow::Result, the ? operator “just works” no matter which library’s error you’re propagating.",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>18</span>  <span class='chapter-title'>Adding a crate: `anyhow`</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/18-anyhow.html#adding-a-dependency",
+    "href": "intro-to-rust-for-r-devs/18-anyhow.html#adding-a-dependency",
+    "title": "18  Adding a crate: anyhow",
+    "section": "Adding a dependency",
+    "text": "Adding a dependency\nUp to now our Cargo.toml has had no dependencies. To add anyhow, run:\ncargo add anyhow\nThis downloads the crate and adds it to the [dependencies] section of Cargo.toml:\n[dependencies]\nanyhow = \"1\"",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>18</span>  <span class='chapter-title'>Adding a crate: `anyhow`</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/18-anyhow.html#using-anyhow",
+    "href": "intro-to-rust-for-r-devs/18-anyhow.html#using-anyhow",
+    "title": "18  Adding a crate: anyhow",
+    "section": "Using anyhow",
+    "text": "Using anyhow\nBring anyhow::Result into scope, then use it as the return type. Now ? can propagate the ParseFloatError from .parse() without us ever naming it:\nuse anyhow::Result;\n\nimpl Point {\n    fn from_strings(x: &str, y: &str) -&gt; Result&lt;Self&gt; {\n        let x = x.parse::&lt;f64&gt;()?;\n        let y = y.parse::&lt;f64&gt;()?;\n        Ok(Point { x, y })\n    }\n}\nBecause main can also return anyhow::Result&lt;()&gt;, errors can bubble all the way up to the top of the program.",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>18</span>  <span class='chapter-title'>Adding a crate: `anyhow`</span>"
+    ]
+  },
+  {
+    "objectID": "intro-to-rust-for-r-devs/18-anyhow.html#exercise",
+    "href": "intro-to-rust-for-r-devs/18-anyhow.html#exercise",
+    "title": "18  Adding a crate: anyhow",
+    "section": "Exercise",
+    "text": "Exercise\n\nRun cargo add anyhow to add the dependency\nDefine a Point struct with f64 fields x and y\nAdd a from_strings(x: &str, y: &str) associated function that:\n\nReturns anyhow::Result&lt;Self&gt;\nUses .parse::&lt;f64&gt;()? to parse each field\n\nIn main() (returning anyhow::Result&lt;()&gt;), build a Point from two strings using ?\nTry passing an unparseable string (e.g. \"abc\") to see the error propagate\n\n\n\nView solution\n\nuse anyhow::Result;\n\n#[derive(Debug)]\nstruct Point {\n    x: f64,\n    y: f64,\n}\n\nimpl Point {\n    // `.parse::&lt;f64&gt;()` returns a `Result` whose error type belongs to the\n    // standard library. With `anyhow::Result`, `?` accepts (almost) any error\n    // type, so we never have to name it ourselves.\n    fn from_strings(x: &str, y: &str) -&gt; Result&lt;Self&gt; {\n        let x = x.parse::&lt;f64&gt;()?;\n        let y = y.parse::&lt;f64&gt;()?;\n        Ok(Point { x, y })\n    }\n}\n\n// `anyhow::Result&lt;()&gt;` lets `?` bubble up any error from inside `main`.\nfn main() -&gt; Result&lt;()&gt; {\n    let point = Point::from_strings(\"3.0\", \"0.14\")?;\n    println!(\"Parsed {point:?}\");\n\n    // Try changing \"0.14\" to \"abc\" above: the parse fails, `?` returns the\n    // error, and the program prints it and exits non-zero.\n\n    Ok(())\n}",
+    "crumbs": [
+      "Intro to Rust for R Developers",
+      "<span class='chapter-number'>18</span>  <span class='chapter-title'>Adding a crate: `anyhow`</span>"
     ]
   }
 ]

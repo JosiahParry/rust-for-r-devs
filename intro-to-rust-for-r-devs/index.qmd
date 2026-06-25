@@ -17,22 +17,23 @@ This is the conservative timeline for the workshop. So long as we make it to "Ma
 
 |Section                |Duration | End time |
 |:----------------------|:--------|:--------|
-|Intro & Why Rust       |0:15     |9:15 AM  |
-|Hello, world!          |0:10     |9:25 AM  |
-|Primitive Types        |0:10     |9:35 AM  |
-|Control Flow           |0:10     |9:45 AM  |
-|Break                  |0:05     |9:50 AM  |
-|Arrays & Vectors       |0:10     |9:55 AM  |
-|for loops              |0:10     |10:05 AM |
-|Mutability             |0:10     |10:15 AM |
-|Mutable Vectors        |0:10     |10:25 AM |
-|Functions              |0:10     |10:35 AM |
-|Ownership              |0:10     |10:45 AM |
-|Break                  |0:10     |10:55 AM |
-|Iterators              |0:15     |11:10 AM |
-|Mapping over Iterators |0:15     |11:25 AM |
-|Defining Structs       |0:10     |11:35 AM |
-|Struct Methods         |0:10     |11:45 AM |
-|Enumerations           |0:10     |11:55 AM |
-|Options                |0:10     |12:05 PM |
-|Closing                |0:05     |12:10 PM |
+|Intro & Why Rust       |0:10     |9:10 AM  |
+|Hello, world!          |0:10     |9:20 AM  |
+|Primitive Types        |0:10     |9:30 AM  |
+|Control Flow           |0:10     |9:40 AM  |
+|Arrays & Vectors       |0:10     |9:50 AM  |
+|for loops              |0:10     |10:00 AM |
+|Break                  |0:05     |10:05 AM |
+|Mutability             |0:05     |10:10 AM |
+|Mutable Vectors        |0:10     |10:20 AM |
+|Functions              |0:10     |10:30 AM |
+|Ownership              |0:10     |10:40 AM |
+|Iterators              |0:15     |10:55 AM |
+|Mapping over Iterators |0:10     |11:05 AM |
+|Break                  |0:05     |11:10 AM |
+|Defining Structs       |0:10     |11:20 AM |
+|Struct Methods         |0:10     |11:30 AM |
+|Enumerations           |0:05     |11:35 AM |
+|Options                |0:10     |11:45 AM |
+|Result                 |0:05     |11:50 AM |
+|Adding a crate: anyhow |0:10     |12:00 PM |

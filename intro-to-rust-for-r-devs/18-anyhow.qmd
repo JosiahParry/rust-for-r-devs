@@ -1,0 +1,73 @@
+# Adding a crate: `anyhow`
+
+::: callout-tip
+## Objective
+
+Add your first external dependency with `cargo add`. Use `anyhow` to propagate errors of (almost) any type with `?`.
+:::
+
+In the last chapter our `divide()` function used a `String` for its error type. That worked because _we_ invented the error. But most of the time we are calling code written by someone else.
+
+## Library error types
+
+Almost every library defines its **own** error types. These tend to be `enum`s that list every kind of error that can occur. For example, parsing a string into an `f64` with `.parse::<f64>()` returns a `Result` whose error type is `std::num::ParseFloatError`.
+
+This is great for precision, but it becomes a chore: if one function can fail in three different ways, you'd have to juggle three different error types just to use `?`.
+
+## `anyhow` to the rescue
+
+Rather than naming every possible error type, we can use a dependency called [`anyhow`](https://docs.rs/anyhow). It provides `anyhow::Result<T>`, which lets you return (almost) **any** error type—thanks to some magic from Rust's trait system that we won't get into today.
+
+The practical upshot: with `anyhow::Result`, the `?` operator "just works" no matter which library's error you're propagating.
+
+## Adding a dependency
+
+Up to now our `Cargo.toml` has had no dependencies. To add `anyhow`, run:
+
+```bash
+cargo add anyhow
+```
+
+This downloads the crate and adds it to the `[dependencies]` section of `Cargo.toml`:
+
+```toml
+[dependencies]
+anyhow = "1"
+```
+
+## Using `anyhow`
+
+Bring `anyhow::Result` into scope, then use it as the return type. Now `?` can propagate the `ParseFloatError` from `.parse()` without us ever naming it:
+
+```rust
+use anyhow::Result;
+
+impl Point {
+    fn from_strings(x: &str, y: &str) -> Result<Self> {
+        let x = x.parse::<f64>()?;
+        let y = y.parse::<f64>()?;
+        Ok(Point { x, y })
+    }
+}
+```
+
+Because `main` can also return `anyhow::Result<()>`, errors can bubble all the way up to the top of the program.
+
+## Exercise
+
+- Run `cargo add anyhow` to add the dependency
+- Define a `Point` struct with `f64` fields `x` and `y`
+- Add a `from_strings(x: &str, y: &str)` associated function that:
+  - Returns `anyhow::Result<Self>`
+  - Uses `.parse::<f64>()?` to parse each field
+- In `main()` (returning `anyhow::Result<()>`), build a `Point` from two strings using `?`
+- Try passing an unparseable string (e.g. `"abc"`) to see the error propagate
+
+<details>
+<summary>View solution</summary>
+
+```{.rust}
+{{< include ../intro-to-rust/examples/18-anyhow.rs >}}
+```
+
+</details>

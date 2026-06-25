@@ -118,7 +118,8 @@ fn main() {
 <details>
 <summary>View solution</summary>
 
-```{.rust include="../intro-to-rust/examples/11-iterators.rs"}
+```{.rust}
+{{< include ../intro-to-rust/examples/11-iterators.rs >}}
 ```
 
 </details>

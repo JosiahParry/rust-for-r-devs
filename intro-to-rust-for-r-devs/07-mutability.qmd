@@ -65,6 +65,7 @@ You can use `+=` shorthand to add and assign all at the same time. For example `
 <details>
 <summary>View solution</summary>
 
-```{.rust include="../intro-to-rust/examples/07-mutability.rs"}
+```{.rust}
+{{< include ../intro-to-rust/examples/07-mutability.rs >}}
 ```
 </details>
