@@ -102,13 +102,7 @@ Modify `src/main.rs` to add two or more incompatible types.
 <details>
     <summary>View solution</summary>
 
-```rust
-fn main() {
-    let x = 3.14;
-    let y = 47_i32;
-    let z = x + y as f64;
-    println!(" The value of z is {z}");
-}
+```{.rust include="../intro-to-rust/examples/03-types.rs"}
 ```
 
 </details>

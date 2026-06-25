@@ -85,17 +85,7 @@ fn main() {
 <details>
 <summary>View solution</summary>
 
-```rust
-fn main() {
-    let arr = [1, 2, 3, 4];
-    println!("Array: {:?}", arr);
-
-    let v = vec![10, 20, 30, 40, 50];
-    println!("Vector: {:?}", v);
-
-    // Bonus:
-    let v = vec![42_i32; 0];
-}
+```{.rust include="../intro-to-rust/examples/05-collections.rs"}
 ```
 
 </details>

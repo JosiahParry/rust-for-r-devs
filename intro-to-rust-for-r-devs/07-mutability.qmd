@@ -65,18 +65,6 @@ You can use `+=` shorthand to add and assign all at the same time. For example `
 <details>
 <summary>View solution</summary>
 
-```rust
-fn main() {
-    let x = vec![1.0, 2.0, 3.0, 4.0];
-
-    let n = x.len() as f64;
-    let mut total = 0.0;
-
-    for xi in x {
-        total += xi;
-    }
-
-    println!("The mean is: {}", total / n);
-}
+```{.rust include="../intro-to-rust/examples/07-mutability.rs"}
 ```
 </details>

@@ -110,55 +110,10 @@ In general: slice > reference > owned
 - Calculate the mean of the same `Vec<f64>` twice
 - Print the vector at the end
 
-<details>
-<summary>View solution</summary>
-
-```rust
-fn mean(x: Vec<f64>) -> f64 {
-    let mut total = 0.0;
-    for xi in x {
-        total += xi;
-    }
-    total / x.len() as f64
-}
-
-fn main() {
-    let x = vec![1.0, 2.0, 3.0, 4.0, 5.0];
-    let result = mean(x.clone());
-    let result2 = mean(x.clone())
-    println!("The vector is still {:?}", x);
-}
-```
-
-</details>
-
 ## Exercise 2
 
 - Rewrite the `mean()` function to accept a **reference** to a `Vec<f64>` instead of taking ownership
 - Then call it with a borrowed vector.
-
-
-<details>
-<summary>View solution</summary>
-
-```rust
-fn mean(x: &Vec<f64>) -> f64 {
-    let mut total = 0.0;
-    for xi in x {
-        total += xi;
-    }
-    total / x.len() as f64
-}
-
-fn main() {
-    let x = vec![1.0, 2.0, 3.0, 4.0, 5.0];
-    let result = mean(&x);
-    println!("The mean of x is {result}");
-}
-```
-
-</details>
-
 
 ## Exercise 3
 
@@ -167,24 +122,12 @@ fn main() {
 - Calculate the mean on both `x` and `y`
 - Print both averages
 
+### Solution
 
 <details>
 <summary>View solution</summary>
 
-```rust
-fn mean(x: &[f64]) -> f64 {
-    let mut total = 0.0;
-    for xi in x {
-        total += xi;
-    }
-    total / x.len() as f64
-}
-
-fn main() {
-    let x = vec![1.0, 2.0, 3.0, 4.0, 5.0];
-    let y = [0.0, 9.5, 3.3, 11.78, 3.14159];
-    println!("The mean of x is {}.\nThe mean of y is {}", mean(&x), mean(&y));
-}
+```{.rust include="../intro-to-rust/examples/10-references-slices.rs"}
 ```
 
 </details>

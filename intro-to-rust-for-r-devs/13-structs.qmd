@@ -129,17 +129,6 @@ fn main() {
 <details>
     <summary>View solution</summary>
 
-```rust
-#[derive(Debug, Clone)]
-struct Point {
-    x: f64,
-    y: f64
-}
-
-fn main() {
-    let point = Point { x: 3.0, y: 0.14 };
-    println!("The point is {:?}");
-    let Point { x, y } = point;
-}
+```{.rust include="../intro-to-rust/examples/13-structs.rs"}
 ```
 </details>

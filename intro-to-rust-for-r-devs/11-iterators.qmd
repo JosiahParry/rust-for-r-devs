@@ -109,25 +109,6 @@ fn main() {
 - Create a vector of 5 or more `f64` values
 - Calculate the mean and print the result
 
-### Solution
-
-<details>
-<summary>View solution</summary>
-
-```rust
-fn mean(x: &[f64]) -> f64 {
-    let total: f64 = x.iter().sum();
-    total / x.len() as f64
-}
-
-fn main() {
-    let nums = vec![1.0, 2.0, 3.0, 4.0, 5.0];
-    println!("Mean is: {}", mean(&nums));
-}
-```
-
-</details>
-
 ## Exercise 2
 
 - Print the index and value for each item in a vector for **only even** values
@@ -137,16 +118,7 @@ fn main() {
 <details>
 <summary>View solution</summary>
 
-```rust
-fn main() {
-    let nums = vec![1, 2, 3, 4, 5, 6];
-
-    for (i, n) in nums.iter().enumerate() {
-        if n % 2 == 0 {
-            println!("Index {i}: {n} is even");
-        }
-    }
-}
+```{.rust include="../intro-to-rust/examples/11-iterators.rs"}
 ```
 
 </details>

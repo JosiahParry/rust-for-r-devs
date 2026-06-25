@@ -67,17 +67,6 @@ The exercise does not involve `.unwrap()` because it's a bad habbit. Let's try a
 
 <details>
 <summary>View solution</summary>
-```rust
-impl Point {
-    fn distance(&self, destination: &Self, measure: Option<&Measure>) -> f64 {
-        match measure {
-            Some(m) => match m {
-                Measure::Euclidean => self.euclidean_distance(destination),
-                Measure::Haversine => self.haversine_distance(destination),
-            },
-            None => self.euclidean_distance(destination),
-        }
-    }
-}
+```{.rust include="../intro-to-rust/examples/16-options.rs"}
 ```
 </details>

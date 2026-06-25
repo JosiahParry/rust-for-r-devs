@@ -154,21 +154,7 @@ fn variance(x: &[f64]) -> f64 {
 <details>
 <summary>View solution</summary>
 
-```rust
-fn variance(x: &[f64]) -> f64 {
-    let n = x.len() as f64;
-    let avg = mean(x);
-    let sq_diffs: f64 = x
-        .iter()
-        .map(|xi| (xi - avg).powi(2))
-        .sum();
-    sq_diffs / (n - 1.0)
-}
-
-fn main() {
-    let x = vec![2.0, 4.0, 4.0, 4.0, 5.0, 5.0, 7.0, 9.0];
-    println!("Variance is: {:.2}", variance(&x));
-}
+```{.rust include="../intro-to-rust/examples/12-iter-map.rs"}
 ```
 
 </details>
@@ -191,18 +177,7 @@ $$
 <details>
 <summary>View solution</summary>
 
-```rust
-fn standardize(x: &[f64]) -> Vec<f64> {
-    let avg = mean(x);
-    let std_dev = variance(x).sqrt();
-    x.iter().map(|xi| (xi - avg) / std_dev).collect()
-}
-
-fn main() {
-    let x = vec![1.0, 2.0, 3.0, 4.0, 5.0];
-    let standardized = standardize(x);
-    println!("Standardized: {:?}", standardized);
-}
+```{.rust include="../intro-to-rust/examples/12-iter-map.rs"}
 ```
 
 </details>

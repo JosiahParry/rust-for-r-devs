@@ -118,11 +118,7 @@ println!("Hello, {name}!");
 
 In `src/main.rs`
 
-```rust
-fn main() {
-    let name = "Josiah";
-    println!("Hello, {name}!");
-}
+```{.rust include="../intro-to-rust/examples/02-hello-world.rs"}
 ```
 
 </details>

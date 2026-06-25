@@ -123,27 +123,6 @@ impl Shape {
 - Create an enum called `Measure` with two variants `Euclidean` and `Haversine`
 - Create a method called `ndim()` which returns `2` for `Euclidean` and `3` for `Haversine`
 
-<details>
-    <summary>View solution</summary>
-
-```rust
-enum Measure {
-    Euclidean,
-    Haversine,
-}
-
-impl Measure {
-    fn ndim(&self) -> i32 {
-        match self {
-            Self::Euclidean => 2,
-            Self::Haversine => 3
-        }
-    }
-}
-```
-
-</details>
-
 ## Exercise 2
 
 
@@ -178,15 +157,8 @@ impl Point {
 
 <details>
 <summary>View solution</summary>
-```rust
 
-impl Point {
-    // Demonstrates using pattern matching an enum
-    fn distance(&self, destination: &Self, measure: &Measure) -> f64 {
-        match measure {
-            Measure::Euclidean => self.euclidean_distance(destination),
-            Measure::Haversine => self.haversine_distance(destination),
-        }
-    }
-}
+```{.rust include="../intro-to-rust/examples/15-enums.rs"}
 ```
+
+</details>
