@@ -43,7 +43,7 @@ Almost everything in Rust can be cloned by using the `.clone()` method.
 #### Cannot compile
 
 ```rust
-let x  = v![0.0, 3.14, 10.1, 44.8];
+let x  = vec![0.0, 3.14, 10.1, 44.8];
 
 let avg1 = mean(x); // ⬅️ x moved here!
 let avg2 = mean(x); // ❌ compiler error
@@ -53,7 +53,7 @@ let avg2 = mean(x); // ❌ compiler error
 If we first clone `x` before using `mean()` we can use `x` again.
 
 ```rust
-let x  = v![0.0, 3.14, 10.1, 44.8];
+let x  = vec![0.0, 3.14, 10.1, 44.8];
 
 let avg1 = mean(x.clone()); // ⬅️ x cloned here!
 let avg2 = mean(x); // ✅ compiler happy
