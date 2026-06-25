@@ -44,7 +44,7 @@
     "href": "index.html#install-rextendr",
     "title": "Rust for R Developers",
     "section": "Install {rextendr}",
-    "text": "Install {rextendr}\nWe will be using the rextendr package to build Rust powerd R-packages.\n\n\n\n\n\n\nOther R package dependencies\n\n\n\nWe also will be relying on other packages in the R ecosytem to make developing easier. Please install:\n\ndevtools\nusethis\n\ninstall.packages(c(\"devtools\", \"usethis\"))\n\n\nInstall the package using:\nif (!requireNamespace(\"remotes\")) {\n    install.packages(\"remotes\")\n}\n\nremotes::install_github(\"extendr/rextendr\")\nOnce rextendr is installed, run the below command. You are good to go if:\n\n✅ cargo version is printed (should be 1.80 or greater)\n✅ rustup has a recent version printed\n✅ You have an active default toolchain\n\n\n\n\n\n\n\nIf you’re using windows ensure that x86_64-pc-windows-gnu is your default target. See the above command if it is not.\nR does not support packages compiled with Microsoft Visual C++ (MSVC) so this is required.\n\n\n\n\nrextendr::rust_sitrep()\n\nRust infrastructure sitrep:\n✔ \"rustup\": 1.28.2 (e4f3ad6f8 2025-04-28)\n✔ \"cargo\": 1.85.1 (d73d2caf9 2024-12-31)\nℹ host: aarch64-apple-darwin\nℹ toolchains: stable-aarch64-apple-darwin (active, default),\n  nightly-aarch64-apple-darwin, 1.65.0-aarch64-apple-darwin,\n  1.72.1-aarch64-apple-darwin, 1.74.1-aarch64-apple-darwin,\n  1.75.0-aarch64-apple-darwin, 1.76.0-aarch64-apple-darwin, and\n  1.80.1-aarch64-apple-darwin\n! One of these toolchains should be default: stable-aarch64-apple-darwin\n  (active, default), nightly-aarch64-apple-darwin, 1.65.0-aarch64-apple-darwin,\n  1.72.1-aarch64-apple-darwin, 1.74.1-aarch64-apple-darwin,\n  1.75.0-aarch64-apple-darwin, 1.76.0-aarch64-apple-darwin, and\n  1.80.1-aarch64-apple-darwin\nℹ Run e.g. `rustup default stable-aarch64-apple-darwin (active, default)`",
+    "text": "Install {rextendr}\nWe will be using the rextendr package to build Rust powerd R-packages.\n\n\n\n\n\n\nOther R package dependencies\n\n\n\nWe also will be relying on other packages in the R ecosytem to make developing easier. Please install:\n\ndevtools\nusethis\n\ninstall.packages(c(\"devtools\", \"usethis\"))\n\n\nInstall the package using:\nif (!requireNamespace(\"remotes\")) {\n    install.packages(\"remotes\")\n}\n\nremotes::install_github(\"extendr/rextendr\")\nOnce rextendr is installed, run the below command. You are good to go if:\n\n✅ cargo version is printed (should be 1.80 or greater)\n✅ rustup has a recent version printed\n✅ You have an active default toolchain\n\n\n\n\n\n\n\nIf you’re using windows ensure that x86_64-pc-windows-gnu is your default target. See the above command if it is not.\nR does not support packages compiled with Microsoft Visual C++ (MSVC) so this is required.\n\n\n\n\nrextendr::rust_sitrep()\n\nRust infrastructure sitrep:\n✔ \"rustup\": 1.27.1 (2024-04-24)\n✔ \"cargo\": 1.87.0 (99624be96 2025-05-06)\nℹ host: aarch64-apple-darwin\nℹ toolchains: stable-aarch64-apple-darwin (default) and\n  nightly-2023-07-27-aarch64-apple-darwin\nℹ target: aarch64-apple-darwin",
     "crumbs": [
       "Get set up"
     ]
@@ -140,7 +140,7 @@
     "href": "intro-to-rust-for-r-devs/hello-world.html#println",
     "title": "2  Hello, World!",
     "section": "println!()",
-    "text": "println!()\n\nMacros have a !, like println!().\nThink of it like print() in R, but explicit.\nIt supports format strings:\n\n\n\n\n\n\n\nUsing placeholder\nlet name = \"Josiah\";\nprintln!(\"Hello, {}!\", name);\n\n\nDirect interpolation\nlet name = \"Josiah\";\nprintln!(\"Hello, {name}!\");",
+    "text": "println!()\n\nMacros have a !, like println!().\nThink of it like print() in R, but explicit.\nIt supports format strings:\n\n\n\n\nUsing placeholder\nlet name = \"Josiah\";\nprintln!(\"Hello, {}!\", name);\n\n\nDirect interpolation\nlet name = \"Josiah\";\nprintln!(\"Hello, {name}!\");",
     "crumbs": [
       "Intro to Rust for R Developers",
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Hello, World!</span>"
@@ -250,7 +250,7 @@
     "href": "intro-to-rust-for-r-devs/fizz-buzz.html#numeric-operators",
     "title": "4  Control Flow",
     "section": "",
-    "text": "+ addition\n- subtraction\n/ division\n% remainder",
+    "text": "+ addition\n- subtraction\n* multiplication\n/ division\n% remainder",
     "crumbs": [
       "Intro to Rust for R Developers",
       "<span class='chapter-number'>4</span>  <span class='chapter-title'>Control Flow</span>"
@@ -635,7 +635,7 @@
     "href": "intro-to-rust-for-r-devs/iter-map.html#using-.map",
     "title": "12  Mapping over Iterators",
     "section": "",
-    "text": "// providing explicit type annotation in one\n// value so the compiler knows its f64 and not f32\nlet x = vec![5.9_f64, 6.8, 4.5, 7.3, 6.2];\n\nx.iter().map(|xi| xi.powi(2))",
+    "text": "// providing explicit type annotation in one\n// value so the compiler knows its f64 and not f32\nlet x: Vec&lt;f64&gt; = vec![5.9, 6.8, 4.5, 7.3, 6.2];\n\nx.iter().map(|xi| xi.powi(2))",
     "crumbs": [
       "Intro to Rust for R Developers",
       "<span class='chapter-number'>12</span>  <span class='chapter-title'>Mapping over Iterators</span>"
@@ -668,7 +668,7 @@
     "href": "intro-to-rust-for-r-devs/iter-map.html#turbofish",
     "title": "12  Mapping over Iterators",
     "section": "Turbofish 🐠💨",
-    "text": "Turbofish 🐠💨\nAlternatively, we can use “turbofish” syntax. We can specify the type directly in the .collect() function. .collect() is a generic method. And in the words of the Rust standard library documentation (emphasis mine)\n\n“Because collect() is so general, it can cause problems with type inference. As such, collect() is one of the few times you’ll see the syntax affectionately known as the ‘turbofish’: ::&lt;&gt;. This helps the inference algorithm understand specifically which collection you’re trying to collect into.”\n\nTurbofish takes the structure of .collect::&lt;TYPE&gt;().\n\nExamples\n\n\n\n\n\n\nExplicit typing\nfn main() {\n    let nums = vec![1, 2, 3];\n\n    // Add 1 to each element\n    let incremented: Vec&lt;_&gt; = nums.iter()\n        .map(|x| x + 1)\n        .collect();\n\n    println!(\"{:?}\", incremented);\n}\n\n\nInference w/ turbofish\nfn main() {\n    let nums = vec![1, 2, 3];\n\n    // Add 1 to each element\n    let incremented = nums.iter()\n        .map(|x| x + 1)\n        .collect::&lt;Vec&lt;_&gt;&gt;();\n\n    println!(\"{:?}\", incremented);\n}\n\n\n\nTurbofish is a bit more awkward at first, but it is more flexible and doesn’t require modification whenever the inner type changes.",
+    "text": "Turbofish 🐠💨\nAlternatively, we can use “turbofish” syntax. We can specify the type directly in the .collect() function. .collect() is a generic method. And in the words of the Rust standard library documentation (emphasis mine)\n\n“Because collect() is so general, it can cause problems with type inference. As such, collect() is one of the few times you’ll see the syntax affectionately known as the ‘turbofish’: ::&lt;&gt;. This helps the inference algorithm understand specifically which collection you’re trying to collect into.”\n\nTurbofish takes the structure of .collect::&lt;TYPE&gt;().\n\nExamples\n\n\n\nExplicit typing\nfn main() {\n    let nums = vec![1, 2, 3];\n\n    // Add 1 to each element\n    let incremented: Vec&lt;_&gt; = nums.iter()\n        .map(|x| x + 1)\n        .collect();\n\n    println!(\"{:?}\", incremented);\n}\n\n\nInference w/ turbofish\nfn main() {\n    let nums = vec![1, 2, 3];\n\n    // Add 1 to each element\n    let incremented = nums.iter()\n        .map(|x| x + 1)\n        .collect::&lt;Vec&lt;_&gt;&gt;();\n\n    println!(\"{:?}\", incremented);\n}\n\n\n\nTurbofish is a bit more awkward at first, but it is more flexible and doesn’t require modification whenever the inner type changes.",
     "crumbs": [
       "Intro to Rust for R Developers",
       "<span class='chapter-number'>12</span>  <span class='chapter-title'>Mapping over Iterators</span>"

@@ -224,6 +224,7 @@ Understand control flow and numeric operators in Rust. You will create the `Fizz
 
 - `+` addition
 - `-` subtraction
+- `*` multiplication
 - `/` division
 - `%` remainder
 

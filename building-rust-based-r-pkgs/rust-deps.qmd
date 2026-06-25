@@ -75,7 +75,7 @@ This will add the geohash dependency.
 Open `src/rust/src/lib.rs` and add the following below `use extendr_api::prelude::*;`
 
 ```rust
-use geohash::{Coord, encode};
+use geohash::{Coord, Direction, decode, encode, neighbor};
 ```
 
 </details>

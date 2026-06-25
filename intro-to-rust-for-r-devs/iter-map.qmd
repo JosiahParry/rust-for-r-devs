@@ -19,7 +19,7 @@ We apply `.map()` to an iterator. For example, to square each element in a vecto
 ```rust
 // providing explicit type annotation in one
 // value so the compiler knows its f64 and not f32
-let x = vec![5.9_f64, 6.8, 4.5, 7.3, 6.2];
+let x: Vec<f64> = vec![5.9, 6.8, 4.5, 7.3, 6.2];
 
 x.iter().map(|xi| xi.powi(2))
 ```
