@@ -59,7 +59,7 @@ fn psum(x: Vec<f64>, y: Vec<f64>) -> Vec<f64> {
 
 ## Exercise
 
-- Modify `x` and `y` to be `&[f64]`
+- Modify `x` and `y` to be `Vec<f64>`
 - Change the return type to be `Vec<String>`
 - Create a zipped iterator for `x` and `y`
 - Map through the iterator and:
@@ -91,7 +91,7 @@ gh_encode(x, y, 10L)
 
 ```rust
 #[extendr]
-fn gh_encode(x: &[f64], y: &[f64], length: usize) -> Vec<String> {
+fn gh_encode(x: Vec<f64>, y: Vec<f64>, length: usize) -> Vec<String> {
 
     if length == 0 || length > 12 {
         throw_r_error("`length` must be between 1 and 12");

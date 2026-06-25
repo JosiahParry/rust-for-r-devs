@@ -108,16 +108,11 @@ Cloning an extendr `Robj` (or other wrapper type) is quite cheap. When cloning a
 ## Exercise
 
 - Rewrite `gh_encode()` to use `Doubles` for both the `x` and `y` argument
+- Use `.inner()` to access the inner `f64` value in the `.map()` closure
 - Still return `Vec<String>`
 
 
 ### Solution
-
-<details><summary>View hint</summary>
-
-Use `.inner()` to access the `f64` value from `xi` and `yi`.
-
-</details>
 
 <details>
     <summary>View solution</summary>

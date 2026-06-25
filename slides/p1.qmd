@@ -1280,8 +1280,8 @@ match my_shape {
 
 ```rust
 match my_shape {
-    Shape::Hexagon => println!("Hexagons are the bestagons");
-    _ => println!("Every other polygon is mid");
+    Shape::Hexagon => println!("Hexagons are the bestagons"),
+    _ => println!("Every other polygon is mid"),
 }
 ```
 
