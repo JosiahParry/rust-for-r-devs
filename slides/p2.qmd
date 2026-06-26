@@ -527,7 +527,7 @@ extendr_module! {
 ::: callout-tip
 ## Objective
 
-Use an `#[extendr]` impl to store a Rust struct inside an R object, and learn how to get it back out again.
+Use an `#[extendr]` impl to store a Rust struct inside an R object.
 
 :::
 
@@ -538,19 +538,18 @@ Use an `#[extendr]` impl to store a Rust struct inside an R object, and learn ho
 
 ## What is an external pointer?
 
-- A special object that essentially says "oh, i know where that is!"
-- Lets you use it from other languages
-- For the rspatial nerds in the house, this is how the super fast geos package works
+- Points 👉🏼 to memory somewhere else
+- Lets you use other languages' objects
 
-. . .
-
-- R doesn't know how to work with an external pointer
-- It just keeps track of it and keeps it alive
 
 ## A constructor
 
-- To create one we need a helper to construct the type
-- We do this via a `new()` method on the struct
+- We need a helper to create our struct from R
+- Add a `new()` method on the struct
+
+:::{.aside}
+`new()` isn't special, just a conventional name.
+:::
 
 . . .
 
@@ -570,7 +569,6 @@ impl RShape {
 
 ## Calling it from R
 
-- It is **fallible** because it can error out
 - Include the impl in `extendr_module! {}`
 
 . . .
@@ -593,32 +591,33 @@ Now `RShape$new("triangle")` returns an R object that holds a Rust `RShape`.
 ::: callout-tip
 ## Objective
 
-Take a character vector and create a list of external pointers.
+Create a list of `Url` pointers from a character vector.
 
 :::
 
 ## Working with many
 
-- In R we typically work with a vector of values
-- We want hundreds and thousands of urls, not one at a time
-- How? Through vectorization (a fancy name for iteration and looping)
+- R is _vectorized_
+- Remember, **no scalars!!**
+- Vectorization means looping in a low level language
 
-## How do we store them?
+## How do we store multiple pointers?
 
 - An external pointer isn't any type of vector
-- Remember!!!!! Lists **are vectors**
-- Lists can hold any R object they want!!
-- So this is a natural way to contain multiple external pointers
+- Lists **are vectors**!!! 
+- Each element is a pointer
 
-. . .
 
-- Use the `Strings` wrapper type (an NA-aware version of `Vec<String>`)
+## `Strings` wrapper type
 
-## Strings wrapper type
-
+- Use the `Strings` wrapper type
 - Use `.into_iter()` to iterate through it
 - Each element is an `Rstr`, an NA aware `&str`
 - It can be used in most places that `&str` can be used
+
+:::{.aside}
+Mental model as `Vec<String>`
+:::
 
 ## Collecting into a list
 
@@ -645,28 +644,34 @@ fn parse_shapes(shapes: Strings) -> List {
 ::: callout-tip
 ## Objective
 
-Improve our vectorized function to handle NAs and errors gracefully instead of unwrapping.
+Handle NA's and errors in a vectorized function
 
 :::
 
-## Different schools of thought
+## Schools of thought:
 
 - Fail on any error?
 - Or handle errors with grace?
-- For vectorized ops: ignore them, return `NA`
+
+
+:::{.callout-important}
+## My opinion
+
+Return `NA` or `NULL` in the case of errors.
+:::
 
 ## Handling NAs and errors
 
 - Check for NA with `.is_na()`
 - Return `NULL` with `Robj::from(())`
 - `()` is the unit-type—nothingness
-- Otherwise parse and `match` the result
+- Parse and `match` the result
 - Convert success into an `Robj` with `.into_robj()`
 
 . . .
 
 ::: callout-tip
-Multiple line expressions in an iterator? Wrap it in a bracket!
+Multiple line expressions in an iterator? Wrap it in `{}`!
 :::
 
 # Exercise
@@ -683,7 +688,7 @@ Write a function that reads a list of external pointers and turns it back into a
 ## Ugly printing
 
 - R can't see inside an external pointer
-- All it can show is the memory address
+- It only sees the memory address
 
 . . .
 
@@ -696,10 +701,10 @@ parse_shapes(c("triangle", "hexagon"))
 #> <pointer: 0x600000abc480>
 ```
 
-## Accessing the external pointer
+## Accessing `ExternalPtr<T>` 🐠💨
 
 - Stored in a struct called `ExternalPtr`
-- Has an associated type—the "turbo-fish"
+- Has an associated type—the "turbo-fish" 
 - Each type has a `try_from()` that fallibly converts
 - extendr provides `ExternalPtr::try_from()`
 
@@ -715,7 +720,7 @@ impl RShape {
 
 ## Iterating a list
 
-- Each item is a **tuple** (like a tuple in python lol!)
+- Each item is a **tuple** `(val, val)`
 - Fixed size, each element can be a different type
 - `.0` is the name (`&str`), `.1` is the value (`Robj`)
 - We usually ignore the name with `_`

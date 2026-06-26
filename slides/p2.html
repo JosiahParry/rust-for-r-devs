@@ -914,7 +914,7 @@
 <p><strong>Objective</strong></p>
 </div>
 <div class="callout-content">
-<p>Use an <code>#[extendr]</code> impl to store a Rust struct inside an R object, and learn how to get it back out again.</p>
+<p>Use an <code>#[extendr]</code> impl to store a Rust struct inside an R object.</p>
 </div>
 </div>
 </div>
@@ -929,23 +929,17 @@
 <section id="what-is-an-external-pointer" class="slide level2">
 <h2>What is an external pointer?</h2>
 <ul>
-<li class="fragment">A special object that essentially says “oh, i know where that is!”</li>
-<li class="fragment">Lets you use it from other languages</li>
-<li class="fragment">For the rspatial nerds in the house, this is how the super fast geos package works</li>
+<li class="fragment">Points 👉🏼 to memory somewhere else</li>
+<li class="fragment">Lets you use other languages’ objects</li>
 </ul>
-<div class="fragment">
-<ul>
-<li class="fragment">R doesn’t know how to work with an external pointer</li>
-<li class="fragment">It just keeps track of it and keeps it alive</li>
-</ul>
-</div>
 </section>
 <section id="a-constructor" class="slide level2">
 <h2>A constructor</h2>
 <ul>
-<li class="fragment">To create one we need a helper to construct the type</li>
-<li class="fragment">We do this via a <code>new()</code> method on the struct</li>
+<li class="fragment">We need a helper to create our struct from R</li>
+<li class="fragment">Add a <code>new()</code> method on the struct</li>
 </ul>
+
 <div class="fragment">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb13-1"><a href=""></a><span class="kw">impl</span> RShape <span class="op">{</span></span>
 <span id="cb13-2"><a href=""></a>    <span class="kw">fn</span> new(x<span class="op">:</span> <span class="op">&amp;</span><span class="dt">str</span>) <span class="op">-&gt;</span> <span class="pp">anyhow::</span><span class="dt">Result</span><span class="op">&lt;</span><span class="dt">Self</span><span class="op">&gt;</span> <span class="op">{</span></span>
@@ -959,11 +953,12 @@
 <span id="cb13-10"><a href=""></a>    <span class="op">}</span></span>
 <span id="cb13-11"><a href=""></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-</section>
+<aside><div>
+<p><code>new()</code> isn’t special, just a conventional name.</p>
+</div></aside></section>
 <section id="calling-it-from-r" class="slide level2">
 <h2>Calling it from R</h2>
 <ul>
-<li class="fragment">It is <strong>fallible</strong> because it can error out</li>
 <li class="fragment">Include the impl in <code>extendr_module! {}</code></li>
 </ul>
 <div class="fragment">
@@ -993,7 +988,7 @@
 <p><strong>Objective</strong></p>
 </div>
 <div class="callout-content">
-<p>Take a character vector and create a list of external pointers.</p>
+<p>Create a list of <code>Url</code> pointers from a character vector.</p>
 </div>
 </div>
 </div>
@@ -1001,33 +996,31 @@
 <section id="working-with-many" class="slide level2">
 <h2>Working with many</h2>
 <ul>
-<li class="fragment">In R we typically work with a vector of values</li>
-<li class="fragment">We want hundreds and thousands of urls, not one at a time</li>
-<li class="fragment">How? Through vectorization (a fancy name for iteration and looping)</li>
+<li class="fragment">R is <em>vectorized</em></li>
+<li class="fragment">Remember, <strong>no scalars!!</strong></li>
+<li class="fragment">Vectorization means looping in a low level language</li>
 </ul>
 </section>
-<section id="how-do-we-store-them" class="slide level2">
-<h2>How do we store them?</h2>
+<section id="how-do-we-store-multiple-pointers" class="slide level2">
+<h2>How do we store multiple pointers?</h2>
 <ul>
 <li class="fragment">An external pointer isn’t any type of vector</li>
-<li class="fragment">Remember!!!!! Lists <strong>are vectors</strong></li>
-<li class="fragment">Lists can hold any R object they want!!</li>
-<li class="fragment">So this is a natural way to contain multiple external pointers</li>
+<li class="fragment">Lists <strong>are vectors</strong>!!!</li>
+<li class="fragment">Each element is a pointer</li>
 </ul>
-<div class="fragment">
-<ul>
-<li class="fragment">Use the <code>Strings</code> wrapper type (an NA-aware version of <code>Vec&lt;String&gt;</code>)</li>
-</ul>
-</div>
 </section>
 <section id="strings-wrapper-type" class="slide level2">
-<h2>Strings wrapper type</h2>
+<h2><code>Strings</code> wrapper type</h2>
 <ul>
+<li class="fragment">Use the <code>Strings</code> wrapper type</li>
 <li class="fragment">Use <code>.into_iter()</code> to iterate through it</li>
 <li class="fragment">Each element is an <code>Rstr</code>, an NA aware <code>&amp;str</code></li>
 <li class="fragment">It can be used in most places that <code>&amp;str</code> can be used</li>
 </ul>
-</section>
+
+<aside><div>
+<p>Mental model as <code>Vec&lt;String&gt;</code></p>
+</div></aside></section>
 <section id="collecting-into-a-list" class="slide level2">
 <h2>Collecting into a list</h2>
 <ul>
@@ -1062,18 +1055,30 @@
 <p><strong>Objective</strong></p>
 </div>
 <div class="callout-content">
-<p>Improve our vectorized function to handle NAs and errors gracefully instead of unwrapping.</p>
+<p>Handle NA’s and errors in a vectorized function</p>
 </div>
 </div>
 </div>
 </section>
-<section id="different-schools-of-thought" class="slide level2">
-<h2>Different schools of thought</h2>
+<section id="schools-of-thought" class="slide level2">
+<h2>Schools of thought:</h2>
 <ul>
 <li class="fragment">Fail on any error?</li>
 <li class="fragment">Or handle errors with grace?</li>
-<li class="fragment">For vectorized ops: ignore them, return <code>NA</code></li>
 </ul>
+<div class="callout callout-important callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>My opinion</strong></p>
+</div>
+<div class="callout-content">
+<p>Return <code>NA</code> or <code>NULL</code> in the case of errors.</p>
+</div>
+</div>
+</div>
 </section>
 <section id="handling-nas-and-errors" class="slide level2">
 <h2>Handling NAs and errors</h2>
@@ -1081,7 +1086,7 @@
 <li class="fragment">Check for NA with <code>.is_na()</code></li>
 <li class="fragment">Return <code>NULL</code> with <code>Robj::from(())</code></li>
 <li class="fragment"><code>()</code> is the unit-type—nothingness</li>
-<li class="fragment">Otherwise parse and <code>match</code> the result</li>
+<li class="fragment">Parse and <code>match</code> the result</li>
 <li class="fragment">Convert success into an <code>Robj</code> with <code>.into_robj()</code></li>
 </ul>
 <div class="fragment">
@@ -1094,7 +1099,7 @@
 <p><strong>Tip</strong></p>
 </div>
 <div class="callout-content">
-<p>Multiple line expressions in an iterator? Wrap it in a bracket!</p>
+<p>Multiple line expressions in an iterator? Wrap it in <code>{}</code>!</p>
 </div>
 </div>
 </div>
@@ -1126,7 +1131,7 @@
 <h2>Ugly printing</h2>
 <ul>
 <li class="fragment">R can’t see inside an external pointer</li>
-<li class="fragment">All it can show is the memory address</li>
+<li class="fragment">It only sees the memory address</li>
 </ul>
 <div class="fragment">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href=""></a><span class="fu">parse_shapes</span>(<span class="fu">c</span>(<span class="st">"triangle"</span>, <span class="st">"hexagon"</span>))</span>
@@ -1137,8 +1142,8 @@
 <span id="cb16-6"><a href=""></a><span class="co">#&gt; &lt;pointer: 0x600000abc480&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
-<section id="accessing-the-external-pointer" class="slide level2">
-<h2>Accessing the external pointer</h2>
+<section id="accessing-externalptrt" class="slide level2">
+<h2>Accessing <code>ExternalPtr&lt;T&gt;</code> 🐠💨</h2>
 <ul>
 <li class="fragment">Stored in a struct called <code>ExternalPtr</code></li>
 <li class="fragment">Has an associated type—the “turbo-fish”</li>
@@ -1156,7 +1161,7 @@
 <section id="iterating-a-list" class="slide level2">
 <h2>Iterating a list</h2>
 <ul>
-<li class="fragment">Each item is a <strong>tuple</strong> (like a tuple in python lol!)</li>
+<li class="fragment">Each item is a <strong>tuple</strong> <code>(val, val)</code></li>
 <li class="fragment">Fixed size, each element can be a different type</li>
 <li class="fragment"><code>.0</code> is the name (<code>&amp;str</code>), <code>.1</code> is the value (<code>Robj</code>)</li>
 <li class="fragment">We usually ignore the name with <code>_</code></li>
