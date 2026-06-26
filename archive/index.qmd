@@ -1,0 +1,571 @@
+---
+title: Building Rust based R Packages
+---
+
+<!--
+## Objective {.unnumbered}
+
+
+- Learn how to create Rust based R packages using extendr
+- Begin to feel comfortable working with data between R & Rust
+- Create an R package to perform geohashing based on the Rust crate called `geohash`
+
+In this workshop we will create a Rust-based R package to perform [geohashing](https://www.youtube.com/watch?v=vGKs-c1nQYU) using [`extendr`](https://extendr.github.io/).
+
+The first few sections of the workshop may be a litte "lesson" intensive and the latter portion light on it.
+
+## General Overview
+
+- What is FFI
+- What is extendr
+  - webR support
+- R's C API
+- `extendr-ffi` & `extendr-api`
+
+## What is a geohash?
+
+- not everyone is a geospatial nerd but i am
+- i have 2 videos on this exact concept
+- a third video that goes through making this package that inspired this workshop
+- Super quick review of what a geohash is
+
+## Hello, World!
+
+- Creating a new package `usethis::create_package(rstudio = FALSE)`
+- Add extendr `rextendr::use_extendr()`
+- package structure
+  - previous workshop used a binary crate, we will be building a library crate
+- `rextendr::document()`
+- `devtools::load_all()`
+- `hello_world()`
+- review the contents
+- `#[extendr]` attribute macro
+- `rprintln!()`
+
+## rextendr DX
+
+- show the VS Code settings
+- running `cargo check`
+
+## Adding dependencies
+
+- add geohash dependency
+- `rextendr::use_crate()`
+- import structs and functions
+- import  `Coord` and `encode()`
+
+## A new R function
+
+- create a basic function `gh_encode()` that takes an `x: f64` and a `y: f64` value and prints the coordinate
+- next exercise add 3rd argument for length which is `[1:12]` it's `usize`
+
+## Throwing R errors
+
+- let's add validation with `throw_r_error()`
+- check that the goehash length is appropriate range
+- if not, throw and error
+
+## Calling Rust From R
+
+- add `#[extendr]` macro to the function
+  - this does magic behind the hood to make it _callable_ from R
+- the function _must_ be added to `extendr_module! {}` for it to be available
+- run `rextendr::document()` for the new changes to take place
+- `devtools::load_all()` to make the function available
+
+## Encoding a geohash
+
+- lets finish up our first function which will geohash a single coordinate by calling `encode()`
+- `encode()` returns a `Result<String>`
+- a `Result<>` is a special type of `Option<>`
+- we will talk about handling errors gracefully in R later when we cover NA handling
+- for now we will `.unwrap()` the result right away
+- add the return type as `String`
+  - extendr will handle converting this into a character vector
+
+## Vectorize geohash encoding
+
+- modify `gh_encode()` to take a `Vec<f64>` for both `x` and `y`
+- We will iterate through these _together_
+- review `.zip()` to merge iterators
+- for each element in the iterator we encode the geohash
+- collect to strings
+- rextendr::document()
+- devtools::load_all()
+
+test in R
+
+```r
+x <- rnorm(100, -180, 180)
+y <- rnorm(100, -90, 90)
+gh_len <- 7
+
+gh_encode(x, y, gh_len)
+```
+
+- What about handling errors and NAs?
+- Gonna need to address type mapping first
+
+## Type Mapping
+
+- vecs are fine for basic stuff.
+- R types are more complex and have support for NULL and NA values
+- Scalar types
+- Vector types
+- NULL in R
+- Robj
+- Rust has the unit type `()`. We can tu
+
+## R's type system
+
+- Everything is an SEXP
+- Briefly discuss representations
+- I thought really hard on whether or not to discuss this. Initially i thought i wouldnt, but i think it is actually really helpful to understand the fundamental data structures in R. It helps make the mental leaps much easier.
+- So we're going to spend a few minutes discussing internal representations in R
+
+## Robj  & SEXP
+
+- in extendr, everything can be represented as an Robj
+- Robj is an opaque type: we do not know what type it is, we just know its an Robj
+- a helpful catch-all
+- we can turn any extendr type into an `Robj` using the `.into_robj()` method
+
+
+## Scalars
+
+- NA aware types that correspond to R's type system
+- every scalar has `na()` method
+
+### Doubles
+
+- internally represented by f64
+- access the inner f64 value using `.inner()`
+- Convert `f64` to an `Rfloat` using `Rfloat::from(x)`
+
+
+## Strings
+
+- A bit of a nightmare
+- Create `Rstr` from a `String` in Rust using `Rstr::from(x)`
+
+## Using extendr types
+
+- rewrite `gh_encode()` to use `Doubles` and `Strings`
+- we can leave length as usize for now as it will always be scalar.
+- to access the inner value of an `Rfloat` use `.inner()`
+-
+
+## Error handling in Rust
+
+> "And I think Result can be explained fairly quickly in the following way: Rust does not have exceptions. Errors are data. If a function is falliable, it returns Result, which is a fork between the successful value, and the error-as-data. We may ignore the error-branch entirely with .unwrap." -Mossa
+
+- Handle errors gracefully on the R side by returning a NULL or NA value when it is appropriate
+- describe `Result<>` which is an enum.
+- let's match on the result from `encode()`
+  - when `Ok(gh)` use `Rstr::from(gh)`
+  - when `Err(e)` use `Rstr::na()` to record a missing value
+- when we try to encode data that is not in long lat we will get an error—e.g. if its in meter that wont work
+- for the exercise feed some bad data to the function to see it return an NA
+
+## NA handling
+
+- now what about when the coordinates are NA?
+- how do we handle that?
+- we can check `Rfloat::is_na()`
+  - if either `Rfloat::is_na()` return `Rstr::na()`
+  - else, do the geohash
+- test with NA values
+
+## Geohash Neighbor
+
+- A geohash is a square grid
+- each location has up to 6 neighbors
+- to find a specific neighbor we can use the `neighbor()` function
+- this function takes an enum for direction
+
+## Enums in R
+
+- first step, lets make a utility function to take a `String` and convert this to the enum
+
+```r
+gh_neighbor <- function(gh, neighbor = c("N","NE","E","SE","S","SW","W","NW")) {
+  arg.match(neighbor)
+  # function body
+}
+```
+
+## Custom Enum handling
+
+- match statements can be used on strings too
+- there will be a catch all part of the match
+- in the function
+
+```rust
+fn as_direction(direction: String) -> Direction {
+    match direction.to_lowercase().as_str() {
+        "n" => Direction:N,
+        "ne" => Direction:NE,
+        "e" => Direction:E,
+        "se" => Direction:SE,
+        "s" => Direction:S,
+        "sw" => Direction:SW,
+        "w" => Direction:W,
+        "nw" => Direction:NW,
+        _ => throw_r_error("Invalid geohash neighbor direction")
+    }
+}
+```
+
+## Single Neighbor function
+
+Exercise
+
+- Create a function `gh_decode()`
+- returns `Option<String>`
+- takes 2 args:
+  1. `geohash: String`
+  2. `direction: String`
+- cast the direction to the  `Direction` enum
+- pass into the `neighbor()` function
+- If there is an error in the result, return `None`
+- If successful return `Some(geohash)`
+- document and run the function in R to see the result
+- test with bad data
+
+
+## Vectorize the neighbor function
+
+- Modify `gh_decode()` to take `geohash: Strings`
+- Returns `Strings`
+- Use `.into_iter().map().collect::<String>()` to return a vector of neighbors
+- Handle NA values for geohash, return an `Rstr::na()`
+- Handle errors return `Rstr::na()`
+- Otherwise return `Rstr::from()`
+- Collect into Strings
+
+
+## Decoding a geohash
+
+- a geohash isn't a coordinate, but rather a bounding box
+- the `decode()` function decodes into a center point and error in two directions
+- The signature is `pub fn decode(hash_str: &str) -> Result<(Coord, f64, f64), GeohashError>`
+- the `Coord` is a "generic" struct it has fields x & y and the x & y error
+- most natural way to work with this in R would be to create a data frame
+- How can we create a data frame in extendr?
+- there's a few ways. We're going to go ahead and create one from scratch
+
+## What is there to a data.frame?
+
+> data.frames are just lists masquerading as a rectangle
+
+- named vectors
+- structs are record based not column based (this is kinda the whole thing about apache arrow)
+- How can we handle this?
+- using an iterator isn't the most logical for this. Instead, we can use a for loop
+- we can allocate our own vectors and then fill them in a for loop
+
+## Tuples
+
+- The decode function returns a tuple which we haven't yet covered.
+- tuples are the heterogeneous collection type in Rust
+- if you've used tuples in python they're pretty much the same
+- elements in the tuple are not named
+- generally good for holding only a handful of items, otherwise just define a struct
+- we access elements from the tuple via `.0`, `.1`, `.2`
+- We can perform destructuring assignment of tuples too which will be handy
+-
+
+
+## Creating vectors
+
+- `Doubles`, `Strings`, and `Logicals` are wrappers around R types
+- We can collect into these types or we can create them
+- We can allocate empty vectors using associated method `Doubles::new(usize)`
+    - But filling these is actually somewhat slow due to the FFI boundary
+- Associated method `Doubles::from_values()` to collect values into a vector
+  - Store `Vec<Rfloat>`
+  - Collect from the vector
+
+## Creating `data.frame`s
+
+- There are two primary ways of creating data.frames in extendr
+- I recommend using the `data_frame!()` macro
+- this returns an untyped R object: `Robj`
+-
+
+### Exercise
+
+- create 4 empty vectors to store:
+  - x, y, x_error, y_error
+- Create a for loop on the `geohash` note you have to call `.into_iter()` explicitly
+-
+
+```rust
+fn gh_decode(geohash: Strings) -> Robj {
+    let mut x_res = Vec::new();
+    let mut y_res = Vec::new();
+    let mut x_error = Vec::new();
+    let mut y_error = Vec::new();
+
+    for gh in geohash.into_iter() {
+        let resi = decode(gh);
+        match resi {
+            Ok((Coord { x, y }, xe, ye)) => {
+                x_res.push(Rfloat::from(x));
+                y_res.push(Rfloat::from(y));
+                x_error.push(Rfloat::from(xe));
+                y_error.push(Rfloat::from(ye));
+            }
+            Err(_) => {
+                x_res.push(Rfloat::na());
+                y_res.push(Rfloat::na());
+                x_error.push(Rfloat::na());
+                y_error.push(Rfloat::na());
+            }
+        }
+    }
+
+    data_frame!(
+        x = Doubles::from_values(x_res),
+        y = Doubles::from_values(y_res),
+        x_error = Doubles::from_values(x_error),
+        y_error = Doubles::from_values(y_error)
+    )
+}
+```
+
+
+## Geohash Neighbors
+
+- We already made a vectorized functioon to find neighbors in a single direction.
+- but there is also a function `neighbors()` that returns a struct `Neighbors` that has the geohash for _all_ neighbors
+- This would be a nice function to have access to in R
+- how should we do this?
+- we can take a similar approach we did for `gh_decode()`
+- But that's a lot of boiler plate!
+- There's another approach to this
+- `IntoDataFrameRow` trait which we can derive
+
+## Traits
+
+- in the previous workhop we used the `#[derive()]` attribute to be able to have debug printing
+- what is a trait?
+- are similar to object oriented programming
+- they define behaviors that a type can perform
+- they are how we share behavior across rust libraries
+- they're common methods that can be implemented for any type you own
+- many traits can be "derived" this means you can get them on your type "for free" without doing work
+
+# `IntoDataFrameRow` trait
+
+- the `IntoDataFrameRow` trait is a helper trait to take a `Vec<T>` and turn it into a data frame in R
+- it is a one-way trait
+- since dataframes are column oriented but structs are row-oriented we can only go one way at the moment
+- each field in the struct becomes a column in R
+- so it would be nice if we can derive this for the Neighbors struct
+
+### Example
+
+```rust
+#[derive(IntoDataFrameRow)]
+struct Point {
+    x: Rfloat,
+    y: Rfloat,
+}
+
+#[extendr]
+fn make_points(x: Doubles, y: Doubles) -> Robj {
+    x.into_iter()
+        .zip(y.into_iter())
+        .map(|(xi, yi)| Point {
+            x: xi.clone(),
+            y: yi.clone(),
+        })
+        .collect::<Vec<_>>()
+        .into_dataframe()
+        .unwrap()
+        .into_robj()
+}
+```
+```r
+n <- 10
+x <- runif(n, -180, 180)
+y <- runif(n, -90, 90)
+
+make_points(x, y)
+#>             x          y
+#> 1   153.79235  51.577234
+#> 2   162.48952 -12.125679
+#> 3   145.49589 -51.865901
+#> 4  -115.30154 -40.289614
+#> 5    66.23683  71.941302
+#> 6   163.38766  -9.811993
+#> 7   -45.73522 -13.195039
+#> 8   -93.75467 -70.093101
+#> 9   104.26631 -41.306501
+#> 10  -99.78657   8.136069
+```
+
+## Deriving IntoDataFrameRow for Neighbors
+
+- lets try deriving it
+- lol oops! That sucks! we cant implement traits for types we don't own.
+- this is called the "orphan rule"
+
+## Work-around: create your own struct
+
+- one way to handle this is to create your own struct that you can implement traits on
+- we can create our own struct `GHNeighbors`
+- Since we **own** `GHNeighbors` we can derive `IntoDataFrameRow` for it
+- but how do we go from `Neighbors` to `GHNeighbors`?
+- we can implement a trait `From`
+
+## `From` trait
+
+- part of the standard library
+- this provides a 0-cost abstraction
+- lets us go from `T` to `U` without incurring any runtime cost
+- use the `impl` keyword to implement a trait
+- `impl Trait for OurType`
+- The `From` trait requires us to specify a type:
+- `impl From<ForeignType> for OurType`
+
+### Example
+
+```rust
+impl From<Coord<f64>> for Point {
+    fn from(value: Coord<f64>) -> Self {
+        Point {
+            x: Rfloat::from(value.x),
+            y: Rfloat::from(value.y),
+        }
+    }
+}
+```
+
+This lets us do something like:
+
+```rust
+let coord = Coord::zero();
+let p = Point::from(coord);
+```
+
+
+
+Pro-tip if you write:
+
+```rust
+impl From<T> for U {
+    // have cursor here and type `cmd + .`
+}
+```
+
+- This opens the "Quick fix"
+- press "implement missing members" which fills the template:
+
+```rust
+impl From<T> for U {
+    fn from(value: T) -> Self {
+        // construct Self / U struct here
+        todo!()
+    }
+}
+```
+
+## Default trait
+
+- what happens when we run into an error finding the neighbors?
+- we want to be able to return a row of NAs
+- rather than constructing the whole thing from struct each time we want to use a full row of NA
+- we can actually instead, implement a default value
+- note often the default trait can be derived
+
+### Example
+
+```rust
+impl Default for Point {
+    fn default() -> Self {
+        Self {
+            x: Rfloat::na(),
+            y: Rfloat::na(),
+        }
+    }
+}
+```
+
+### Exercise
+
+Implement the `Default` trait for `GHNeighbors`
+```rust
+impl Default for GHNeighbors {
+    fn default() -> Self {
+        Self {
+            sw: Rstr::na(),
+            s: Rstr::na(),
+            se: Rstr::na(),
+            w: Rstr::na(),
+            e: Rstr::na(),
+            nw: Rstr::na(),
+            n: Rstr::na(),
+            ne: Rstr::na(),
+        }
+    }
+}
+```
+
+This lets us write `GHNeighbors::default()`
+
+## Put it all together
+
+- lets combine the use of our implementations of `From`, `Default`, and `IntoDataFrameRow` row to write `gh_neighbors()`
+
+### Exercise
+
+```rust
+#[extendr]
+fn gh_neighbors(geohashes: Strings) -> Robj {
+    let all_rows = geohashes
+        .into_iter()
+        .map(|gh| match neighbors(gh.as_str()) {
+            Ok(nbs) => GHNeighbors::from(nbs),
+            Err(_) => GHNeighbors::default(),
+        })
+        .collect::<Vec<_>>();
+
+    all_rows.into_dataframe().unwrap().into_robj()
+}
+```
+
+## You help me choose what to do next
+
+- Q&A?
+- The last function but independently?
+- CRAN compatibility?
+
+
+## All on your own now
+
+- the `decode_bbox()` function
+
+## CRAN Compatibility
+
+- vendoring
+- MSRV
+
+## Using GitHub Actions
+
+- R CMD check
+- CRAN checks
+
+
+## Thank you
+
+- Join our Discord
+-
+
+
+<details>
+    <summary>View solution</summary>
+</details>
+
+ -->

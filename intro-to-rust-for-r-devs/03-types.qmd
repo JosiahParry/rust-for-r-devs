@@ -7,12 +7,11 @@ Familiarize yourself with basic types in Rust and when they may be used.
 
 :::
 
-In R everything is a vector. A vector is a **collection** of values. There is no **scalar** type for a double/ character / integer / logical vector. Those are just length 1 vectors.
+In R everything is a vector. A vector is a **collection** of values. There is no **scalar** type for a double / character / integer / logical vector. Those are just length 1 vectors.
 
-In Rust, however, scalars are the building blocks of everything. When a collection is needed those are made directly from scalars. You will often hear of these as **primitives**.
+In Rust, however, scalars are the building blocks of everything. When a **collection** is needed those are made directly from scalars. You will often hear of these as **primitives**.
 
 Today we will only be using a handful of these primitives but it is important to understand what they are—in general.
-
 
 
 ## Integers

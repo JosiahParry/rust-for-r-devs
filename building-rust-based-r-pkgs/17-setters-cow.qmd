@@ -1,0 +1,76 @@
+# Setters & copy-on-write
+
+::: callout-tip
+## Objective
+
+Modify a value held in an external pointer without mutating the original.
+
+:::
+
+Getters read from a url. Setters change one. But R has a rule we need to respect: **copy-on-write**. When you modify an object in R, you don't change it in place. R makes a copy first and modifies the copy.
+
+We saw earlier that R owns our external pointers, so we shouldn't mutate them in place anyways. Both reasons point to the same approach. To set a value, we clone the Rust object out of the pointer, modify the clone, and return a brand new object.
+
+## A helper to clone
+
+Getting a fresh, owned copy out of a pointer is its own little dance: get the pointer, borrow with `as_ref()`, then `.clone()`. We'll do this in every setter, so here's a helper to add to your `impl`:
+
+```rust
+impl RUrl {
+    fn clone_from_robj(robj: Robj) -> anyhow::Result<Self> {
+        match ExternalPtr::<RUrl>::try_from(robj) {
+            Ok(v) => Ok(v.as_ref().clone()),
+            Err(e) => Err(anyhow!("Expected an object of class `rurl`:\n{e}")),
+        }
+    }
+}
+```
+
+This requires `RUrl` to derive `Clone`, which we did back when we defined it.
+
+## Mutable values
+
+Once we have an owned clone, we can mark it `mut` and call a method that takes `&mut self`. The setter methods on `Url` look like this:
+
+```rust
+pub fn set_host(&mut self, host: Option<&str>) -> Result<(), ()>
+```
+
+The `host` is an `Option` because passing `None` removes the host. We always want to set one, so we pass `Some(host)`.
+
+## Exercise
+
+- Write `url_set_host(url: List, host: Strings) -> List`
+- Zip the urls together with the hosts
+- If the url is `NULL` or the host is `NA`, return `NULL` for that element
+- Otherwise clone the url with `clone_from_robj`, set the host, and return the new object
+- Collect into a `List`
+
+For now, assume `url` and `host` are the same length. We'll handle recycling and length checks in the next chapter.
+
+<details>
+    <summary>View solution</summary>
+
+```rust
+#[extendr]
+fn url_set_host(url: List, host: Strings) -> List {
+    url.into_iter()
+        .zip(host.into_iter())
+        .map(|((_, url), host)| {
+            if url.is_null() || host.is_na() {
+                return ().into_robj();
+            }
+
+            match RUrl::clone_from_robj(url) {
+                Ok(mut rurl) => match rurl.0.set_host(Some(host)) {
+                    Ok(_) => rurl.into_robj(),
+                    Err(_) => ().into_robj(),
+                },
+                Err(_) => ().into_robj(),
+            }
+        })
+        .collect()
+}
+```
+
+</details>

@@ -40,27 +40,28 @@ book:
         # - intro-to-rust-for-r-devs/parallelize.qmd
     - part: building-rust-based-r-pkgs/index.qmd
       chapters:
-        - building-rust-based-r-pkgs/ffi.qmd
-        - building-rust-based-r-pkgs/extendr.qmd
-        - building-rust-based-r-pkgs/objective.qmd
-        - building-rust-based-r-pkgs/hello-world.qmd
-        - building-rust-based-r-pkgs/extendr-structure.qmd
-        - building-rust-based-r-pkgs/extendr-dx.qmd
-        - building-rust-based-r-pkgs/rust-deps.qmd
-        - building-rust-based-r-pkgs/first-fn.qmd
-        - building-rust-based-r-pkgs/encode.qmd
-        - building-rust-based-r-pkgs/throwing-errors.qmd
-        - building-rust-based-r-pkgs/vectorize.qmd
-        - building-rust-based-r-pkgs/r-type-system.qmd
-        - building-rust-based-r-pkgs/using-extendr-types.qmd
-        - building-rust-based-r-pkgs/error-handling.qmd
-        - building-rust-based-r-pkgs/na-handling.qmd
-        - building-rust-based-r-pkgs/enums.qmd
-        - building-rust-based-r-pkgs/geohash-nb.qmd
-        - building-rust-based-r-pkgs/vectorize-neighbor.qmd
-        - building-rust-based-r-pkgs/decode.qmd
-        - building-rust-based-r-pkgs/vectorize-decode.qmd
-        - building-rust-based-r-pkgs/vibe-check.qmd
+        - building-rust-based-r-pkgs/01-ffi.qmd
+        - building-rust-based-r-pkgs/02-what-is-extendr.qmd
+        - building-rust-based-r-pkgs/03-objective.qmd
+        - building-rust-based-r-pkgs/04-hello-world.qmd
+        - building-rust-based-r-pkgs/05-package-structure.qmd
+        - building-rust-based-r-pkgs/06-extendr-dx.qmd
+        - building-rust-based-r-pkgs/07-r-type-system.qmd
+        - building-rust-based-r-pkgs/08-na-handling.qmd
+        - building-rust-based-r-pkgs/09-centroid.qmd
+        - building-rust-based-r-pkgs/10-use-crate-url.qmd
+        - building-rust-based-r-pkgs/11-external-pointers.qmd
+        - building-rust-based-r-pkgs/12-lists-of-pointers.qmd
+        - building-rust-based-r-pkgs/13-print-helper.qmd
+        - building-rust-based-r-pkgs/14-s3.qmd
+        - building-rust-based-r-pkgs/15-url-getters.qmd
+        - building-rust-based-r-pkgs/16-mapping-into-option.qmd
+        - building-rust-based-r-pkgs/17-setters-cow.qmd
+        - building-rust-based-r-pkgs/18-recycling-and-errors.qmd
+        - building-rust-based-r-pkgs/19-path-segments.qmd
+        - building-rust-based-r-pkgs/20-query-pairs.qmd
+        - building-rust-based-r-pkgs/21-roxygen-docs.qmd
+        - building-rust-based-r-pkgs/22-cran.qmd
 
 format:
   html:

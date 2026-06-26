@@ -8,13 +8,6 @@ Provide motivation for _why_ learning Rust is a use of our time. Discuss _what_ 
 🧠 Think of Rust as "C for people who like error messages that actually help."
 :::
 
-## Reasoning
-
-Rust is a programming language that’s fast, safe, and surprisingly friendly to use. Rust turns your code into a standalone program that runs directly on your computer. This makes it much faster and more efficient, similar to languages like C or C++. But where those languages can be hard to use and easy to break, Rust was built to be safer and more helpful.
-
-Rust is especially good at preventing bugs related to memory. There's no garbage collector in Rust so it is quite memory efficient. Moreover, Rust is designed with the developer in mind. The rust compiler provides error messages that rival—or maybe even surpass—the quality of tidyverse error messaging.
-
-
 ## TL;DR
 
 - R is interpreted. Code runs line by line.

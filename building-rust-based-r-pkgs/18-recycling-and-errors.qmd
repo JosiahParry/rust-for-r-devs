@@ -1,0 +1,124 @@
+# Recycling & errors
+
+::: callout-tip
+## Objective
+
+Recycle a scalar argument over a vector and throw an error when lengths don't line up.
+
+:::
+
+Our `url_set_host()` assumed the urls and hosts were the same length. But R users expect **recycling**. If you give a length-1 value, it should apply to every element.
+
+```r
+url_set_scheme(urls, "https")
+```
+
+That single `"https"` should be reused for all the urls.
+
+## Recycling with `.cycle()`
+
+The `.cycle()` method takes an iterator and repeats it forever. When we zip a cycled iterator against our urls, the shorter one keeps repeating to cover every url.
+
+```rust
+url.into_iter().zip(scheme.into_iter().cycle())
+```
+
+A length-1 `scheme` now applies to every url. A length-3 `scheme` lines up with three urls as you'd expect.
+
+## Length checks with `throw_r_error`
+
+Recycling only makes sense in two cases. The value is a scalar, or it's exactly the same length as the urls. Anything else is a mistake, and we should tell the user instead of silently doing something weird.
+
+When an argument is invalid, we don't return `NA` for that element. The whole call is wrong, so we stop the function with an error. We do that with `throw_r_error()`.
+
+```rust
+if (scheme.len() != url.len()) & (scheme.len() != 1) {
+    throw_r_error("`scheme` must be a scalar or the same length as `url`");
+}
+```
+
+The condition reads: error when the length is neither equal to the url length nor equal to one.
+
+## Exercise
+
+Write the remaining setters, each with a length check up front and `.cycle()` for recycling:
+
+- `url_set_path()` calls `set_path()`, which is infallible (returns `()`)
+- `url_set_port()` calls `set_port()`, which takes `Option<u16>` and returns a `Result`
+- `url_set_scheme()` calls `set_scheme()`, which returns a `Result`
+
+<details>
+    <summary>View solution</summary>
+
+```rust
+#[extendr]
+fn url_set_path(url: List, path: Strings) -> List {
+    if (path.len() != url.len()) & (path.len() != 1) {
+        throw_r_error("`path` must be a scalar or the same length as `url`");
+    }
+    url.into_iter()
+        .zip(path.into_iter().cycle())
+        .map(|((_, url), path)| {
+            if url.is_null() || path.is_na() {
+                return ().into_robj();
+            }
+
+            match RUrl::clone_from_robj(url) {
+                Ok(mut rurl) => {
+                    rurl.0.set_path(path);
+                    rurl.into_robj()
+                }
+                Err(_) => ().into_robj(),
+            }
+        })
+        .collect()
+}
+
+#[extendr]
+fn url_set_port(url: List, port: Integers) -> List {
+    if (port.len() != url.len()) & (port.len() != 1) {
+        throw_r_error("`port` must be a scalar or the same length as `url`");
+    }
+    url.into_iter()
+        .zip(port.into_iter().cycle())
+        .map(|((_, url), port)| {
+            if url.is_null() || port.is_na() {
+                return ().into_robj();
+            }
+
+            match RUrl::clone_from_robj(url) {
+                Ok(mut rurl) => match rurl.0.set_port(Some(port.0 as u16)) {
+                    Ok(_) => rurl.into_robj(),
+                    Err(_) => ().into_robj(),
+                },
+                Err(_) => ().into_robj(),
+            }
+        })
+        .collect()
+}
+
+#[extendr]
+fn url_set_scheme(url: List, scheme: Strings) -> List {
+    if (scheme.len() != url.len()) & (scheme.len() != 1) {
+        throw_r_error("`scheme` must be a scalar or the same length as `url`");
+    }
+    url.into_iter()
+        .zip(scheme.into_iter().cycle())
+        .map(|((_, url), scheme)| {
+            if url.is_null() || scheme.is_na() {
+                return ().into_robj();
+            }
+
+            match RUrl::clone_from_robj(url) {
+                Ok(mut rurl) => match rurl.0.set_scheme(scheme) {
+                    Ok(_) => rurl.into_robj(),
+                    Err(_) => ().into_robj(),
+                },
+                Err(_) => ().into_robj(),
+            }
+        })
+        .collect()
+}
+```
+
+</details>

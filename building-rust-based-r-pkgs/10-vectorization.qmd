@@ -1,0 +1,12 @@
+in the previous exercise we worked with a single url
+in r we typically work with a vector of values, naturally, we won't want to work with just a single url at a time, we want to work with hundreds and thousands of them 
+
+so, how can we handle this? through vectorization (a fancy name for iteration and looping)
+
+now, an external pointer isn't any type of vector that im aware of! So? how do we store them? 
+
+Remember!!!!! Lists **are vectors** (see https://www.youtube.com/watch?v=V5M90oonAAg)
+
+lists can hold any r object in them that they want!! SO this is a natural way to contain multiple external pointers at a time!!!
+
+What we can do is use the `Strings` wrapper type (think of this as an NA-aware version of `Vec<String>`)

@@ -1,0 +1,83 @@
+# Adding the `url` crate
+
+::: callout-tip
+## Objective
+
+Add a dependency to our package and import items from it.
+
+:::
+
+Dependencies in Rust are managed by the `Cargo.toml` file. R will let you use packages that are on your machine even if you do not explicitly declare them as dependencies. Rust will **not**. You must declare dependencies.
+
+
+## `Cargo.toml`
+
+The `Cargo.toml` is akin to the `DESCRIPTION` file. Dependencies are set via the `[dependencies]` table.
+
+We can add dependencies manually, using `cargo add crate-name`, or via `rextendr::use_crate("cratename")`.
+
+```toml
+[package]
+name = "rurl"
+publish = false
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.65"
+
+[lib]
+crate-type = [ "staticlib" ]
+name = "rurl"
+
+[dependencies]
+extendr-api = "*"
+```
+
+::: aside
+Rust dependencies use [semantic versionining (semver)](https://semver.org/). The `"*"` is a shorthand for specifying the latest stable release.
+:::
+
+
+## Importing items from dependencies
+
+When dependencies are added to a crate, the items from the dependency are accessed via namespace similar to R. If we look at `lib.rs` we see at the top
+
+```rust
+use extendr_api::prelude::*;
+```
+
+This has the format of `crate_name::module::item`. The `*` is a wildcard for importing everything from the module.
+
+The **`prelude`** is a common module name. It re-exports the commonly used items from a crate all together so you do not have to manually list them.
+
+Multiple items can be imported using `{}` for example:
+
+```rust
+use crate_name::{StructName, function_name};
+```
+
+
+## Exercise
+
+- Add the `url` crate as a dependency
+- Import the `Url` struct from `url` in `lib.rs`
+- While we're here, add `anyhow` too—we'll use it for error handling
+
+<details>
+    <summary>View solution</summary>
+
+From the R terminal run:
+
+```r
+rextendr::use_crate("url")
+rextendr::use_crate("anyhow")
+```
+
+This will add the `url` and `anyhow` dependencies.
+
+Open `src/rust/src/lib.rs` and add the following below `use extendr_api::prelude::*;`
+
+```rust
+use url::Url;
+```
+
+</details>

@@ -1,0 +1,96 @@
+# Lists of pointers
+
+::: callout-tip
+## Objective
+
+Build a vector of Rust objects by collecting external pointers into a list.
+
+:::
+
+In the last chapter we made a single external pointer. R users don't want one
+value at a time though—they want a **vector**. How do we hold a vector of Rust
+objects?
+
+## Lists *are* vectors
+
+Remember that in R a `list` is just a vector—a vector whose elements can be
+anything. That's exactly what we need: each element will be an external pointer.
+
+So to return many Rust objects to R, we build a `List` where every element is a
+pointer.
+
+## `NULL` is our missing value
+
+A character vector can contain `NA`. When we turn each string into a pointer, we
+need somewhere to put "this one is missing." In a list, the natural missing value
+is `NULL`. So:
+
+- if the input string is `NA`, the element becomes `NULL`
+- if it parses, the element becomes the external pointer
+- if it *fails* to parse, the element also becomes `NULL`
+
+We turn any value—a pointer or a `NULL`—into a generic `Robj` so that every
+element of the iterator has the same type and can be collected together.
+
+## Example
+
+Here we parse a character vector of shape names into a list of `Shape` objects:
+
+```rust
+#[extendr]
+fn parse_shapes(x: Strings) -> List {
+    x.into_iter()
+        .map(|xi| {
+            if xi.is_na() {
+                return ().into_robj();
+            }
+
+            match Shape::new(xi) {
+                Ok(shape) => shape.into_robj(),
+                Err(_) => ().into_robj(),
+            }
+        })
+        .collect::<List>()
+}
+```
+
+::: callout-note
+## Collecting into wrapper types
+
+Recall that we can `.collect()` directly into `Strings`, `Doubles`, etc. when
+every element is the matching scalar type (`Rstr`, `Rfloat`, ...). Here, because
+every element is a generic `Robj`, we collect into a `List`.
+:::
+
+## Exercise
+
+- Write `url_parse(x: Strings) -> List`
+- For each element: `NA` becomes `NULL`, a parsed url becomes an external
+  pointer, a parse failure becomes `NULL`
+- Use the `RUrl::new()` constructor you wrote in the last chapter
+- Collect into a `List`
+
+<details>
+    <summary>View solution</summary>
+
+```rust
+#[extendr]
+fn url_parse(x: Strings) -> List {
+    x.into_iter()
+        .map(|xi| {
+            if xi.is_na() {
+                return ().into_robj();
+            }
+
+            match RUrl::new(xi) {
+                Ok(v) => v.into_robj(),
+                Err(_) => ().into_robj(),
+            }
+        })
+        .collect::<List>()
+}
+```
+
+(We'll come back and give this list a class in the S3 chapter.)
+
+</details>

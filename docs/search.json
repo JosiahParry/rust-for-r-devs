@@ -64,7 +64,7 @@
     "href": "intro-to-rust-for-r-devs/index.html#timeline",
     "title": "Intro to Rust for R Developers",
     "section": "",
-    "text": "Section\nDuration\nEnd time\n\n\n\n\nIntro & Why Rust\n0:15\n9:15 AM\n\n\nHello, world!\n0:10\n9:25 AM\n\n\nPrimitive Types\n0:10\n9:35 AM\n\n\nControl Flow\n0:10\n9:45 AM\n\n\nBreak\n0:05\n9:50 AM\n\n\nArrays & Vectors\n0:10\n9:55 AM\n\n\nfor loops\n0:10\n10:05 AM\n\n\nMutability\n0:10\n10:15 AM\n\n\nMutable Vectors\n0:10\n10:25 AM\n\n\nFunctions\n0:10\n10:35 AM\n\n\nOwnership\n0:10\n10:45 AM\n\n\nBreak\n0:10\n10:55 AM\n\n\nIterators\n0:15\n11:10 AM\n\n\nMapping over Iterators\n0:15\n11:25 AM\n\n\nDefining Structs\n0:10\n11:35 AM\n\n\nStruct Methods\n0:10\n11:45 AM\n\n\nEnumerations\n0:10\n11:55 AM\n\n\nOptions\n0:10\n12:05 PM\n\n\nClosing\n0:05\n12:10 PM",
+    "text": "Section\nDuration\nEnd time\n\n\n\n\nIntro & Why Rust\n0:10\n9:10 AM\n\n\nHello, world!\n0:10\n9:20 AM\n\n\nPrimitive Types\n0:10\n9:30 AM\n\n\nControl Flow\n0:10\n9:40 AM\n\n\nArrays & Vectors\n0:10\n9:50 AM\n\n\nfor loops\n0:10\n10:00 AM\n\n\nBreak\n0:05\n10:05 AM\n\n\nMutability\n0:05\n10:10 AM\n\n\nMutable Vectors\n0:10\n10:20 AM\n\n\nFunctions\n0:10\n10:30 AM\n\n\nOwnership\n0:10\n10:40 AM\n\n\nIterators\n0:15\n10:55 AM\n\n\nMapping over Iterators\n0:10\n11:05 AM\n\n\nBreak\n0:05\n11:10 AM\n\n\nDefining Structs\n0:10\n11:20 AM\n\n\nStruct Methods\n0:10\n11:30 AM\n\n\nEnumerations\n0:05\n11:35 AM\n\n\nOptions\n0:10\n11:45 AM\n\n\nResult\n0:05\n11:50 AM\n\n\nAdding a crate: anyhow\n0:10\n12:00 PM",
     "crumbs": [
       "Intro to Rust for R Developers"
     ]
@@ -1735,7 +1735,7 @@
     "href": "intro-to-rust-for-r-devs/01-why-rust.html",
     "title": "1  Why Rust?",
     "section": "",
-    "text": "Reasoning\nRust is a programming language that’s fast, safe, and surprisingly friendly to use. Rust turns your code into a standalone program that runs directly on your computer. This makes it much faster and more efficient, similar to languages like C or C++. But where those languages can be hard to use and easy to break, Rust was built to be safer and more helpful.\nRust is especially good at preventing bugs related to memory. There’s no garbage collector in Rust so it is quite memory efficient. Moreover, Rust is designed with the developer in mind. The rust compiler provides error messages that rival—or maybe even surpass—the quality of tidyverse error messaging.",
+    "text": "TL;DR",
     "crumbs": [
       "Intro to Rust for R Developers",
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Why Rust?</span>"
@@ -1745,8 +1745,8 @@
     "objectID": "intro-to-rust-for-r-devs/01-why-rust.html#tldr",
     "href": "intro-to-rust-for-r-devs/01-why-rust.html#tldr",
     "title": "1  Why Rust?",
-    "section": "TL;DR",
-    "text": "TL;DR\n\nR is interpreted. Code runs line by line.\nR (and Python) are built on C.\nC is compiled — it builds a binary that runs directly on your machine.\nRust is also compiled, like C, C++, Go, Java, and Fortran.\nThese languages are “close to the metal” — fast, efficient, and powerful.\nRust matches C++ in speed, but with some key advantages:\n\nMemory safety without a garbage collector (unlike Go), thanks to the borrow checker.\nA great developer experience:\n\nHelpful, friendly compiler errors (Tidyverse-level DX).\nModern tooling (cargo, rustdoc, rustfmt, rust-analyzer, etc.).\n\n\nRust is easy to get started with and rewards best practices.\n\nWe won’t go deep into memory safety or concurrency today\n\nRust uses errors as data, unlike R and C++, Rust does not support exceptions",
+    "section": "",
+    "text": "R is interpreted. Code runs line by line.\nR (and Python) are built on C.\nC is compiled — it builds a binary that runs directly on your machine.\nRust is also compiled, like C, C++, Go, Java, and Fortran.\nThese languages are “close to the metal” — fast, efficient, and powerful.\nRust matches C++ in speed, but with some key advantages:\n\nMemory safety without a garbage collector (unlike Go), thanks to the borrow checker.\nA great developer experience:\n\nHelpful, friendly compiler errors (Tidyverse-level DX).\nModern tooling (cargo, rustdoc, rustfmt, rust-analyzer, etc.).\n\n\nRust is easy to get started with and rewards best practices.\n\nWe won’t go deep into memory safety or concurrency today\n\nRust uses errors as data, unlike R and C++, Rust does not support exceptions",
     "crumbs": [
       "Intro to Rust for R Developers",
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Why Rust?</span>"
@@ -1757,7 +1757,7 @@
     "href": "intro-to-rust-for-r-devs/02-hello-world.html",
     "title": "2  Hello, World!",
     "section": "",
-    "text": "Crate anatomy\nRust uses a tool called cargo for building, checking, and managing dependencies. This is installed for you when you used rustup to install Rust.\nTo create a new Rust crate, use cargo new name-of-crate. This creates a new directory called name-of-crate. Be sure to cd into that directory.\nTwo types of crates: binary, library.\nBinary crates are standalone applications like command line tools, or things that run once—simiar to a script that you run with Rscript main.R",
+    "text": "Crate anatomy\nRust uses a tool called cargo for managing its dependencies and build lifecycle. This is installed for you when you used rustup to install Rust.\nRust doesn’t create libraries, instead its code is are called crates.\nTo create a new Rust crate, use cargo new name-of-crate. This creates a new directory called name-of-crate. Be sure to cd into that directory.\nTwo types of crates: binary, library.\nBinary crates are standalone applications like command line tools, or things that run once—simiar to a script that you run with Rscript main.R",
     "crumbs": [
       "Intro to Rust for R Developers",
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Hello, World!</span>"
@@ -1790,7 +1790,7 @@
     "href": "intro-to-rust-for-r-devs/02-hello-world.html#main.rs",
     "title": "2  Hello, World!",
     "section": "main.rs",
-    "text": "main.rs\nWhen you create a new rust binary the file src/main.rs is prepopulated with:\n\n\n\n\n\n\nTipsrc/main.rs\n\n\n\nThe main() function defines what is executed when your binary is run.\nfn main() {\n    println!(\"Hello, world!\");\n}\n\n\nThere are a few things going on in here:\n\nFunctions are declared using the fn keyword\nThe main() function is the entrypoint of the program (and required)\nBlocks of code are delimted using curly braces (like R & C)\nStatements end with ;\nprintln!() is a macro (notice the !) which is used to print to stdout\n\n\n\nWhen a program writes to the console it does so through file connections called standard output (stdout) and standard error (stderr).\nWhen we print a message with print() or message() in R, we print to stdout. When we make a warning or error using stop() or warning() in R, that is writing to stderr.\n\n\n\n\n\n\nVariables can only be defined inside of the main() function.",
+    "text": "main.rs\nWhen you create a new rust binary crate the file src/main.rs is prepopulated with:\n\n\n\n\n\n\nTipsrc/main.rs\n\n\n\nThe main() function defines what is executed when your binary is run.\nfn main() {\n    println!(\"Hello, world!\");\n}\n\n\nThere are a few things going on in here:\n\nFunctions are declared using the fn keyword\nThe main() function is the entrypoint of the program (and required)\nBlocks of code are delimted using curly braces (like R & C)\nStatements end with ;\nprintln!() is a macro (notice the !) which is used to print to stdout\n\n\n\nWhen a program writes to the console it does so through file connections called standard output (stdout) and standard error (stderr).\nWhen we print a message with print() or message() in R, we print to stdout. When we make a warning or error using stop() or warning() in R, that is writing to stderr.\n\n\n\n\n\n\nVariables can only be defined inside of the main() function.",
     "crumbs": [
       "Intro to Rust for R Developers",
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Hello, World!</span>"
@@ -1812,7 +1812,7 @@
     "href": "intro-to-rust-for-r-devs/02-hello-world.html#exercise",
     "title": "2  Hello, World!",
     "section": "Exercise",
-    "text": "Exercise\n\nIn your terminal, create a new rust crate called intro-to-rust\nOpen the new Rust crate’s folder in Positron\nRun the hello world program using cargo run\nCreate a variable called name inside of the main() function with your name\nPrint Hello, {name}! using println!()\nTo run it navigate to your terminal and then enter cargo run.\n\n\nSolution\n\n\nView solution\n\nIn src/main.rs\nfn main() {\n    let name = \"Josiah\";\n    println!(\"Hello, {name}!\");\n}",
+    "text": "Exercise\n\nIn your terminal, create a new rust crate called intro-to-rust\nOpen the new Rust crate’s folder in Positron / VS Code / Your IDE\nRun the hello world program using cargo run\nCreate a variable called name inside of the main() function with your name\nPrint Hello, {name}! using println!()\nTo run it navigate to your terminal and then enter cargo run.\n\n\nSolution\n\n\nView solution\n\nIn src/main.rs\nfn main() {\n    let name = \"Josiah\";\n    println!(\"Hello, {name}!\");\n}",
     "crumbs": [
       "Intro to Rust for R Developers",
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Hello, World!</span>"
@@ -1823,7 +1823,7 @@
     "href": "intro-to-rust-for-r-devs/03-types.html",
     "title": "3  Basic Types",
     "section": "",
-    "text": "Integers\nIn R everything is a vector. A vector is a collection of values. There is no scalar type for a double/ character / integer / logical vector. Those are just length 1 vectors.\nIn Rust, however, scalars are the building blocks of everything. When a collection is needed those are made directly from scalars. You will often hear of these as primitives.\nToday we will only be using a handful of these primitives but it is important to understand what they are—in general.\nIntegers are either signed or unsigned.\nA signed integer can contain a negative value. Whereas an unsigned integer can contain only positive numbers.\nThe letter prefix is the type of primitive. The following number indicates how many bits can be used to store the values. Unsigned integers can contain more possible values because they do not have to support negative numbers.",
+    "text": "Integers\nIn R everything is a vector. A vector is a collection of values. There is no scalar type for a double / character / integer / logical vector. Those are just length 1 vectors.\nIn Rust, however, scalars are the building blocks of everything. When a collection is needed those are made directly from scalars. You will often hear of these as primitives.\nToday we will only be using a handful of these primitives but it is important to understand what they are—in general.\nIntegers are either signed or unsigned.\nA signed integer can contain a negative value. Whereas an unsigned integer can contain only positive numbers.\nThe letter prefix is the type of primitive. The following number indicates how many bits can be used to store the values. Unsigned integers can contain more possible values because they do not have to support negative numbers.",
     "crumbs": [
       "Intro to Rust for R Developers",
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Basic Types</span>"
@@ -2153,7 +2153,7 @@
     "href": "intro-to-rust-for-r-devs/10-references-slices.html#cloning",
     "title": "10  Ownership",
     "section": "Cloning",
-    "text": "Cloning\nThe simplest but least efficient way to reuse a variable is to clone it. This is what R does.\n\n\n\n\n\n\nRemember: when in doubt, clone it out!\n\n\n\nAlmost everything in Rust can be cloned by using the .clone() method.\n\n\n\n\n\n\nImportantCannot compile\n\n\n\nlet x  = v![0.0, 3.14, 10.1, 44.8];\n\nlet avg1 = mean(x); // ⬅️ x moved here!\nlet avg2 = mean(x); // ❌ compiler error\n\n\nIf we first clone x before using mean() we can use x again.\nlet x  = v![0.0, 3.14, 10.1, 44.8];\n\nlet avg1 = mean(x.clone()); // ⬅️ x cloned here!\nlet avg2 = mean(x); // ✅ compiler happy",
+    "text": "Cloning\nThe simplest but least efficient way to reuse a variable is to clone it. This is what R does.\n\n\n\n\n\n\nRemember: when in doubt, clone it out!\n\n\n\nAlmost everything in Rust can be cloned by using the .clone() method.\n\n\n\n\n\n\nImportantCannot compile\n\n\n\nlet x  = vec![0.0, 3.14, 10.1, 44.8];\n\nlet avg1 = mean(x); // ⬅️ x moved here!\nlet avg2 = mean(x); // ❌ compiler error\n\n\nIf we first clone x before using mean() we can use x again.\nlet x  = vec![0.0, 3.14, 10.1, 44.8];\n\nlet avg1 = mean(x.clone()); // ⬅️ x cloned here!\nlet avg2 = mean(x); // ✅ compiler happy",
     "crumbs": [
       "Intro to Rust for R Developers",
       "<span class='chapter-number'>10</span>  <span class='chapter-title'>Ownership</span>"
@@ -2208,7 +2208,7 @@
     "href": "intro-to-rust-for-r-devs/10-references-slices.html#exercise-3",
     "title": "10  Ownership",
     "section": "Exercise 3",
-    "text": "Exercise 3\n\nRewrite mean() to accept a slice (&[f64]) instead of a Vec&lt;f64&gt; reference.\nCreate an array of f64 values called y\nCalculate the mean on both x and y\nPrint both averages\n\n\nSolution\n\n\nView solution",
+    "text": "Exercise 3\n\nRewrite mean() to accept a slice (&[f64]) instead of a Vec&lt;f64&gt; reference.\nCreate an array of f64 values called y\nCalculate the mean on both x and y\nPrint both averages\n\n\nSolution\n\n\nView solution\n\n// Final form of `mean()` from this chapter: accepts a slice (`&[f64]`),\n// which works for both `Vec&lt;f64&gt;` and arrays without moving them.\nfn mean(x: &[f64]) -&gt; f64 {\n    let mut total = 0.0;\n    for xi in x {\n        total += xi;\n    }\n    total / x.len() as f64\n}\n\nfn main() {\n    let x = vec![1.0, 2.0, 3.0, 4.0, 5.0];\n    let y = [0.0, 9.5, 3.3, 11.78, 3.14159];\n    println!(\n        \"The mean of x is {}.\\nThe mean of y is {}\",\n        mean(&x),\n        mean(&y)\n    );\n}",
     "crumbs": [
       "Intro to Rust for R Developers",
       "<span class='chapter-number'>10</span>  <span class='chapter-title'>Ownership</span>"
@@ -2729,6 +2729,961 @@
     "crumbs": [
       "Intro to Rust for R Developers",
       "<span class='chapter-number'>18</span>  <span class='chapter-title'>Adding a crate: `anyhow`</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/index.html",
+    "href": "building-rust-based-r-pkgs/index.html",
+    "title": "Building Rust based R Packages",
+    "section": "",
+    "text": "Timeline\nWelcome back! This afternoon we put the morning’s Rust to work by building a real R package powered by Rust.\nWe’ll create a package called {rurl}—R bindings to the url crate—so we can parse, inspect, and modify URLs at the speed of Rust while feeling completely at home in R.\nThis is the conservative timeline for the workshop. The first hour is the most “lesson”-heavy. Once we start building {rurls} it’s almost entirely hands-on.",
+    "crumbs": [
+      "Building Rust based R Packages"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/index.html#timeline",
+    "href": "building-rust-based-r-pkgs/index.html#timeline",
+    "title": "Building Rust based R Packages",
+    "section": "",
+    "text": "Section\nDuration\nEnd time\n\n\n\n\nFFI\n0:05\n1:35 PM\n\n\nWhat is extendr?\n0:05\n1:40 PM\n\n\nWorkshop scope\n0:03\n1:43 PM\n\n\nHello, world!\n0:10\n1:53 PM\n\n\nPackage structure\n0:10\n2:03 PM\n\n\nDeveloper experience\n0:05\n2:08 PM\n\n\nR’s type system\n0:10\n2:18 PM\n\n\nHandling NAs\n0:07\n2:25 PM\n\n\nBreak\n0:07\n2:32 PM\n\n\nWarm-up 1: centroid()\n0:07\n2:39 PM\n\n\nWarm-up 2: distance()\n0:07\n2:46 PM\n\n\nAdding the url crate\n0:05\n2:51 PM\n\n\nParsing URLs\n0:08\n2:59 PM\n\n\nPrinting & S3\n0:12\n3:11 PM\n\n\nURL getters\n0:15\n3:26 PM\n\n\nBreak\n0:07\n3:33 PM\n\n\nJoining URLs\n0:08\n3:41 PM\n\n\nPath segments\n0:08\n3:49 PM\n\n\nSetters\n0:12\n4:01 PM\n\n\nQuery pairs\n0:10\n4:11 PM\n\n\nDocumenting with roxygen2\n0:08\n4:19 PM\n\n\nCRAN & closing\n0:07\n4:26 PM",
+    "crumbs": [
+      "Building Rust based R Packages"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/01-ffi.html",
+    "href": "building-rust-based-r-pkgs/01-ffi.html",
+    "title": "19  Foreign Function Interfaces (FFI)",
+    "section": "",
+    "text": "R’s C API\nForeign function interfaces (FFI) are mechanisms by which other (foreign) languages can be used in our programming langauge of choice. They are typically used to call compiled languages (like C / Rust) from an interpretted langauge (R).\nMuch of R’s success and power comes from a robust FFI tooling ecosystem. Some of the more prominent FFI libraries are:\nMost langauges have the ability to interact with C and C-types. R is written in C and exposes a C API. Rust is able to work with C and represent C types. This is where extendr comes in.",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>19</span>  <span class='chapter-title'>Foreign Function Interfaces (FFI)</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/02-what-is-extendr.html",
+    "href": "building-rust-based-r-pkgs/02-what-is-extendr.html",
+    "title": "20  What is extendr?",
+    "section": "",
+    "text": "extendr-ffi\nextendr is a project that focuses on extending R with Rust. It is comprised of:\nextendr-ffi defines the types and functions in R’s C API using Rust functions and types. As R’s C API changes, extendr-ffi is responsible for ensuring that packages are backwards compatible.\nFortunately, we will never have to touch this layer. Everything is built on top of this crate.",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>20</span>  <span class='chapter-title'>What is extendr?</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/02-what-is-extendr.html#extendr-api",
+    "href": "building-rust-based-r-pkgs/02-what-is-extendr.html#extendr-api",
+    "title": "20  What is extendr?",
+    "section": "extendr-api",
+    "text": "extendr-api\nextendr-api is the high-level crate that is built upon extendr-ffi. It makes working with R types such as vectors feel fairly natural from a Rust perspective. It handles the oddities of garbage collection and everything else related to the FFI boundary.\nWe will spend the rest of the workshop using the extendr-api crate.",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>20</span>  <span class='chapter-title'>What is extendr?</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/02-what-is-extendr.html#extendr-engine",
+    "href": "building-rust-based-r-pkgs/02-what-is-extendr.html#extendr-engine",
+    "title": "20  What is extendr?",
+    "section": "extendr-engine",
+    "text": "extendr-engine\nThe extendr-engine is focused on the opposite direction—calling R from Rust. It enables us to start an R process inside of Rust as well as execute R code in that R process. It can be used in creating Rust-based CLI tools that call R or whatever else your imagination can think up.",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>20</span>  <span class='chapter-title'>What is extendr?</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/02-what-is-extendr.html#rextendr",
+    "href": "building-rust-based-r-pkgs/02-what-is-extendr.html#rextendr",
+    "title": "20  What is extendr?",
+    "section": "{rextendr}",
+    "text": "{rextendr}\nOn the R side exists {rextendr}. It is a {usethis}-like package for developing Rust-powered R packages.\nIt is primarily used to:\n\nscaffold R packages\ndocument Rust functions\nprepare packages for CRAN release\n\nIt also provide a knitr-engine which lets us include Rust in R Markdown documents.",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>20</span>  <span class='chapter-title'>What is extendr?</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/03-objective.html",
+    "href": "building-rust-based-r-pkgs/03-objective.html",
+    "title": "21  Workshop Scope",
+    "section": "",
+    "text": "Why URLs?\nThere’s no better way to learn than by doing.\nIn this workshop we will create a Rust-powered R package by building a new package called {rurl}.\nThe {rurl} package provides R bindings to the url crate—one of the most downloaded rust crates of all time.\nWe’ll touch on:\nAs much as this is about Rust, we are also working within the confines of R and thus, the two are inextricably linked.\nThe Url crate has a bit of almost everything:\nThe deceptively complex string—i.e. https://user@example.com:8080/path/to/page?q=rust#section–contains a scheme, host, port, path, query, and fragment.\nParsing urls correctly is a touch thing to do! A great place for Rust’s type system.",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>21</span>  <span class='chapter-title'>Workshop Scope</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/03-objective.html#the-r-package",
+    "href": "building-rust-based-r-pkgs/03-objective.html#the-r-package",
+    "title": "21  Workshop Scope",
+    "section": "The R package",
+    "text": "The R package\nThe {rurl} package we build will let us:\n\nparse character vectors of URLs into Url structs\ncreate a {vctrs} compatible vector\nextract components (host, scheme, path, port, query)\njoin, modify, and decompose URLs",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>21</span>  <span class='chapter-title'>Workshop Scope</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/04-hello-world.html",
+    "href": "building-rust-based-r-pkgs/04-hello-world.html",
+    "title": "22  Hello, world!",
+    "section": "",
+    "text": "Developer functions\nWe’re now ready to create our R package.\nTo develop a Rust-based R package, there are a few functions we need to familiarize ourselves with.",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>22</span>  <span class='chapter-title'>Hello, world!</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/04-hello-world.html#developer-functions",
+    "href": "building-rust-based-r-pkgs/04-hello-world.html#developer-functions",
+    "title": "22  Hello, world!",
+    "section": "",
+    "text": "I don’t use RStudio anymore so I set create_package(rstudio = FALSE) to not have Rproj.user created.\n\nusethis::create_package() creates an R package\nrextendr::use_extendr() creates the Rust infrastructure\ndevtools::document() document and update Rust function definitions",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>22</span>  <span class='chapter-title'>Hello, world!</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/04-hello-world.html#developer-workflow",
+    "href": "building-rust-based-r-pkgs/04-hello-world.html#developer-workflow",
+    "title": "22  Hello, world!",
+    "section": "Developer workflow",
+    "text": "Developer workflow\nThe typical workflow for developing an extendr package involves:\n\nModify the Rust source code\nUpdate the bindings documentation using devtools::document()\nLoad the package devtools::load_all()\nTest the R functions\nRepeat",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>22</span>  <span class='chapter-title'>Hello, world!</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/04-hello-world.html#exercise",
+    "href": "building-rust-based-r-pkgs/04-hello-world.html#exercise",
+    "title": "22  Hello, world!",
+    "section": "Exercise",
+    "text": "Exercise\n\nCreate a new package called {rurl} using {usethis}\nInclude extendr in the new package by running rextendr::use_extendr()\nCompile the package by using devtools::document()\nLoad the package using devtools::load_all()\nRun hello_world()\n\n\nSolution\n\n\nView solution\n\nusethis::create_package(\"rurl\")\n\n# add extendr scaffolding\nrextendr::use_extendr()\n\n# compile and document the Rust functions\ndevtools::document()\n\n# load the R package\ndevtools::load_all()\n\n# run the hello_world()!\nhello_world()",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>22</span>  <span class='chapter-title'>Hello, world!</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/05-package-structure.html",
+    "href": "building-rust-based-r-pkgs/05-package-structure.html",
+    "title": "23  Package structure",
+    "section": "",
+    "text": "Compiled Code\nThe basic structure of an extendr-based R package is like so:\nR packages that have compile code must store the source in src/. The src/ directory has the structure:",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>23</span>  <span class='chapter-title'>Package structure</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/05-package-structure.html#compiled-code",
+    "href": "building-rust-based-r-pkgs/05-package-structure.html#compiled-code",
+    "title": "23  Package structure",
+    "section": "",
+    "text": ".\n├── Makevars\n├── Makevars.in\n├── Makevars.win.in\n└── rust\n    ├── Cargo.lock\n    ├── Cargo.toml\n    ├── src\n\nrust/ is a library crate that is linked to by R\nMakevars files builds the Rust library and links it to R",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>23</span>  <span class='chapter-title'>Package structure</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/05-package-structure.html#rust-libraries",
+    "href": "building-rust-based-r-pkgs/05-package-structure.html#rust-libraries",
+    "title": "23  Package structure",
+    "section": "Rust libraries",
+    "text": "Rust libraries\nRust library crates have lib.rs instead of main.rs. There is no entrypoint that gets executed. Instead, we define functions, structs, enums, etc. that are used by the R package.",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>23</span>  <span class='chapter-title'>Package structure</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/06-extendr-dx.html",
+    "href": "building-rust-based-r-pkgs/06-extendr-dx.html",
+    "title": "24  Developer Experience",
+    "section": "",
+    "text": "Viewing Problems\nThe use_extendr() function creates will create (or update) the settings.json file in Positron & VS Code. This lets the rust-analyzer find the Rust package. Rust files are automatically linted and checked for errors.\nThe rust-analyzer is always running and identifies errors and warnings as you write them.\nYou can diagnose and identify issues in your Rust code by using the problems tab.\nOr, alternatively, you can run cargo check from the terminal to get diagnostics that way. This is my preference, personally.",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>24</span>  <span class='chapter-title'>Developer Experience</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/06-extendr-dx.html#viewing-problems",
+    "href": "building-rust-based-r-pkgs/06-extendr-dx.html#viewing-problems",
+    "title": "24  Developer Experience",
+    "section": "",
+    "text": "Problems Tab\n\n\n\ncd src/rust\ncargo check\n\n\n\ncargo check\n\n\n\n\n\n\n\n\nTipcargo check Keyboard shortcut\n\n\n\n\n\nI have a user task and keybinding to run cargo check in extendr packages that I find quite nice.\nOpen the command pallete using cmd + shift + p and find Tasks: Open User Tasks and add this task.\n{\n    \"label\": \"Check extendr package\",\n    \"type\": \"shell\",\n    \"command\": \"cargo check --all-features --manifest-path=src/rust/Cargo.toml\",\n}\nYou can bind this task to a keyboard shortcut. I use shift + cmd + enter and the condition that the directory is an R package and the open editor is a rust file.\n{\n    \"key\": \"shift+cmd+enter\",\n    \"command\": \"workbench.action.tasks.runTask\",\n    \"args\": \"Check extendr package\",\n    \"when\": \"isRPackage && editorLangId == 'rust'\",\n}",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>24</span>  <span class='chapter-title'>Developer Experience</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/06-extendr-dx.html#exercise",
+    "href": "building-rust-based-r-pkgs/06-extendr-dx.html#exercise",
+    "title": "24  Developer Experience",
+    "section": "Exercise",
+    "text": "Exercise\n\nRun cargo check in the src/rust directory",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>24</span>  <span class='chapter-title'>Developer Experience</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/07-r-type-system.html",
+    "href": "building-rust-based-r-pkgs/07-r-type-system.html",
+    "title": "25  R’s Type System",
+    "section": "",
+    "text": "Vector SEXP types\nIn R, everything is an SEXP.\nTo extendr, an SEXP is an Robj—it can be anything.\nThere are a subset of SEXP types that we actually care about—the vector kinds. For the sake of simplicity, we’ll only talk about the numeric vector types.",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>25</span>  <span class='chapter-title'>R's Type System</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/07-r-type-system.html#vector-sexp-types",
+    "href": "building-rust-based-r-pkgs/07-r-type-system.html#vector-sexp-types",
+    "title": "25  R’s Type System",
+    "section": "",
+    "text": "SEXP numeric types\n\n\n\nIntegers are represented by 32 bit integers i32 in Rust.\nDoubles are represented by 64 bit floats f64 in Rust.",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>25</span>  <span class='chapter-title'>R's Type System</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/07-r-type-system.html#scalar-types",
+    "href": "building-rust-based-r-pkgs/07-r-type-system.html#scalar-types",
+    "title": "25  R’s Type System",
+    "section": "Scalar types",
+    "text": "Scalar types\ni32 and f64 do not have a concept of NA or missing. How do we address this?\nextendr provides scalar types such as:\n\nRfloat\nRint\nRstr\nRbool\n\nand others.\nThese scalar types are created using ScalarType::from(). For example:\nlet my_float = Rfloat::from(3.14);\nOr, NAs can be created explicitly by using the associated method ScalarType::na()\nlet my_na = Rfloat::na();\n\nMissingness can also be checked by using the my_na.is_na() method.\nTo access the inner type—e.g. f64 or i32 we can use the .inner() method.",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>25</span>  <span class='chapter-title'>R's Type System</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/07-r-type-system.html#wrapper-types",
+    "href": "building-rust-based-r-pkgs/07-r-type-system.html#wrapper-types",
+    "title": "25  R’s Type System",
+    "section": "Wrapper types",
+    "text": "Wrapper types\nTo work with vectors, we work with their wrapper types. These are:\n\nDoubles\nIntegers\nLogicals\nStrings\n\nWe should always prefer these types over using Vec&lt;f64&gt; or Vec&lt;i32&gt;.\n\n\n\n\n\n\nNoteWhen in doubt, clone it out\n\n\n\n\n\nCloning an extendr Robj (or other wrapper type) is quite cheap. When cloning an Robj, we are only incrementing a reference count and not performing a full copy like we do when working in R.\n\n\n\n\n\n\nWrapper types",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>25</span>  <span class='chapter-title'>R's Type System</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/07-r-type-system.html#a-quick-taste",
+    "href": "building-rust-based-r-pkgs/07-r-type-system.html#a-quick-taste",
+    "title": "25  R’s Type System",
+    "section": "A quick taste",
+    "text": "A quick taste\nA vectorized extendr function takes a wrapper type in, iterates over its scalar elements, and collects back into a wrapper type. For example, doubling every value of a numeric vector:\n#[extendr]\nfn double_it(x: Doubles) -&gt; Doubles {\n    x.into_iter()\n        .map(|xi| Rfloat::from(xi.inner() * 2.0))\n        .collect::&lt;Doubles&gt;()\n}\nWe’ll put this exact shape to work in our first warm-up exercise.",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>25</span>  <span class='chapter-title'>R's Type System</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/08-na-handling.html",
+    "href": "building-rust-based-r-pkgs/08-na-handling.html",
+    "title": "26  Handle NAs gracefully",
+    "section": "",
+    "text": "Example\nWe’ve been using xi.inner() to access the f64 value of an Rfloat. This is an infallible method. It always provides the inner value of the Rfloat. However, we may want to handle NA values differently.\nTo handle NA values explicitly, we can check for the pressence of NA in an Rfloat using xi.is_na(). We can then match on the boolean value and choose what to do!\nmatch isn’t only for enums! When we match on booleans, there are only two variants: true or false. We can also perform nested match statements!\nHere we perform a nested match statement on the Result from parsing a string slice to an integer.",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>26</span>  <span class='chapter-title'>Handle NAs gracefully</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/08-na-handling.html#example",
+    "href": "building-rust-based-r-pkgs/08-na-handling.html#example",
+    "title": "26  Handle NAs gracefully",
+    "section": "",
+    "text": "let num_parsed = \"10\".parse::&lt;i32&gt;();\n\nmatch num_parsed {\n    Ok(num) =&gt; {\n        match num &gt; 10 {\n            true =&gt; println!(\"Parsed number is greater than 10!\"),\n            false =&gt; println!(\"Parsed number is less than or equal to 10\")\n        }\n    },\n    Err(e) =&gt; println!(\"Failed to parse number with error: {e:?}\")\n}",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>26</span>  <span class='chapter-title'>Handle NAs gracefully</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/08-na-handling.html#the-pattern",
+    "href": "building-rust-based-r-pkgs/08-na-handling.html#the-pattern",
+    "title": "26  Handle NAs gracefully",
+    "section": "The pattern",
+    "text": "The pattern\nFor each element, if it is missing return an NA, otherwise do the work.\n#[extendr]\nfn add_one(x: Doubles) -&gt; Doubles {\n    x.into_iter()\n        .map(|xi| {\n            match xi.is_na() {\n                true =&gt; Rfloat::na(),\n                false =&gt; Rfloat::from(xi.inner() + 1.0),\n            }\n        })\n        .collect::&lt;Doubles&gt;()\n}\nWe’ll put this pattern to use in the warm-up exercises that follow.",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>26</span>  <span class='chapter-title'>Handle NAs gracefully</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/09-centroid.html",
+    "href": "building-rust-based-r-pkgs/09-centroid.html",
+    "title": "27  Warm-up: centroid()",
+    "section": "",
+    "text": "Step 1: ignore NAs\nThis morning we ended on a Point struct. Let’s pick up right there, but on the R side of the boundary.\nThe centroid of a set of points is the mean of their x values and the mean of their y values. Given two coordinate vectors, we want to return a single point: c(mean_x, mean_y).\nWe’ll accumulate a running total for x and y, divide by the length, and return a length-2 Doubles.\nA few pieces we need:\nWe’ll return an anyhow::Result&lt;Doubles&gt; so that, later, we have a natural place for errors to go.",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>27</span>  <span class='chapter-title'>Warm-up: `centroid()`</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/09-centroid.html#step-1-ignore-nas",
+    "href": "building-rust-based-r-pkgs/09-centroid.html#step-1-ignore-nas",
+    "title": "27  Warm-up: centroid()",
+    "section": "",
+    "text": "a mutable accumulator: let mut x_bar = 0.0;\nthe number of elements: x.len() returns a usize\nbuild the result with Doubles::from_values([x_bar, y_bar])\n\n\n\nExercise\n\nWrite centroid(x: Doubles, y: Doubles) -&gt; Result&lt;Doubles&gt;\nSum the inner values of x into x_bar and y into y_bar\nDivide each by the length\nReturn Ok(Doubles::from_values([x_bar, y_bar]))\n\n\n\nView solution\n\nuse anyhow::Result;\n\n#[extendr]\nfn centroid(x: Doubles, y: Doubles) -&gt; Result&lt;Doubles&gt; {\n    let n = x.len() as f64;\n\n    let mut x_bar = 0.0;\n    let mut y_bar = 0.0;\n\n    for (xi, yi) in x.iter().zip(y.iter()) {\n        x_bar += xi.inner();\n        y_bar += yi.inner();\n    }\n\n    x_bar /= n;\n    y_bar /= n;\n\n    Ok(Doubles::from_values([x_bar, y_bar]))\n}\nDon’t forget to add centroid to extendr_module! {}, then devtools::document() and devtools::load_all().",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>27</span>  <span class='chapter-title'>Warm-up: `centroid()`</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/09-centroid.html#step-2-handle-nas",
+    "href": "building-rust-based-r-pkgs/09-centroid.html#step-2-handle-nas",
+    "title": "27  Warm-up: centroid()",
+    "section": "Step 2: handle NAs",
+    "text": "Step 2: handle NAs\nTry it with a missing value:\ncentroid(c(0, 10, NA), c(0, 20, 5))\n#&gt; [1] NaN NaN\nNA slipped through .inner() and poisoned the sum. Recall the pattern from the previous chapter: check is_na() and decide what to do.\nFor a centroid, the simplest rule is: if any coordinate is missing, the centroid is undefined, so return c(NA, NA).\n\nExercise\n\nBefore the loop, check whether any element of x or y is NA\nIf so, return Ok(Doubles::from_values([Rfloat::na(), Rfloat::na()]))\nOtherwise compute the centroid as before\n\n\n\nView solution\n\nuse anyhow::Result;\n\n#[extendr]\nfn centroid(x: Doubles, y: Doubles) -&gt; Result&lt;Doubles&gt; {\n    let any_missing = x.iter().any(|xi| xi.is_na()) || y.iter().any(|yi| yi.is_na());\n\n    if any_missing {\n        return Ok(Doubles::from_values([Rfloat::na(), Rfloat::na()]));\n    }\n\n    let n = x.len() as f64;\n    let mut x_bar = 0.0;\n    let mut y_bar = 0.0;\n\n    for (xi, yi) in x.iter().zip(y.iter()) {\n        x_bar += xi.inner();\n        y_bar += yi.inner();\n    }\n\n    Ok(Doubles::from_values([x_bar / n, y_bar / n]))\n}",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>27</span>  <span class='chapter-title'>Warm-up: `centroid()`</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/10-use-crate-url.html",
+    "href": "building-rust-based-r-pkgs/10-use-crate-url.html",
+    "title": "28  Adding the url crate",
+    "section": "",
+    "text": "Cargo.toml\nDependencies in Rust are managed by the Cargo.toml file. R will let you use packages that are on your machine even if you do not explicitly declare them as dependencies. Rust will not. You must declare dependencies.\nThe Cargo.toml is akin to the DESCRIPTION file. Dependencies are set via the [dependencies] table.\nWe can add dependencies manually, using cargo add crate-name, or via rextendr::use_crate(\"cratename\").",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>28</span>  <span class='chapter-title'>Adding the `url` crate</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/10-use-crate-url.html#cargo.toml",
+    "href": "building-rust-based-r-pkgs/10-use-crate-url.html#cargo.toml",
+    "title": "28  Adding the url crate",
+    "section": "",
+    "text": "[package]\nname = \"rurl\"\npublish = false\nversion = \"0.1.0\"\nedition = \"2021\"\nrust-version = \"1.65\"\n\n[lib]\ncrate-type = [ \"staticlib\" ]\nname = \"rurl\"\n\n[dependencies]\nextendr-api = \"*\"\n\n\nRust dependencies use semantic versionining (semver). The \"*\" is a shorthand for specifying the latest stable release.",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>28</span>  <span class='chapter-title'>Adding the `url` crate</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/10-use-crate-url.html#importing-items-from-dependencies",
+    "href": "building-rust-based-r-pkgs/10-use-crate-url.html#importing-items-from-dependencies",
+    "title": "28  Adding the url crate",
+    "section": "Importing items from dependencies",
+    "text": "Importing items from dependencies\nWhen dependencies are added to a crate, the items from the dependency are accessed via namespace similar to R. If we look at lib.rs we see at the top\nuse extendr_api::prelude::*;\nThis has the format of crate_name::module::item. The * is a wildcard for importing everything from the module.\nThe prelude is a common module name. It re-exports the commonly used items from a crate all together so you do not have to manually list them.\nMultiple items can be imported using {} for example:\nuse crate_name::{StructName, function_name};",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>28</span>  <span class='chapter-title'>Adding the `url` crate</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/10-use-crate-url.html#exercise",
+    "href": "building-rust-based-r-pkgs/10-use-crate-url.html#exercise",
+    "title": "28  Adding the url crate",
+    "section": "Exercise",
+    "text": "Exercise\n\nAdd the url crate as a dependency\nImport the Url struct from url in lib.rs\nWhile we’re here, add anyhow too—we’ll use it for error handling\n\n\n\nView solution\n\nFrom the R terminal run:\nrextendr::use_crate(\"url\")\nrextendr::use_crate(\"anyhow\")\nThis will add the url and anyhow dependencies.\nOpen src/rust/src/lib.rs and add the following below use extendr_api::prelude::*;\nuse url::Url;",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>28</span>  <span class='chapter-title'>Adding the `url` crate</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/11-external-pointers.html",
+    "href": "building-rust-based-r-pkgs/11-external-pointers.html",
+    "title": "29  External pointers",
+    "section": "",
+    "text": "What is an external pointer?\nSo far we’ve moved values across the boundary—numbers and strings get copied into R’s own vector types. But sometimes we want to hold onto a whole Rust type and keep calling methods on it. For that we use an external pointer.\nAn external pointer is exactly what it sounds like: a reference to some data sitting in memory that R does not understand. R can’t look inside it—it just holds the pointer and keeps the data alive.\nWhen we put #[extendr] on a type and its impl block, extendr lets that type travel to R as an external pointer.\nThe associated function new() is a fallible constructor: every known string is Ok(variant), and anything else is an Err. We return anyhow::Result so the error type is handled for us.\nIncluding the impl in extendr_module! {} uses impl, not fn:\nNow Shape$new(\"triangle\") returns an R object that holds a Rust Shape.",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>29</span>  <span class='chapter-title'>External pointers</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/11-external-pointers.html#what-is-an-external-pointer",
+    "href": "building-rust-based-r-pkgs/11-external-pointers.html#what-is-an-external-pointer",
+    "title": "29  External pointers",
+    "section": "",
+    "text": "#[derive(Debug)]\n#[extendr]\nenum Shape {\n    Triangle,\n    Rectangle,\n    Pentagon,\n    Hexagon,\n}\n\n#[extendr]\nimpl Shape {\n    fn new(x: &str) -&gt; anyhow::Result&lt;Self&gt; {\n        match x {\n            \"triangle\" =&gt; Ok(Self::Triangle),\n            \"rectangle\" =&gt; Ok(Self::Rectangle),\n            \"pentagon\" =&gt; Ok(Self::Pentagon),\n            \"hexagon\" =&gt; Ok(Self::Hexagon),\n            _ =&gt; Err(anyhow::anyhow!(\"unknown shape: {x}\")),\n        }\n    }\n\n    fn n_coords(&self) -&gt; usize {\n        match self {\n            Shape::Triangle =&gt; 3,\n            Shape::Rectangle =&gt; 4,\n            Shape::Pentagon =&gt; 4,\n            Shape::Hexagon =&gt; 5,\n        }\n    }\n}\n\n\nextendr_module! {\n    mod mypackage;\n    impl Shape;\n}",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>29</span>  <span class='chapter-title'>External pointers</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/11-external-pointers.html#who-owns-it",
+    "href": "building-rust-based-r-pkgs/11-external-pointers.html#who-owns-it",
+    "title": "29  External pointers",
+    "section": "Who owns it?",
+    "text": "Who owns it?\nR owns the external pointer. When you clone an external pointer in R, you are not copying the Rust value—you’re just incrementing a reference count. R uses that count to decide when memory can be freed: when the count drops to zero (for example after rm() and a garbage collection), R runs a finalizer and Rust drops the value. Until then it stays alive.\nThis is why we generally treat the pointer as read-only: R is in charge of the object’s lifetime.",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>29</span>  <span class='chapter-title'>External pointers</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/11-external-pointers.html#getting-the-rust-value-back",
+    "href": "building-rust-based-r-pkgs/11-external-pointers.html#getting-the-rust-value-back",
+    "title": "29  External pointers",
+    "section": "Getting the Rust value back",
+    "text": "Getting the Rust value back\nTo read the Rust value out of an R object, we use ExternalPtr with the turbofish syntax:\nlet ptr = ExternalPtr::&lt;Shape&gt;::try_from(robj)?;\ntry_from is fallible—the object might not actually be a Shape—so it returns a Result.\nOnce we have the pointer, we can borrow the inner value with as_ref():\nlet shape: &Shape = ptr.as_ref();\nIf we need an owned copy we can modify, we clone() the borrowed value (this requires the type to derive Clone):\nlet mut owned = ptr.as_ref().clone();",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>29</span>  <span class='chapter-title'>External pointers</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/11-external-pointers.html#exercise",
+    "href": "building-rust-based-r-pkgs/11-external-pointers.html#exercise",
+    "title": "29  External pointers",
+    "section": "Exercise",
+    "text": "Exercise\nWe’re going to build a type RUrl that wraps a url::Url.\n\nDefine struct RUrl(Url) (a newtype) and derive Clone\nPut #[extendr] on both the struct and an impl RUrl block\nWrite an associated function new(url: &str) that parses the string with Url::parse() and returns anyhow::Result&lt;Self&gt;\nRegister it with impl RUrl; in extendr_module! {}\ndevtools::document() and devtools::load_all()\n\nThen call the constructor directly from R:\nRUrl$new(\"https://google.com\")\n#&gt; &lt;pointer: 0x6000021b9c60&gt;\n#&gt; attr(,\"class\")\n#&gt; [1] \"RUrl\"\n\n\nView solution\n\n#[derive(Clone)]\n#[extendr]\nstruct RUrl(Url);\n\n#[extendr]\nimpl RUrl {\n    fn new(url: &str) -&gt; anyhow::Result&lt;Self&gt; {\n        Ok(Self(Url::parse(url)?))\n    }\n}",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>29</span>  <span class='chapter-title'>External pointers</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/12-lists-of-pointers.html",
+    "href": "building-rust-based-r-pkgs/12-lists-of-pointers.html",
+    "title": "30  Lists of pointers",
+    "section": "",
+    "text": "Lists are vectors\nIn the last chapter we made a single external pointer. R users don’t want one value at a time though—they want a vector. How do we hold a vector of Rust objects?\nRemember that in R a list is just a vector—a vector whose elements can be anything. That’s exactly what we need: each element will be an external pointer.\nSo to return many Rust objects to R, we build a List where every element is a pointer.",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>30</span>  <span class='chapter-title'>Lists of pointers</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/12-lists-of-pointers.html#null-is-our-missing-value",
+    "href": "building-rust-based-r-pkgs/12-lists-of-pointers.html#null-is-our-missing-value",
+    "title": "30  Lists of pointers",
+    "section": "NULL is our missing value",
+    "text": "NULL is our missing value\nA character vector can contain NA. When we turn each string into a pointer, we need somewhere to put “this one is missing.” In a list, the natural missing value is NULL. So:\n\nif the input string is NA, the element becomes NULL\nif it parses, the element becomes the external pointer\nif it fails to parse, the element also becomes NULL\n\nWe turn any value—a pointer or a NULL—into a generic Robj so that every element of the iterator has the same type and can be collected together.",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>30</span>  <span class='chapter-title'>Lists of pointers</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/12-lists-of-pointers.html#example",
+    "href": "building-rust-based-r-pkgs/12-lists-of-pointers.html#example",
+    "title": "30  Lists of pointers",
+    "section": "Example",
+    "text": "Example\nHere we parse a character vector of shape names into a list of Shape objects:\n#[extendr]\nfn parse_shapes(x: Strings) -&gt; List {\n    x.into_iter()\n        .map(|xi| {\n            if xi.is_na() {\n                return ().into_robj();\n            }\n\n            match Shape::new(xi) {\n                Ok(shape) =&gt; shape.into_robj(),\n                Err(_) =&gt; ().into_robj(),\n            }\n        })\n        .collect::&lt;List&gt;()\n}\n\n\n\n\n\n\nNoteCollecting into wrapper types\n\n\n\nRecall that we can .collect() directly into Strings, Doubles, etc. when every element is the matching scalar type (Rstr, Rfloat, …). Here, because every element is a generic Robj, we collect into a List.",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>30</span>  <span class='chapter-title'>Lists of pointers</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/12-lists-of-pointers.html#exercise",
+    "href": "building-rust-based-r-pkgs/12-lists-of-pointers.html#exercise",
+    "title": "30  Lists of pointers",
+    "section": "Exercise",
+    "text": "Exercise\n\nWrite url_parse(x: Strings) -&gt; List\nFor each element: NA becomes NULL, a parsed url becomes an external pointer, a parse failure becomes NULL\nUse the RUrl::new() constructor you wrote in the last chapter\nCollect into a List\n\n\n\nView solution\n\n#[extendr]\nfn url_parse(x: Strings) -&gt; List {\n    x.into_iter()\n        .map(|xi| {\n            if xi.is_na() {\n                return ().into_robj();\n            }\n\n            match RUrl::new(xi) {\n                Ok(v) =&gt; v.into_robj(),\n                Err(_) =&gt; ().into_robj(),\n            }\n        })\n        .collect::&lt;List&gt;()\n}\n(We’ll come back and give this list a class in the S3 chapter.)",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>30</span>  <span class='chapter-title'>Lists of pointers</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/13-print-helper.html",
+    "href": "building-rust-based-r-pkgs/13-print-helper.html",
+    "title": "31  A print helper",
+    "section": "",
+    "text": "A helper to get the pointer\nWhen we print our list of objects, it’s ugly:\nR can’t see inside an external pointer, so all it can show is the memory address. We’d much rather see something meaningful. To do that, we write a function that walks the list, gets each Rust value back out, and produces a character vector.\nReaching into the list and pulling out the external pointer is something we’ll do over and over, so it’s worth a small helper. Add this associated function to your impl:",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>31</span>  <span class='chapter-title'>A print helper</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/13-print-helper.html#a-helper-to-get-the-pointer",
+    "href": "building-rust-based-r-pkgs/13-print-helper.html#a-helper-to-get-the-pointer",
+    "title": "31  A print helper",
+    "section": "",
+    "text": "impl RUrl {\n    fn get_extptr(robj: Robj) -&gt; extendr_api::Result&lt;ExternalPtr&lt;Self&gt;&gt; {\n        ExternalPtr::&lt;Self&gt;::try_from(robj)\n    }\n}",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>31</span>  <span class='chapter-title'>A print helper</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/13-print-helper.html#iterating-a-list",
+    "href": "building-rust-based-r-pkgs/13-print-helper.html#iterating-a-list",
+    "title": "31  A print helper",
+    "section": "Iterating a list",
+    "text": "Iterating a list\nWhen we iterate over a List, each item is a tuple: the element’s name and its value as an Robj. We usually ignore the name with _.\nFor each value we try to get the pointer back. If we succeed, we borrow the inner Rust value and produce a string from it. If not, we produce an NA.",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>31</span>  <span class='chapter-title'>A print helper</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/13-print-helper.html#example",
+    "href": "building-rust-based-r-pkgs/13-print-helper.html#example",
+    "title": "31  A print helper",
+    "section": "Example",
+    "text": "Example\nHere we turn a list of Shapes into a character vector of their vertex counts:\n#[extendr]\nfn format_shapes(x: List) -&gt; Strings {\n    x.into_iter()\n        .map(|(_, vi)| match Shape::get_extptr(vi) {\n            Ok(shape) =&gt; Rstr::from(format!(\"{}-gon\", shape.n_coords())),\n            Err(_) =&gt; Rstr::na(),\n        })\n        .collect::&lt;Strings&gt;()\n}",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>31</span>  <span class='chapter-title'>A print helper</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/13-print-helper.html#exercise",
+    "href": "building-rust-based-r-pkgs/13-print-helper.html#exercise",
+    "title": "31  A print helper",
+    "section": "Exercise",
+    "text": "Exercise\n\nWrite format_rurls(x: List) -&gt; Strings\nIterate the list, destructuring each element as (_, vi)\nUse RUrl::get_extptr() to get the pointer back\nOn success, turn the inner Url into a string with .to_string()\nOn failure, return Rstr::na()\n\n\n\nView solution\n\n#[extendr]\nfn format_rurls(x: List) -&gt; Strings {\n    x.into_iter()\n        .map(|(_, vi)| {\n            let vv = RUrl::get_extptr(vi);\n            match vv {\n                Ok(rurl) =&gt; Rstr::from(rurl.0.to_string()),\n                Err(_) =&gt; Rstr::na(),\n            }\n        })\n        .collect::&lt;Strings&gt;()\n}",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>31</span>  <span class='chapter-title'>A print helper</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/14-s3.html",
+    "href": "building-rust-based-r-pkgs/14-s3.html",
+    "title": "32  S3 classes",
+    "section": "",
+    "text": "Classes are the whole hook\nWe have a format_* function, but R doesn’t know to use it. When you type the name of an object, R dispatches to a print/format method based on the object’s class. So we need to give our list a class.\nR’s S3 system is driven entirely by the class attribute. If an object has class \"foo\", then calling a generic like format() on it looks for format.foo(). That’s it—attach a class, define a method, and you plug straight into R.",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>32</span>  <span class='chapter-title'>S3 classes</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/14-s3.html#the-vctrs_vctr-class",
+    "href": "building-rust-based-r-pkgs/14-s3.html#the-vctrs_vctr-class",
+    "title": "32  S3 classes",
+    "section": "The vctrs_vctr class",
+    "text": "The vctrs_vctr class\nThe vctrs package defines a very general vctrs_vctr class that gives sensible default behavior for vector-like objects. We’ll include it in our class vector so we get that behavior for free, ending with the underlying list type:\nc(\"myclass\", \"vctrs_vctr\", \"list\")",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>32</span>  <span class='chapter-title'>S3 classes</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/14-s3.html#setting-the-class-from-rust",
+    "href": "building-rust-based-r-pkgs/14-s3.html#setting-the-class-from-rust",
+    "title": "32  S3 classes",
+    "section": "Setting the class from Rust",
+    "text": "Setting the class from Rust\nWe can assign a class to a mutable Robj with .set_class(). Because set_class() is fallible, the function returns a Result.",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>32</span>  <span class='chapter-title'>S3 classes</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/14-s3.html#example",
+    "href": "building-rust-based-r-pkgs/14-s3.html#example",
+    "title": "32  S3 classes",
+    "section": "Example",
+    "text": "Example\n#[extendr]\nfn parse_shapes(x: Strings) -&gt; extendr_api::Result&lt;List&gt; {\n    let mut res = x\n        .into_iter()\n        .map(|xi| match Shape::new(xi) {\n            Ok(shape) =&gt; shape.into_robj(),\n            Err(_) =&gt; ().into_robj(),\n        })\n        .collect::&lt;List&gt;();\n\n    res.set_class(&[\"shapes\", \"vctrs_vctr\", \"list\"])?;\n    Ok(res)\n}",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>32</span>  <span class='chapter-title'>S3 classes</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/14-s3.html#the-r-method",
+    "href": "building-rust-based-r-pkgs/14-s3.html#the-r-method",
+    "title": "32  S3 classes",
+    "section": "The R method",
+    "text": "The R method\nThe class is only half the story—now define the method on the R side. In an R script (e.g. R/rurls.R), define format.rurls and have it call your Rust helper:\n#' @export\nformat.rurls &lt;- function(x, ...) {\n    format_rurls(x)\n}",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>32</span>  <span class='chapter-title'>S3 classes</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/14-s3.html#exercise",
+    "href": "building-rust-based-r-pkgs/14-s3.html#exercise",
+    "title": "32  S3 classes",
+    "section": "Exercise",
+    "text": "Exercise\n\nUpdate url_parse() to return extendr_api::Result&lt;List&gt;\nSet the class to c(\"rurls\", \"vctrs_vctr\", \"list\") on the result\nAdd the format.rurls method above in an R script\ndevtools::document() and devtools::load_all(), then print a parsed vector\n\n\n\nView solution\n\n#[extendr]\nfn url_parse(x: Strings) -&gt; extendr_api::Result&lt;List&gt; {\n    let mut res = x\n        .into_iter()\n        .map(|xi| {\n            if xi.is_na() {\n                return ().into_robj();\n            }\n\n            match RUrl::new(xi) {\n                Ok(v) =&gt; v.into_robj(),\n                Err(_) =&gt; ().into_robj(),\n            }\n        })\n        .collect::&lt;List&gt;();\n\n    res.set_class(&[\"rurls\", \"vctrs_vctr\", \"list\"])?;\n    Ok(res)\n}\n#' @export\nformat.rurls &lt;- function(x, ...) {\n    format_rurls(x)\n}",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>32</span>  <span class='chapter-title'>S3 classes</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/15-url-getters.html",
+    "href": "building-rust-based-r-pkgs/15-url-getters.html",
+    "title": "33  Getters",
+    "section": "",
+    "text": "The pattern\nNow that we can hold objects in a list, we can expose their methods to R. These getter functions all look the same: walk the list, get each object back, call a method, collect the results.\nEvery getter is the same shape we used for the print helper:",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>33</span>  <span class='chapter-title'>Getters</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/15-url-getters.html#the-pattern",
+    "href": "building-rust-based-r-pkgs/15-url-getters.html#the-pattern",
+    "title": "33  Getters",
+    "section": "",
+    "text": "iterate the list ((_, vi) tuples)\nget_extptr to recover the object\ncall the method on the borrowed value\ncollect into a wrapper type, with NA on failure",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>33</span>  <span class='chapter-title'>Getters</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/15-url-getters.html#example",
+    "href": "building-rust-based-r-pkgs/15-url-getters.html#example",
+    "title": "33  Getters",
+    "section": "Example",
+    "text": "Example\nA getter that returns the number of coordinates for each shape:\n#[extendr]\nfn shape_coords(x: List) -&gt; Integers {\n    x.into_iter()\n        .map(|(_, vi)| match Shape::get_extptr(vi) {\n            Ok(shape) =&gt; Rint::from(shape.n_coords() as i32),\n            Err(_) =&gt; Rint::na(),\n        })\n        .collect::&lt;Integers&gt;()\n}\nOnce you’ve written one, the rest are copy-paste with a different method name.",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>33</span>  <span class='chapter-title'>Getters</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/15-url-getters.html#finding-the-methods",
+    "href": "building-rust-based-r-pkgs/15-url-getters.html#finding-the-methods",
+    "title": "33  Getters",
+    "section": "Finding the methods",
+    "text": "Finding the methods\nA Url has many methods. The two best ways to discover them:\n\nthe docs page: https://docs.rs/url/latest/url/struct.Url.html#implementations\nthe LSP autocomplete—type rurl.0. and let rust-analyzer list them\n\nSome methods return a plain &str (like scheme()); these are the easy ones and we’ll do them first. Others return an Option—we’ll handle those in the next chapter.",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>33</span>  <span class='chapter-title'>Getters</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/15-url-getters.html#exercise",
+    "href": "building-rust-based-r-pkgs/15-url-getters.html#exercise",
+    "title": "33  Getters",
+    "section": "Exercise",
+    "text": "Exercise\nWrite a getter for each Url method that returns a plain &str (no Option):\n\nurl_scheme() calls scheme()\nurl_path() calls path()\nurl_authority() calls authority()\n\nEach takes a List and returns Strings.\n\n\nView solution\n\n#[extendr]\nfn url_scheme(url: List) -&gt; Strings {\n    url.into_iter()\n        .map(|(_, vi)| match RUrl::get_extptr(vi) {\n            Ok(rurl) =&gt; Rstr::from(rurl.0.scheme()),\n            Err(_) =&gt; Rstr::na(),\n        })\n        .collect()\n}\n\n#[extendr]\nfn url_path(url: List) -&gt; Strings {\n    url.into_iter()\n        .map(|(_, vi)| match RUrl::get_extptr(vi) {\n            Ok(rurl) =&gt; Rstr::from(rurl.0.path()),\n            Err(_) =&gt; Rstr::na(),\n        })\n        .collect()\n}\n\n#[extendr]\nfn url_authority(url: List) -&gt; Strings {\n    url.into_iter()\n        .map(|(_, vi)| match RUrl::get_extptr(vi) {\n            Ok(rurl) =&gt; Rstr::from(rurl.0.authority()),\n            Err(_) =&gt; Rstr::na(),\n        })\n        .collect()\n}",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>33</span>  <span class='chapter-title'>Getters</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/16-mapping-into-option.html",
+    "href": "building-rust-based-r-pkgs/16-mapping-into-option.html",
+    "title": "34  Mapping into an Option",
+    "section": "",
+    "text": ".map() works on Option too\nSome methods don’t return a plain value—they return an Option. For example, a url may or may not have a host, so host_str() returns Option&lt;&str&gt;. The getters in the last chapter won’t work directly on these.\nJust like we .map() over the elements of an iterator, we can .map() over the value inside an Option or Result. The closure only runs if the value is Some (or Ok); if it’s None, nothing happens and we still have None.\nThis is exactly what we need: reach inside the Option, change the value, and keep the “missing” case intact.",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>34</span>  <span class='chapter-title'>Mapping into an `Option`</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/16-mapping-into-option.html#map-works-on-option-too",
+    "href": "building-rust-based-r-pkgs/16-mapping-into-option.html#map-works-on-option-too",
+    "title": "34  Mapping into an Option",
+    "section": "",
+    "text": "let maybe_num: Option&lt;i32&gt; = Some(10);\nlet doubled = maybe_num.map(|n| n * 2);\n// doubled == Some(20)\n\nlet nothing: Option&lt;i32&gt; = None;\nlet still_nothing = nothing.map(|n| n * 2);\n// still_nothing == None",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>34</span>  <span class='chapter-title'>Mapping into an `Option`</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/16-mapping-into-option.html#why-we-need-it-here",
+    "href": "building-rust-based-r-pkgs/16-mapping-into-option.html#why-we-need-it-here",
+    "title": "34  Mapping into an Option",
+    "section": "Why we need it here",
+    "text": "Why we need it here\nA method like host_str() returns Option&lt;&str&gt;—a borrowed string slice. To hand it to R we need an owned String. So we map into the option and call .to_string() on the inner &str:\nrurl.0.host_str().map(|v| v.to_string())\n// Option&lt;&str&gt; -&gt; Option&lt;String&gt;\nRstr::from() knows how to turn an Option&lt;String&gt; into an Rstr—None becomes NA automatically.",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>34</span>  <span class='chapter-title'>Mapping into an `Option`</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/16-mapping-into-option.html#exercise",
+    "href": "building-rust-based-r-pkgs/16-mapping-into-option.html#exercise",
+    "title": "34  Mapping into an Option",
+    "section": "Exercise",
+    "text": "Exercise\nWrite a getter for each Url method that returns an Option:\n\nurl_host() calls host_str() (Option&lt;&str&gt;)\nurl_query() calls query() (Option&lt;&str&gt;)\nurl_domain() calls domain() (Option&lt;&str&gt;)\nurl_port() calls port() (Option&lt;u16&gt;, returns Integers)\n\nFor the string ones, map with .to_string(). For port, map the u16 to i32 (R’s integers are signed 32-bit) and return Integers.\n\n\nView solution\n\n#[extendr]\nfn url_host(url: List) -&gt; Strings {\n    url.into_iter()\n        .map(|(_, vi)| match RUrl::get_extptr(vi) {\n            Ok(rurl) =&gt; Rstr::from(rurl.0.host_str().map(|v| v.to_string())),\n            Err(_) =&gt; Rstr::na(),\n        })\n        .collect()\n}\n\n#[extendr]\nfn url_query(url: List) -&gt; Strings {\n    url.into_iter()\n        .map(|(_, vi)| match RUrl::get_extptr(vi) {\n            Ok(rurl) =&gt; Rstr::from(rurl.0.query().map(|v| v.to_string())),\n            Err(_) =&gt; Rstr::na(),\n        })\n        .collect()\n}\n\n#[extendr]\nfn url_domain(url: List) -&gt; Strings {\n    url.into_iter()\n        .map(|(_, vi)| match RUrl::get_extptr(vi) {\n            Ok(rurl) =&gt; Rstr::from(rurl.0.domain().map(|v| v.to_string())),\n            Err(_) =&gt; Rstr::na(),\n        })\n        .collect()\n}\n\n#[extendr]\nfn url_port(url: List) -&gt; Integers {\n    url.into_iter()\n        .map(|(_, vi)| match RUrl::get_extptr(vi) {\n            Ok(rurl) =&gt; Rint::from(rurl.0.port().map(|inner| inner as i32)),\n            Err(_) =&gt; Rint::na(),\n        })\n        .collect()\n}",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>34</span>  <span class='chapter-title'>Mapping into an `Option`</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/17-setters-cow.html",
+    "href": "building-rust-based-r-pkgs/17-setters-cow.html",
+    "title": "35  Setters & copy-on-write",
+    "section": "",
+    "text": "A helper to clone\nGetters read from a url. Setters change one. But R has a rule we need to respect: copy-on-write. When you modify an object in R, you don’t change it in place. R makes a copy first and modifies the copy.\nWe saw earlier that R owns our external pointers, so we shouldn’t mutate them in place anyways. Both reasons point to the same approach. To set a value, we clone the Rust object out of the pointer, modify the clone, and return a brand new object.\nGetting a fresh, owned copy out of a pointer is its own little dance: get the pointer, borrow with as_ref(), then .clone(). We’ll do this in every setter, so here’s a helper to add to your impl:\nThis requires RUrl to derive Clone, which we did back when we defined it.",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>35</span>  <span class='chapter-title'>Setters & copy-on-write</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/17-setters-cow.html#a-helper-to-clone",
+    "href": "building-rust-based-r-pkgs/17-setters-cow.html#a-helper-to-clone",
+    "title": "35  Setters & copy-on-write",
+    "section": "",
+    "text": "impl RUrl {\n    fn clone_from_robj(robj: Robj) -&gt; anyhow::Result&lt;Self&gt; {\n        match ExternalPtr::&lt;RUrl&gt;::try_from(robj) {\n            Ok(v) =&gt; Ok(v.as_ref().clone()),\n            Err(e) =&gt; Err(anyhow!(\"Expected an object of class `rurl`:\\n{e}\")),\n        }\n    }\n}",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>35</span>  <span class='chapter-title'>Setters & copy-on-write</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/17-setters-cow.html#mutable-values",
+    "href": "building-rust-based-r-pkgs/17-setters-cow.html#mutable-values",
+    "title": "35  Setters & copy-on-write",
+    "section": "Mutable values",
+    "text": "Mutable values\nOnce we have an owned clone, we can mark it mut and call a method that takes &mut self. The setter methods on Url look like this:\npub fn set_host(&mut self, host: Option&lt;&str&gt;) -&gt; Result&lt;(), ()&gt;\nThe host is an Option because passing None removes the host. We always want to set one, so we pass Some(host).",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>35</span>  <span class='chapter-title'>Setters & copy-on-write</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/17-setters-cow.html#exercise",
+    "href": "building-rust-based-r-pkgs/17-setters-cow.html#exercise",
+    "title": "35  Setters & copy-on-write",
+    "section": "Exercise",
+    "text": "Exercise\n\nWrite url_set_host(url: List, host: Strings) -&gt; List\nZip the urls together with the hosts\nIf the url is NULL or the host is NA, return NULL for that element\nOtherwise clone the url with clone_from_robj, set the host, and return the new object\nCollect into a List\n\nFor now, assume url and host are the same length. We’ll handle recycling and length checks in the next chapter.\n\n\nView solution\n\n#[extendr]\nfn url_set_host(url: List, host: Strings) -&gt; List {\n    url.into_iter()\n        .zip(host.into_iter())\n        .map(|((_, url), host)| {\n            if url.is_null() || host.is_na() {\n                return ().into_robj();\n            }\n\n            match RUrl::clone_from_robj(url) {\n                Ok(mut rurl) =&gt; match rurl.0.set_host(Some(host)) {\n                    Ok(_) =&gt; rurl.into_robj(),\n                    Err(_) =&gt; ().into_robj(),\n                },\n                Err(_) =&gt; ().into_robj(),\n            }\n        })\n        .collect()\n}",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>35</span>  <span class='chapter-title'>Setters & copy-on-write</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/18-recycling-and-errors.html",
+    "href": "building-rust-based-r-pkgs/18-recycling-and-errors.html",
+    "title": "36  Recycling & errors",
+    "section": "",
+    "text": "Recycling with .cycle()\nOur url_set_host() assumed the urls and hosts were the same length. But R users expect recycling. If you give a length-1 value, it should apply to every element.\nThat single \"https\" should be reused for all the urls.\nThe .cycle() method takes an iterator and repeats it forever. When we zip a cycled iterator against our urls, the shorter one keeps repeating to cover every url.\nA length-1 scheme now applies to every url. A length-3 scheme lines up with three urls as you’d expect.",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>36</span>  <span class='chapter-title'>Recycling & errors</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/18-recycling-and-errors.html#recycling-with-.cycle",
+    "href": "building-rust-based-r-pkgs/18-recycling-and-errors.html#recycling-with-.cycle",
+    "title": "36  Recycling & errors",
+    "section": "",
+    "text": "url.into_iter().zip(scheme.into_iter().cycle())",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>36</span>  <span class='chapter-title'>Recycling & errors</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/18-recycling-and-errors.html#length-checks-with-throw_r_error",
+    "href": "building-rust-based-r-pkgs/18-recycling-and-errors.html#length-checks-with-throw_r_error",
+    "title": "36  Recycling & errors",
+    "section": "Length checks with throw_r_error",
+    "text": "Length checks with throw_r_error\nRecycling only makes sense in two cases. The value is a scalar, or it’s exactly the same length as the urls. Anything else is a mistake, and we should tell the user instead of silently doing something weird.\nWhen an argument is invalid, we don’t return NA for that element. The whole call is wrong, so we stop the function with an error. We do that with throw_r_error().\nif (scheme.len() != url.len()) & (scheme.len() != 1) {\n    throw_r_error(\"`scheme` must be a scalar or the same length as `url`\");\n}\nThe condition reads: error when the length is neither equal to the url length nor equal to one.",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>36</span>  <span class='chapter-title'>Recycling & errors</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/18-recycling-and-errors.html#exercise",
+    "href": "building-rust-based-r-pkgs/18-recycling-and-errors.html#exercise",
+    "title": "36  Recycling & errors",
+    "section": "Exercise",
+    "text": "Exercise\nWrite the remaining setters, each with a length check up front and .cycle() for recycling:\n\nurl_set_path() calls set_path(), which is infallible (returns ())\nurl_set_port() calls set_port(), which takes Option&lt;u16&gt; and returns a Result\nurl_set_scheme() calls set_scheme(), which returns a Result\n\n\n\nView solution\n\n#[extendr]\nfn url_set_path(url: List, path: Strings) -&gt; List {\n    if (path.len() != url.len()) & (path.len() != 1) {\n        throw_r_error(\"`path` must be a scalar or the same length as `url`\");\n    }\n    url.into_iter()\n        .zip(path.into_iter().cycle())\n        .map(|((_, url), path)| {\n            if url.is_null() || path.is_na() {\n                return ().into_robj();\n            }\n\n            match RUrl::clone_from_robj(url) {\n                Ok(mut rurl) =&gt; {\n                    rurl.0.set_path(path);\n                    rurl.into_robj()\n                }\n                Err(_) =&gt; ().into_robj(),\n            }\n        })\n        .collect()\n}\n\n#[extendr]\nfn url_set_port(url: List, port: Integers) -&gt; List {\n    if (port.len() != url.len()) & (port.len() != 1) {\n        throw_r_error(\"`port` must be a scalar or the same length as `url`\");\n    }\n    url.into_iter()\n        .zip(port.into_iter().cycle())\n        .map(|((_, url), port)| {\n            if url.is_null() || port.is_na() {\n                return ().into_robj();\n            }\n\n            match RUrl::clone_from_robj(url) {\n                Ok(mut rurl) =&gt; match rurl.0.set_port(Some(port.0 as u16)) {\n                    Ok(_) =&gt; rurl.into_robj(),\n                    Err(_) =&gt; ().into_robj(),\n                },\n                Err(_) =&gt; ().into_robj(),\n            }\n        })\n        .collect()\n}\n\n#[extendr]\nfn url_set_scheme(url: List, scheme: Strings) -&gt; List {\n    if (scheme.len() != url.len()) & (scheme.len() != 1) {\n        throw_r_error(\"`scheme` must be a scalar or the same length as `url`\");\n    }\n    url.into_iter()\n        .zip(scheme.into_iter().cycle())\n        .map(|((_, url), scheme)| {\n            if url.is_null() || scheme.is_na() {\n                return ().into_robj();\n            }\n\n            match RUrl::clone_from_robj(url) {\n                Ok(mut rurl) =&gt; match rurl.0.set_scheme(scheme) {\n                    Ok(_) =&gt; rurl.into_robj(),\n                    Err(_) =&gt; ().into_robj(),\n                },\n                Err(_) =&gt; ().into_robj(),\n            }\n        })\n        .collect()\n}",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>36</span>  <span class='chapter-title'>Recycling & errors</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/19-path-segments.html",
+    "href": "building-rust-based-r-pkgs/19-path-segments.html",
+    "title": "37  Path segments",
+    "section": "",
+    "text": "path_segments() returns an Option\nA url’s path is split by slashes into segments. The url https://example.com/foo/bar has segments foo and bar. Each url has a different number of segments, so a flat character vector won’t do. Instead we return a list where each element is a character vector of that url’s segments.\nThe path_segments() method gives back Option&lt;Split&gt;. The Split is an iterator over the segments. It returns None for urls that “cannot be a base” (like data:text/plain,...), which have no path segments at all.\nSo we match on the Option:",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>37</span>  <span class='chapter-title'>Path segments</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/19-path-segments.html#path_segments-returns-an-option",
+    "href": "building-rust-based-r-pkgs/19-path-segments.html#path_segments-returns-an-option",
+    "title": "37  Path segments",
+    "section": "",
+    "text": "Some(segments) means we have an iterator. Collect the segments into a Strings.\nNone means there are no segments. Return NULL.",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>37</span>  <span class='chapter-title'>Path segments</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/19-path-segments.html#exercise",
+    "href": "building-rust-based-r-pkgs/19-path-segments.html#exercise",
+    "title": "37  Path segments",
+    "section": "Exercise",
+    "text": "Exercise\n\nWrite url_path_segments(url: List) -&gt; List\nFor each url, get the pointer with get_extptr\nMatch on path_segments()\n\nSome(segments): collect the segments into a Strings\nNone: return NULL\n\nA failed pointer also returns NULL\nCollect into a List\n\n\n\nView solution\n\n#[extendr]\nfn url_path_segments(url: List) -&gt; List {\n    url.into_iter()\n        .map(|(_, robj)| match RUrl::get_extptr(robj) {\n            Ok(v) =&gt; match v.0.path_segments() {\n                Some(segments) =&gt; segments\n                    .map(|vi| Rstr::from(vi))\n                    .collect::&lt;Strings&gt;()\n                    .into_robj(),\n                None =&gt; ().into_robj(),\n            },\n            Err(_) =&gt; ().into_robj(),\n        })\n        .collect()\n}",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>37</span>  <span class='chapter-title'>Path segments</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/20-query-pairs.html",
+    "href": "building-rust-based-r-pkgs/20-query-pairs.html",
+    "title": "38  Query pairs",
+    "section": "",
+    "text": "query_pairs() returns tuples\nThe query string of a url is a set of key=value pairs. In https://example.com/?a=1&b=2 the pairs are a=1 and b=2. We want to pull these out for each url.\nThe query_pairs() method gives an iterator of tuples. Each tuple is a (key, value) where both are string-like. We covered tuples this morning. We access the parts by position, or destructure them in a closure.\nFor each pair we build a two element character vector c(key, value). Each url then becomes a list of those pairs, and the whole thing is a list of lists.",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>38</span>  <span class='chapter-title'>Query pairs</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/20-query-pairs.html#query_pairs-returns-tuples",
+    "href": "building-rust-based-r-pkgs/20-query-pairs.html#query_pairs-returns-tuples",
+    "title": "38  Query pairs",
+    "section": "",
+    "text": "The key and value come back as a Cow&lt;str&gt;, which is a borrowed-or-owned string. We call .to_string() on each to get an owned String we can hand to R.",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>38</span>  <span class='chapter-title'>Query pairs</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/20-query-pairs.html#exercise",
+    "href": "building-rust-based-r-pkgs/20-query-pairs.html#exercise",
+    "title": "38  Query pairs",
+    "section": "Exercise",
+    "text": "Exercise\n\nWrite url_query_pairs(url: List) -&gt; List\nFor each url, get the pointer with get_extptr\nMap over query_pairs(), destructuring each tuple as (key, value)\nBuild a Strings of c(key, value) for each pair\nCollect each url’s pairs into a List\nA failed pointer returns NULL\n\n\n\nView solution\n\n#[extendr]\nfn url_query_pairs(url: List) -&gt; List {\n    url.into_iter()\n        .map(|(_, robj)| match RUrl::get_extptr(robj) {\n            Ok(rurl) =&gt; rurl\n                .0\n                .query_pairs()\n                .map(|(key, value)| {\n                    Strings::from_values([\n                        Rstr::from(key.to_string()),\n                        Rstr::from(value.to_string()),\n                    ])\n                    .into_robj()\n                })\n                .collect::&lt;List&gt;()\n                .into_robj(),\n            Err(_) =&gt; ().into_robj(),\n        })\n        .collect()\n}",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>38</span>  <span class='chapter-title'>Query pairs</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/21-roxygen-docs.html",
+    "href": "building-rust-based-r-pkgs/21-roxygen-docs.html",
+    "title": "39  Documenting with roxygen2",
+    "section": "",
+    "text": "Doc comments\nRight now our functions work when we load_all(), but they aren’t truly part of the package. They have no help pages, and they won’t be exported when someone installs it. We fix both with roxygen2, the same way we would in any R package. The difference is that the documentation lives in the Rust source, written as /// doc comments above the #[extendr] function.\nA /// comment in Rust becomes roxygen documentation. The roxygen tags you already know all work.\nThe important tag is @export. Without it, the function is internal and a user can’t call it after installing the package.",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>39</span>  <span class='chapter-title'>Documenting with roxygen2</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/21-roxygen-docs.html#doc-comments",
+    "href": "building-rust-based-r-pkgs/21-roxygen-docs.html#doc-comments",
+    "title": "39  Documenting with roxygen2",
+    "section": "",
+    "text": "/// Parse a character vector of URLs\n/// @param x a character vector of urls\n/// @export\n#[extendr]\nfn url_parse(x: Strings) -&gt; extendr_api::Result&lt;List&gt; {\n    // ...\n}",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>39</span>  <span class='chapter-title'>Documenting with roxygen2</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/21-roxygen-docs.html#regenerating",
+    "href": "building-rust-based-r-pkgs/21-roxygen-docs.html#regenerating",
+    "title": "39  Documenting with roxygen2",
+    "section": "Regenerating",
+    "text": "Regenerating\nWhen you change the doc comments, run devtools::document(). This does two things.\n\nregenerates the R wrappers in R/extendr-wrappers.R\nupdates the NAMESPACE and the man/ help files",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>39</span>  <span class='chapter-title'>Documenting with roxygen2</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/21-roxygen-docs.html#exercise",
+    "href": "building-rust-based-r-pkgs/21-roxygen-docs.html#exercise",
+    "title": "39  Documenting with roxygen2",
+    "section": "Exercise",
+    "text": "Exercise\n\nAdd /// doc comments to each exported function\nGive each a title, @param tags for the arguments, and @export\nRun devtools::document()\nCheck that ?url_parse shows a help page\n\n\n\nView solution\n\n/// Parse URLs\n///\n/// Parse a character vector of urls into a list of url objects.\n/// @param x a character vector of urls\n/// @export\n#[extendr]\nfn url_parse(x: Strings) -&gt; extendr_api::Result&lt;List&gt; {\n    // ...\n}\nRepeat the same pattern for the getters, setters, and the rest.",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>39</span>  <span class='chapter-title'>Documenting with roxygen2</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/22-cran.html",
+    "href": "building-rust-based-r-pkgs/22-cran.html",
+    "title": "40  CRAN & closing",
+    "section": "",
+    "text": "Vendoring dependencies\nWe’ve built a real package. The last question is how to share it. Getting an extendr package onto CRAN comes down to two things.\nCRAN machines build packages without internet access, so they can’t download crates from the internet at build time. The fix is vendoring: bundling the source of every dependency inside the package itself.\nrextendr has a helper for this.\nThis downloads all of your crates and stores them in the package so the build is fully self-contained.",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>40</span>  <span class='chapter-title'>CRAN & closing</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/22-cran.html#vendoring-dependencies",
+    "href": "building-rust-based-r-pkgs/22-cran.html#vendoring-dependencies",
+    "title": "40  CRAN & closing",
+    "section": "",
+    "text": "rextendr::vendor_pkgs()",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>40</span>  <span class='chapter-title'>CRAN & closing</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/22-cran.html#passing-r-cmd-check",
+    "href": "building-rust-based-r-pkgs/22-cran.html#passing-r-cmd-check",
+    "title": "40  CRAN & closing",
+    "section": "Passing R CMD check",
+    "text": "Passing R CMD check\nThe other half is the same gate every R package goes through.\ndevtools::check()\nThe extendr scaffolding (the configure, tools/, and Makevars files created by use_extendr()) already handles making sure Rust is available at build time. So once your package checks cleanly and the dependencies are vendored, you’re in good shape to submit.",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>40</span>  <span class='chapter-title'>CRAN & closing</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/22-cran.html#thats-really-it",
+    "href": "building-rust-based-r-pkgs/22-cran.html#thats-really-it",
+    "title": "40  CRAN & closing",
+    "section": "That’s really it",
+    "text": "That’s really it\n\nvendor the crates\npass R CMD check\n\nEverything else is a normal R package.",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>40</span>  <span class='chapter-title'>CRAN & closing</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/22-cran.html#thank-you",
+    "href": "building-rust-based-r-pkgs/22-cran.html#thank-you",
+    "title": "40  CRAN & closing",
+    "section": "Thank you!",
+    "text": "Thank you!\nThat’s the workshop. You now know how to:\n\nscaffold a Rust-powered R package\nstore Rust objects in R with external pointers\nexpose getters and setters across the boundary\nplug into R’s S3 system\nprepare the package for CRAN\n\nCome say hi and join the extendr Discord.",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>40</span>  <span class='chapter-title'>CRAN & closing</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/03-objective.html#why-urls",
+    "href": "building-rust-based-r-pkgs/03-objective.html#why-urls",
+    "title": "21  Workshop Scope",
+    "section": "",
+    "text": "associated methods\nmutable methods\nerrors\niterators",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>21</span>  <span class='chapter-title'>Workshop Scope</span>"
     ]
   }
 ]

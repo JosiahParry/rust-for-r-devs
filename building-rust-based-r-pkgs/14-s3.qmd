@@ -1,0 +1,106 @@
+# S3 classes
+
+::: callout-tip
+## Objective
+
+Give our list of pointers an S3 class so R will print it nicely.
+
+:::
+
+We have a `format_*` function, but R doesn't know to *use* it. When you type the
+name of an object, R dispatches to a `print`/`format` method based on the
+object's **class**. So we need to give our list a class.
+
+## Classes are the whole hook
+
+R's S3 system is driven entirely by the `class` attribute. If an object has class
+`"foo"`, then calling a generic like `format()` on it looks for `format.foo()`.
+That's it—attach a class, define a method, and you plug straight into R.
+
+## The `vctrs_vctr` class
+
+The [vctrs](https://vctrs.r-lib.org/) package defines a very general
+`vctrs_vctr` class that gives sensible default behavior for vector-like objects.
+We'll include it in our class vector so we get that behavior for free, ending
+with the underlying `list` type:
+
+```r
+c("myclass", "vctrs_vctr", "list")
+```
+
+## Setting the class from Rust
+
+We can assign a class to a **mutable** `Robj` with `.set_class()`. Because
+`set_class()` is fallible, the function returns a `Result`.
+
+## Example
+
+```rust
+#[extendr]
+fn parse_shapes(x: Strings) -> extendr_api::Result<List> {
+    let mut res = x
+        .into_iter()
+        .map(|xi| match Shape::new(xi) {
+            Ok(shape) => shape.into_robj(),
+            Err(_) => ().into_robj(),
+        })
+        .collect::<List>();
+
+    res.set_class(&["shapes", "vctrs_vctr", "list"])?;
+    Ok(res)
+}
+```
+
+## The R method
+
+The class is only half the story—now define the method on the R side. In an R
+script (e.g. `R/rurls.R`), define `format.rurls` and have it call your Rust
+helper:
+
+```r
+#' @export
+format.rurls <- function(x, ...) {
+    format_rurls(x)
+}
+```
+
+## Exercise
+
+- Update `url_parse()` to return `extendr_api::Result<List>`
+- Set the class to `c("rurls", "vctrs_vctr", "list")` on the result
+- Add the `format.rurls` method above in an R script
+- `devtools::document()` and `devtools::load_all()`, then print a parsed vector
+
+<details>
+    <summary>View solution</summary>
+
+```rust
+#[extendr]
+fn url_parse(x: Strings) -> extendr_api::Result<List> {
+    let mut res = x
+        .into_iter()
+        .map(|xi| {
+            if xi.is_na() {
+                return ().into_robj();
+            }
+
+            match RUrl::new(xi) {
+                Ok(v) => v.into_robj(),
+                Err(_) => ().into_robj(),
+            }
+        })
+        .collect::<List>();
+
+    res.set_class(&["rurls", "vctrs_vctr", "list"])?;
+    Ok(res)
+}
+```
+
+```r
+#' @export
+format.rurls <- function(x, ...) {
+    format_rurls(x)
+}
+```
+
+</details>

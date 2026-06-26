@@ -1,0 +1,46 @@
+# What is extendr?
+
+::: callout-tip
+## Objective
+
+Learn the different components of the extendr ecosystem.
+:::
+
+`extendr` is a project that focuses on _extending_ R with Rust. It is comprised of:
+
+- [rextendr](https://extendr.github.io/rextendr/)
+- [extendr-api](https://extendr.github.io/extendr/extendr_api)
+- [extendr-ffi](https://extendr.github.io/extendr/extendr_ffi)
+- [extendr-engine](https://extendr.github.io/extendr/extendr_engine)
+
+::: callout-note
+There is no single "extendr" library. Rather, that is the name of the project.
+:::
+
+## `extendr-ffi`
+
+`extendr-ffi` defines the types and functions in R's C API using Rust functions and types. As R's C API changes, `extendr-ffi` is responsible for ensuring that packages are backwards compatible.
+
+Fortunately, we will never have to touch this layer. Everything is built on top of this crate.
+
+## `extendr-api`
+
+`extendr-api` is the high-level crate that is built upon `extendr-ffi`. It makes working with R types such as vectors feel fairly natural from a Rust perspective. It handles the oddities of garbage collection and everything else related to the FFI boundary.
+
+We will spend the rest of the workshop using the extendr-api crate.
+
+## `extendr-engine`
+
+The `extendr-engine` is focused on the opposite direction—calling R _from_ Rust. It enables us to start an R process inside of Rust as well as execute R code in that R process. It can be used in creating Rust-based CLI tools that call R or whatever else your imagination can think up.
+
+## `{rextendr}`
+
+On the R side exists `{rextendr}`. It is a `{usethis}`-like package for developing Rust-powered R packages.
+
+It is primarily used to:
+
+- scaffold R packages
+- document Rust functions
+- prepare packages for CRAN release
+
+It also provide a knitr-engine which lets us include Rust in R Markdown documents.

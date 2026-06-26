@@ -8,7 +8,9 @@ Learn how to create a new Rust crate and understand its file structure. You will
 :::
 
 
-Rust uses a tool called `cargo` for building, checking, and managing dependencies. This is installed for you when you used `rustup` to install Rust.
+Rust uses a tool called `cargo` for managing its dependencies and build lifecycle. This is installed for you when you used `rustup` to install Rust.
+
+Rust doesn't create libraries, instead its code is are called **crates**.
 
 To create a new Rust crate, use `cargo new name-of-crate`. This creates a new directory called `name-of-crate`. Be sure to `cd` into that directory.
 
@@ -42,7 +44,7 @@ intro-to-rust/
 
 ## `main.rs`
 
-When you create a new rust binary the file `src/main.rs` is prepopulated with:
+When you create a new rust binary crate the file `src/main.rs` is prepopulated with:
 
 ::: callout-tip
 ## `src/main.rs`
@@ -105,7 +107,7 @@ println!("Hello, {name}!");
 ## Exercise
 
 - In your terminal, create a new rust crate called `intro-to-rust`
-- Open the new Rust crate's folder in Positron
+- Open the new Rust crate's folder in Positron / VS Code / Your IDE
 - Run the hello world program using `cargo run`
 - Create a variable called `name` inside of the `main()` function with your name
 - Print `Hello, {name}!` using `println!()`

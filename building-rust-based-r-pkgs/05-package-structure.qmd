@@ -1,0 +1,47 @@
+# Package structure
+
+::: callout-tip
+## Objective
+
+Understand the directory structure of extendr-based R packages.
+
+:::
+
+The basic structure of an extendr-based R package is like so:
+
+```
+.
+├── DESCRIPTION
+├── NAMESPACE
+├── R
+├── configure
+├── configure.win
+├── man
+├── src
+└── tools
+```
+
+- `tools/`, `configure`, and `configure.win` are used at package build and install time to ensure that Rust is avaialble.
+  - primarily for `R CMD check` and `CRAN` appeasement
+
+## Compiled Code
+
+R packages that have compile code must store the source in `src/`. The `src/` directory has the structure:
+
+```
+.
+├── Makevars
+├── Makevars.in
+├── Makevars.win.in
+└── rust
+    ├── Cargo.lock
+    ├── Cargo.toml
+    ├── src
+```
+
+- `rust/` is a **library** crate that is linked to by R
+- `Makevars` files builds the Rust library and links it to R
+
+## Rust libraries
+
+Rust library crates have `lib.rs` instead of `main.rs`. There is no entrypoint that gets executed. Instead, we define functions, structs, enums, etc.  that are used by the R package.

@@ -1,0 +1,23 @@
+[package]
+name = "rurls"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.65"
+publish = false
+
+[lib]
+crate-type = ["rlib", "staticlib"]
+name = "rurls"
+
+[[bin]]
+name = "document"
+path = "document.rs"
+
+[dependencies]
+anyhow = "1"
+extendr-api = "0.9.0"
+url = "2.5.8"
+
+[profile.release]
+lto = true
+codegen-units = 1

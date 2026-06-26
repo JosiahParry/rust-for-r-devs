@@ -1,0 +1,59 @@
+# Documenting with roxygen2
+
+::: callout-tip
+## Objective
+
+Document your Rust functions so they are exported and have help pages.
+
+:::
+
+Right now our functions work when we `load_all()`, but they aren't truly part of the package. They have no help pages, and they won't be exported when someone installs it. We fix both with roxygen2, the same way we would in any R package. The difference is that the documentation lives in the Rust source, written as `///` doc comments above the `#[extendr]` function.
+
+## Doc comments
+
+A `///` comment in Rust becomes roxygen documentation. The roxygen tags you already know all work.
+
+```rust
+/// Parse a character vector of URLs
+/// @param x a character vector of urls
+/// @export
+#[extendr]
+fn url_parse(x: Strings) -> extendr_api::Result<List> {
+    // ...
+}
+```
+
+The important tag is `@export`. Without it, the function is internal and a user can't call it after installing the package.
+
+## Regenerating
+
+When you change the doc comments, run `devtools::document()`. This does two things.
+
+- regenerates the R wrappers in `R/extendr-wrappers.R`
+- updates the `NAMESPACE` and the `man/` help files
+
+## Exercise
+
+- Add `///` doc comments to each exported function
+- Give each a title, `@param` tags for the arguments, and `@export`
+- Run `devtools::document()`
+- Check that `?url_parse` shows a help page
+
+<details>
+    <summary>View solution</summary>
+
+```rust
+/// Parse URLs
+///
+/// Parse a character vector of urls into a list of url objects.
+/// @param x a character vector of urls
+/// @export
+#[extendr]
+fn url_parse(x: Strings) -> extendr_api::Result<List> {
+    // ...
+}
+```
+
+Repeat the same pattern for the getters, setters, and the rest.
+
+</details>

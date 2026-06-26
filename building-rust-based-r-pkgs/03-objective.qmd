@@ -1,0 +1,44 @@
+# Workshop Scope
+
+::: callout-tip
+## Objective
+
+Define the scope and objective of the workshop.
+
+:::
+
+There's no better way to learn than by doing.
+
+In this workshop we will create a Rust-powered R package by building a new package called `{rurl}`. 
+
+The `{rurl}` package provides R bindings to the [`url` crate](https://docs.rs/url)—one of the most downloaded rust crates of all time.
+
+We'll touch on:
+
+- Advanced R topics
+- Fundamental Rust concepts
+- Approaches for ergonomics
+
+As much as this is about Rust, we are also working within the confines of R and thus, the two are inextricably linked.
+
+## Why URLs?
+
+The `Url` crate has a bit of almost everything: 
+
+- associated methods
+- mutable methods
+- errors
+- iterators
+
+The deceptively complex string—i.e. `https://user@example.com:8080/path/to/page?q=rust#section`–contains a scheme, host, port, path, query, and fragment.
+
+Parsing urls correctly is a touch thing to do! A great place for Rust's type system.
+
+## The R package
+
+The `{rurl}` package we build will let us:
+
+- parse character vectors of URLs into Url structs
+- create a `{vctrs}` compatible vector
+- extract components (host, scheme, path, port, query)
+- join, modify, and decompose URLs

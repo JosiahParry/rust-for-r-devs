@@ -1,0 +1,66 @@
+# Hello, world!
+
+::: callout-tip
+## Objective
+
+Scaffold an extendr-powered R package using `rextendr` and run the `hello_world()` function.
+:::
+
+We're now ready to create our R package.
+
+
+## Developer functions
+
+To develop a Rust-based R package, there are a few functions we need to familiarize ourselves with.
+
+::: aside
+I don't use RStudio anymore so I set `create_package(rstudio = FALSE)` to not have `Rproj.user` created.
+:::
+
+- `usethis::create_package()` creates an R package
+- `rextendr::use_extendr()` creates the Rust infrastructure
+- `devtools::document()` document and update Rust function definitions
+
+
+## Developer workflow
+
+The typical workflow for developing an extendr package involves:
+
+1. Modify the Rust source code
+2. Update the bindings documentation using `devtools::document()`
+3. Load the package `devtools::load_all()`
+4. Test the R functions
+5. Repeat
+
+
+## Exercise
+
+- Create a new package called `{rurl}` using `{usethis}`
+- Include extendr in the new package by running `rextendr::use_extendr()`
+- Compile the package by using `devtools::document()`
+- Load the package using `devtools::load_all()`
+- Run `hello_world()`
+
+### Solution
+
+<details>
+    <summary>View solution</summary>
+
+```r
+usethis::create_package("rurl")
+
+# add extendr scaffolding
+rextendr::use_extendr()
+
+# compile and document the Rust functions
+devtools::document()
+
+# load the R package
+devtools::load_all()
+
+# run the hello_world()!
+hello_world()
+```
+
+
+</details>

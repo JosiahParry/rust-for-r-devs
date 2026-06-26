@@ -1,0 +1,97 @@
+# Getters
+
+::: callout-tip
+## Objective
+
+Write a family of functions that call a method on each object and collect the result.
+
+:::
+
+Now that we can hold objects in a list, we can expose their methods to R. These
+**getter** functions all look the same: walk the list, get each object back,
+call a method, collect the results.
+
+## The pattern
+
+Every getter is the same shape we used for the print helper:
+
+1. iterate the list (`(_, vi)` tuples)
+2. `get_extptr` to recover the object
+3. call the method on the borrowed value
+4. collect into a wrapper type, with `NA` on failure
+
+## Example
+
+A getter that returns the number of coordinates for each shape:
+
+```rust
+#[extendr]
+fn shape_coords(x: List) -> Integers {
+    x.into_iter()
+        .map(|(_, vi)| match Shape::get_extptr(vi) {
+            Ok(shape) => Rint::from(shape.n_coords() as i32),
+            Err(_) => Rint::na(),
+        })
+        .collect::<Integers>()
+}
+```
+
+Once you've written one, the rest are copy-paste with a different method name.
+
+## Finding the methods
+
+A `Url` has many methods. The two best ways to discover them:
+
+- the docs page: <https://docs.rs/url/latest/url/struct.Url.html#implementations>
+- the LSP autocomplete—type `rurl.0.` and let rust-analyzer list them
+
+Some methods return a plain `&str` (like `scheme()`); these are the easy ones and
+we'll do them first. Others return an `Option`—we'll handle those in the next
+chapter.
+
+## Exercise
+
+Write a getter for each `Url` method that returns a plain `&str` (no `Option`):
+
+- `url_scheme()` calls `scheme()`
+- `url_path()` calls `path()`
+- `url_authority()` calls `authority()`
+
+Each takes a `List` and returns `Strings`.
+
+<details>
+    <summary>View solution</summary>
+
+```rust
+#[extendr]
+fn url_scheme(url: List) -> Strings {
+    url.into_iter()
+        .map(|(_, vi)| match RUrl::get_extptr(vi) {
+            Ok(rurl) => Rstr::from(rurl.0.scheme()),
+            Err(_) => Rstr::na(),
+        })
+        .collect()
+}
+
+#[extendr]
+fn url_path(url: List) -> Strings {
+    url.into_iter()
+        .map(|(_, vi)| match RUrl::get_extptr(vi) {
+            Ok(rurl) => Rstr::from(rurl.0.path()),
+            Err(_) => Rstr::na(),
+        })
+        .collect()
+}
+
+#[extendr]
+fn url_authority(url: List) -> Strings {
+    url.into_iter()
+        .map(|(_, vi)| match RUrl::get_extptr(vi) {
+            Ok(rurl) => Rstr::from(rurl.0.authority()),
+            Err(_) => Rstr::na(),
+        })
+        .collect()
+}
+```
+
+</details>

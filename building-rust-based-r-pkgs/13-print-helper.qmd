@@ -1,0 +1,89 @@
+# A print helper
+
+::: callout-tip
+## Objective
+
+Write a function that reads a list of external pointers and turns it back into a character vector.
+
+:::
+
+When we print our list of objects, it's ugly:
+
+```r
+parse_shapes(c("triangle", "hexagon"))
+#> [[1]]
+#> <pointer: 0x600000abc120>
+#>
+#> [[2]]
+#> <pointer: 0x600000abc480>
+```
+
+R can't see inside an external pointer, so all it can show is the memory address.
+We'd much rather see something meaningful. To do that, we write a function that
+walks the list, gets each Rust value back out, and produces a character vector.
+
+## A helper to get the pointer
+
+Reaching into the list and pulling out the external pointer is something we'll do
+over and over, so it's worth a small helper. Add this associated function to your
+`impl`:
+
+```rust
+impl RUrl {
+    fn get_extptr(robj: Robj) -> extendr_api::Result<ExternalPtr<Self>> {
+        ExternalPtr::<Self>::try_from(robj)
+    }
+}
+```
+
+## Iterating a list
+
+When we iterate over a `List`, each item is a **tuple**: the element's name and
+its value as an `Robj`. We usually ignore the name with `_`.
+
+For each value we try to get the pointer back. If we succeed, we borrow the inner
+Rust value and produce a string from it. If not, we produce an `NA`.
+
+## Example
+
+Here we turn a list of `Shape`s into a character vector of their vertex counts:
+
+```rust
+#[extendr]
+fn format_shapes(x: List) -> Strings {
+    x.into_iter()
+        .map(|(_, vi)| match Shape::get_extptr(vi) {
+            Ok(shape) => Rstr::from(format!("{}-gon", shape.n_coords())),
+            Err(_) => Rstr::na(),
+        })
+        .collect::<Strings>()
+}
+```
+
+## Exercise
+
+- Write `format_rurls(x: List) -> Strings`
+- Iterate the list, destructuring each element as `(_, vi)`
+- Use `RUrl::get_extptr()` to get the pointer back
+- On success, turn the inner `Url` into a string with `.to_string()`
+- On failure, return `Rstr::na()`
+
+<details>
+    <summary>View solution</summary>
+
+```rust
+#[extendr]
+fn format_rurls(x: List) -> Strings {
+    x.into_iter()
+        .map(|(_, vi)| {
+            let vv = RUrl::get_extptr(vi);
+            match vv {
+                Ok(rurl) => Rstr::from(rurl.0.to_string()),
+                Err(_) => Rstr::na(),
+            }
+        })
+        .collect::<Strings>()
+}
+```
+
+</details>

@@ -1,0 +1,51 @@
+# CRAN & closing
+
+::: callout-tip
+## Objective
+
+Understand what it takes to get a Rust-powered R package onto CRAN.
+
+:::
+
+We've built a real package. The last question is how to share it. Getting an extendr package onto CRAN comes down to two things.
+
+## Vendoring dependencies
+
+CRAN machines build packages without internet access, so they can't download crates from the internet at build time. The fix is **vendoring**: bundling the source of every dependency inside the package itself.
+
+`rextendr` has a helper for this.
+
+```r
+rextendr::vendor_pkgs()
+```
+
+This downloads all of your crates and stores them in the package so the build is fully self-contained.
+
+## Passing `R CMD check`
+
+The other half is the same gate every R package goes through.
+
+```r
+devtools::check()
+```
+
+The extendr scaffolding (the `configure`, `tools/`, and `Makevars` files created by `use_extendr()`) already handles making sure Rust is available at build time. So once your package checks cleanly and the dependencies are vendored, you're in good shape to submit.
+
+## That's really it
+
+- vendor the crates
+- pass `R CMD check`
+
+Everything else is a normal R package.
+
+## Thank you!
+
+That's the workshop. You now know how to:
+
+- scaffold a Rust-powered R package
+- store Rust objects in R with external pointers
+- expose getters and setters across the boundary
+- plug into R's S3 system
+- prepare the package for CRAN
+
+Come say hi and join the extendr Discord.
