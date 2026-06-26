@@ -399,7 +399,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../building-rust-based-r-pkgs/20-query-pairs.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">38</span>&nbsp; <span class="chapter-title">Query pairs</span></span></a>
+ <span class="menu-text"><span class="chapter-number">38</span>&nbsp; <span class="chapter-title">Returning a List of Vectors</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -430,6 +430,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#scalar-types" id="toc-scalar-types" class="nav-link" data-scroll-target="#scalar-types">Scalar types</a></li>
   <li><a href="#wrapper-types" id="toc-wrapper-types" class="nav-link" data-scroll-target="#wrapper-types">Wrapper types</a></li>
   <li><a href="#a-quick-taste" id="toc-a-quick-taste" class="nav-link" data-scroll-target="#a-quick-taste">A quick taste</a></li>
+  <li><a href="#exercise-3-minutes" id="toc-exercise-3-minutes" class="nav-link" data-scroll-target="#exercise-3-minutes">Exercise (3 minutes)</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/JosiahParry/2025-cascadia-rust-for-r-devs/edit/main/building-rust-based-r-pkgs/08-r-type-system.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/JosiahParry/2025-cascadia-rust-for-r-devs/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -653,7 +654,7 @@ All SEXP types
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> my_na <span class="op">=</span> <span class="pp">Rfloat::</span>na()<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ul>
 <li>Missingness can also be <em>checked</em> by using the <code>my_na.is_na()</code> method.</li>
-<li>To access the inner type—e.g.&nbsp;<code>f64</code> or <code>i32</code> we can use the <code>.inner()</code> method.</li>
+<li>To access the inner type—e.g.&nbsp;<code>f64</code> or <code>i32</code> we can use the <code>.0()</code> method.</li>
 </ul>
 </section>
 <section id="wrapper-types" class="level2">
@@ -695,10 +696,29 @@ All SEXP types
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>extendr<span class="at">]</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> double_it(x<span class="op">:</span> Doubles) <span class="op">-&gt;</span> Doubles <span class="op">{</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    x<span class="op">.</span>into_iter()</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span>map(<span class="op">|</span>xi<span class="op">|</span> <span class="pp">Rfloat::</span>from(xi<span class="op">.</span>inner() <span class="op">*</span> <span class="dv">2.0</span>))</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span>map(<span class="op">|</span>xi<span class="op">|</span> <span class="pp">Rfloat::</span>from(xi<span class="op">.</span><span class="dv">0</span> <span class="op">*</span> <span class="dv">2.0</span>))</span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="pp">collect::</span><span class="op">&lt;</span>Doubles<span class="op">&gt;</span>()</span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>We’ll put this exact shape to work in our first warm-up exercise.</p>
+<p>We’ll put this exact shape to work in the warm-up exercise below.</p>
+</section>
+<section id="exercise-3-minutes" class="level2">
+<h2 class="anchored" data-anchor-id="exercise-3-minutes">Exercise (3 minutes)</h2>
+<p>Write a vectorized function <code>powi()</code> that raises each element of a numeric vector to an integer power.</p>
+<ul>
+<li>It takes a <code>Doubles</code> (<code>x</code>) and an <code>i32</code> (<code>power</code>)</li>
+<li>It returns a <code>Doubles</code></li>
+<li>Iterate over the scalar <code>Rfloat</code> elements, reach the inner <code>f64</code> with <code>.0</code>, and raise it with <code>f64::powi()</code></li>
+<li>Collect into a <code>Doubles</code></li>
+</ul>
+<details>
+<summary>
+View solution
+</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>extendr<span class="at">]</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> powi(x<span class="op">:</span> Doubles<span class="op">,</span> power<span class="op">:</span> <span class="dt">i32</span>) <span class="op">-&gt;</span> Doubles <span class="op">{</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    x<span class="op">.</span>into_iter()<span class="op">.</span>map(<span class="op">|</span>xi<span class="op">|</span> xi<span class="op">.</span><span class="dv">0</span><span class="op">.</span>powi(power))<span class="op">.</span>collect()</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 
 
 </section>
