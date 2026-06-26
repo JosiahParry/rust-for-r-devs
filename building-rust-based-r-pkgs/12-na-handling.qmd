@@ -34,6 +34,23 @@ Improve `url_parse()` so that NAs and parse errors both become `NULL` instead of
 - Otherwise `match` on `RUrl::new(xi)` and return `().into_robj()` on `Err`
 - Collect into a `List`
 
+After `devtools::document()` and `devtools::load_all()`, test it with a vector
+that hits all three cases—a valid URL, an `NA`, and an unparseable string:
+
+```r
+url_parse(c("https://google.com", NA, "not a url"))
+#> [[1]]
+#> <pointer: 0x600001555070>
+#> attr(,"class")
+#> [1] "RUrl"
+#>
+#> [[2]]
+#> NULL
+#>
+#> [[3]]
+#> NULL
+```
+
 <details>
     <summary>View solution</summary>
 

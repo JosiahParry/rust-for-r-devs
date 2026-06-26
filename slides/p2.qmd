@@ -182,7 +182,7 @@ The typical workflow for developing an extendr package involves:
 4. Test the R functions
 5. Repeat
 
-## Exercises
+## Exercises (5 min)
 
 # Package structure
 
@@ -297,7 +297,9 @@ cargo check
 
 ![`cargo check`](/images/cargo-check.png)
 
-# Exercise
+# Exercise (2 min)
+
+# Break
 
 # Adding the `url` crate
 
@@ -355,7 +357,7 @@ use extendr_api::prelude::*;
 use crate_name::{StructName, function_name};
 ```
 
-# Exercise
+# Exercise (3 min)
 
 # R's Type System
 
@@ -426,7 +428,7 @@ Cloning an extendr `Robj` (or other wrapper type) is cheap.
 - Use `.clone()` when something has been "moved"
 - Technically "expensive" for `Vec<T>` but still fast!
 
-# Exercise
+# Exercise (5 min)
 
 # New types
 
@@ -520,7 +522,7 @@ extendr_module! {
 }
 ```
 
-# Exercise
+# Exercise (3 min)
 
 # External pointers
 
@@ -584,7 +586,7 @@ extendr_module! {
 
 Now `RShape$new("triangle")` returns an R object that holds a Rust `RShape`.
 
-# Exercise
+# Exercise (4 min)
 
 # Vectorization
 
@@ -637,7 +639,7 @@ fn parse_shapes(shapes: Strings) -> List {
 }
 ```
 
-# Exercise
+# Exercise (4 min)
 
 # NA handling
 
@@ -674,7 +676,7 @@ Return `NA` or `NULL` in the case of errors.
 Multiple line expressions in an iterator? Wrap it in `{}`!
 :::
 
-# Exercise
+# Exercise (5 min)
 
 # A print helper
 
@@ -739,7 +741,9 @@ fn format_shapes(x: List) -> Strings {
 }
 ```
 
-# Exercise
+# Exercise (7 min)
+
+# Break
 
 # Integrating with {vctrs}
 
@@ -794,7 +798,7 @@ format.rurls <- function(x, ...) {
 }
 ```
 
-# Exercise
+# Exercise (8 min)
 
 # Getters
 
@@ -833,7 +837,7 @@ fn shape_coords(x: List) -> Integers {
 - Easy ones return a plain `&str`
 - Others return an `Option`—next chapter
 
-# Exercise
+# Exercise (6 min)
 
 # Mapping into an `Option`
 
@@ -881,7 +885,7 @@ rurl.0.host_str().map(|v| v.to_string())
 `Rstr::from(Option<String>)` turns `None` into `NA`.
 :::
 
-# Exercise
+# Exercise (10 min)
 
 # 🐮 CoWs and Modifying in place
 
@@ -933,7 +937,7 @@ impl RUrl {
 pub fn set_host(&mut self, host: Option<&str>) -> Result<(), ()>
 ```
 
-# Exercise
+# Exercise (8 min)
 
 # Combining iterators
 
@@ -963,7 +967,7 @@ url.into_iter().zip(host.into_iter())
 - Ignore the name with `_`
 - Best when both are the same length
 
-# Exercise
+# Exercise (5 min)
 
 # Recycling & errors
 
@@ -1005,4 +1009,4 @@ if (scheme.len() != url.len()) & (scheme.len() != 1) {
 }
 ```
 
-# Exercise
+# Exercise (10 min)

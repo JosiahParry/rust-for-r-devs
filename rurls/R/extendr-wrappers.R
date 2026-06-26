@@ -5,7 +5,7 @@
 #' @useDynLib rurls, .registration = TRUE
 NULL
 
-url_parse <- function(x) .Call(wrap__url_parse, x)
+url_parse <- function(url) .Call(wrap__url_parse, url)
 
 format_rurls <- function(x) .Call(wrap__format_rurls, x)
 

@@ -120,7 +120,7 @@ println!("Hello, {name}!");
 :::
 
 
-# Exercise
+# Exercise (4 min)
 
 
 # Basic Types
@@ -208,7 +208,7 @@ fn add2(x: f64, y: i32) -> f64 {
 - `()` is the **unit** type
 - Functions  that do not return anything return `()`
 
-## Exercise
+## Exercise (3 min)
 
 # Control Flow
 
@@ -254,7 +254,7 @@ if x == y {
 }
 ```
 
-## Exercise
+## Exercise (6 min)
 
 
 # Arrays and Vectors
@@ -357,7 +357,7 @@ fn main() {
 ````
 
 
-## Exercise
+## Exercise (4 min)
 
 # `for`-loops
 
@@ -447,7 +447,7 @@ fn main() {
 
 :::
 
-# Exercise
+# Exercise (4 min)
 
 # Break 5 minutes
 
@@ -495,7 +495,7 @@ fn main() {
 }
 ```
 
-# Exercise
+# Exercise (4 min)
 
 # Mutable Vectors
 
