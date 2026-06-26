@@ -1,0 +1,57 @@
+# Query pairs
+
+::: callout-tip
+## Objective
+
+Work with an iterator of tuples and turn each into a small character vector.
+
+:::
+
+The query string of a url is a set of `key=value` pairs. In `https://example.com/?a=1&b=2` the pairs are `a=1` and `b=2`. We want to pull these out for each url.
+
+## `query_pairs()` returns tuples
+
+The `query_pairs()` method gives an iterator of tuples. Each tuple is a `(key, value)` where both are string-like. We covered tuples this morning. We access the parts by position, or destructure them in a closure.
+
+For each pair we build a two element character vector `c(key, value)`. Each url then becomes a list of those pairs, and the whole thing is a list of lists.
+
+::: callout-note
+The key and value come back as a `Cow<str>`, which is a borrowed-or-owned string. We call `.to_string()` on each to get an owned `String` we can hand to R.
+:::
+
+## Exercise
+
+- Write `url_query_pairs(url: List) -> List`
+- For each url, get the pointer with `get_extptr`
+- Map over `query_pairs()`, destructuring each tuple as `(key, value)`
+- Build a `Strings` of `c(key, value)` for each pair
+- Collect each url's pairs into a `List`
+- A failed pointer returns `NULL`
+
+<details>
+    <summary>View solution</summary>
+
+```rust
+#[extendr]
+fn url_query_pairs(url: List) -> List {
+    url.into_iter()
+        .map(|(_, robj)| match RUrl::get_extptr(robj) {
+            Ok(rurl) => rurl
+                .0
+                .query_pairs()
+                .map(|(key, value)| {
+                    Strings::from_values([
+                        Rstr::from(key.to_string()),
+                        Rstr::from(value.to_string()),
+                    ])
+                    .into_robj()
+                })
+                .collect::<List>()
+                .into_robj(),
+            Err(_) => ().into_robj(),
+        })
+        .collect()
+}
+```
+
+</details>

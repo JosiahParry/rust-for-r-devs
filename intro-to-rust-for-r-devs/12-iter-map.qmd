@@ -1,0 +1,185 @@
+# Mapping over Iterators
+
+::: callout-tip
+## Objective
+- Understand how to transform iterator values using `.map()`
+- Learn how to use closures (anonymous functions) in Rust
+- Collect iterator results back into a collection using `.collect()`
+- Use turbofish 🐠💨 syntax for type annotations when needed
+:::
+
+Often we want to transform the values in a vector. To do this in Rust, we can use the `.map()` method. `.map()` lets us apply an operation on each element of the iterator.
+
+In R, we often use the `purrr::map()` function or the `apply()` family of functions to do this.
+
+## Using `.map()`
+
+We apply `.map()` to an iterator. For example, to square each element in a vector we can write:
+
+```rust
+// providing explicit type annotation in one
+// value so the compiler knows its f64 and not f32
+let x: Vec<f64> = vec![5.9, 6.8, 4.5, 7.3, 6.2];
+
+x.iter().map(|xi| xi.powi(2))
+```
+
+Using `.map()` returns another iterator. We can chain operations over iterators by using multiple `.map()` statements.
+
+
+## Closures
+
+In the above example we used a **closure** to modify each element of the iterator. Closures are Rust's version of an anonymous function.
+
+A closure takes the structure `|arg| expression`. They can also be multiple lines by wrapping the expression in a braces:
+
+```rust
+x
+    .iter()
+    .map(|xi| {
+        let squared = xi.powi(2);
+        xi.sqrt()
+    })
+```
+
+Since iterators only contain one item, the closure only has one argument. However, you can use **destructuring** in the closure. For example if using `.enumerate()` we want to access `i` we can do so:
+
+```rust
+x
+    .iter()
+    .enumerate()
+    .map(|(i, xi)| {
+        // do stuff here
+    })
+```
+
+## Collecting results
+
+In R when we use `map()` the results are always returned as a vector. In Rust, we have to explcitly **collect** the iterator into our own type using `.collect()`.
+
+Typically iterators are collected into a `Vec<T>`. Rust cant always infer the type that you want to collect into so we must tell the compiler what type we want.
+
+We can do this during assignment:
+
+```rust
+let x_squared: Vec<f64> = x.iter().map(|xi| xi.powi(2)).collect();
+```
+
+
+## Turbofish 🐠💨
+
+Alternatively, we can use "turbofish" syntax. We can specify the type directly in the `.collect()` function. `.collect()` is a **generic** method. And in the words of the Rust standard library documentation (emphasis mine)
+
+> "Because `collect()` is so general, it **can cause problems with type inference**. As such, `collect()` is one of the few times you’ll see the syntax affectionately known as the ‘turbofish’: `::<>`. This helps the inference algorithm understand specifically which collection you’re trying to collect into."
+
+Turbofish takes the structure of `.collect::<TYPE>()`.
+
+
+
+### Examples
+
+:::{layout-ncol="2"}
+#### Explicit typing
+```rust
+fn main() {
+    let nums = vec![1, 2, 3];
+
+    // Add 1 to each element
+    let incremented: Vec<_> = nums.iter()
+        .map(|x| x + 1)
+        .collect();
+
+    println!("{:?}", incremented);
+}
+```
+
+#### Inference w/ turbofish
+```rust
+fn main() {
+    let nums = vec![1, 2, 3];
+
+    // Add 1 to each element
+    let incremented = nums.iter()
+        .map(|x| x + 1)
+        .collect::<Vec<_>>();
+
+    println!("{:?}", incremented);
+}
+```
+:::
+
+Turbofish is a bit more awkward at first, but it is more flexible and doesn't require modification whenever the inner type changes.
+
+## Exercise 1
+
+Calculate the **variance** of a slice of `f64` values.
+
+$$
+\text{variance} = \frac{\sum_{i=1}^n (x_i - \bar{x})^2}{n - 1}
+$$
+
+* Create a function `variance()` that:
+
+  * Uses `.map()` to calculate squared differences from the mean
+  * Uses `.sum()` to add them up
+  * Divides by `n - 1`
+
+::: callout-tip
+
+* Use `.powi(2)` to square values.
+* Use your previously defined `mean()` function inside `variance()`.
+:::
+
+
+<details>
+<summary>View hint</summary>
+
+```rust
+fn variance(x: &[f64]) -> f64 {
+    let n = x.len() as f64;
+    let avg = mean(x);
+    let sq_diffs: f64 = x
+        .iter()
+        .map(|xi| ___ )  // squared difference here
+        .__();           // sum method here
+
+    sq_diffs / (n - 1.0)
+}
+```
+
+</details>
+
+### Solution
+
+<details>
+<summary>View solution</summary>
+
+```{.rust}
+{{< include ../intro-to-rust/examples/12-iter-map.rs >}}
+```
+
+</details>
+
+
+## Exercise 2
+
+Create a function `standardize()` to perform z-score standardization on a vector of `f64`.
+
+$$
+z_i = \frac{x_i - \mu}{\sigma}
+$$
+
+* Use `.iter()` and `.map()` to calculate mean and variance.
+* Use `.into_iter()`, `.map()`, and `.collect()` to build the standardized vector.
+* Return a new `Vec<f64>` of standardized values.
+
+### Solution
+
+<details>
+<summary>View solution</summary>
+
+```{.rust}
+{{< include ../intro-to-rust/examples/12-iter-map.rs >}}
+```
+
+</details>

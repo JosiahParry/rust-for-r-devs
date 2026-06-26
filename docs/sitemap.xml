@@ -2,11 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/index.html</loc>
-    <lastmod>2025-06-23T15:01:14.718Z</lastmod>
+    <lastmod>2025-06-16T16:48:09.258Z</lastmod>
   </url>
   <url>
     <loc>https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/intro-to-rust-for-r-devs/index.html</loc>
-    <lastmod>2025-06-23T15:01:14.719Z</lastmod>
+    <lastmod>2026-06-25T18:21:40.700Z</lastmod>
   </url>
   <url>
     <loc>https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/intro-to-rust-for-r-devs/why-rust.html</loc>
@@ -74,7 +74,7 @@
   </url>
   <url>
     <loc>https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/building-rust-based-r-pkgs/index.html</loc>
-    <lastmod>2025-06-20T14:32:02.779Z</lastmod>
+    <lastmod>2026-06-26T02:25:55.441Z</lastmod>
   </url>
   <url>
     <loc>https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/building-rust-based-r-pkgs/ffi.html</loc>
@@ -102,7 +102,7 @@
   </url>
   <url>
     <loc>https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/building-rust-based-r-pkgs/rust-deps.html</loc>
-    <lastmod>2025-06-20T14:30:21.786Z</lastmod>
+    <lastmod>2026-06-25T15:16:27.277Z</lastmod>
   </url>
   <url>
     <loc>https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/building-rust-based-r-pkgs/first-fn.html</loc>
@@ -118,11 +118,11 @@
   </url>
   <url>
     <loc>https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/building-rust-based-r-pkgs/vectorize.html</loc>
-    <lastmod>2025-06-20T14:32:35.592Z</lastmod>
+    <lastmod>2025-06-20T21:36:19.205Z</lastmod>
   </url>
   <url>
     <loc>https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/building-rust-based-r-pkgs/r-type-system.html</loc>
-    <lastmod>2025-06-16T23:19:40.483Z</lastmod>
+    <lastmod>2025-06-20T21:55:01.316Z</lastmod>
   </url>
   <url>
     <loc>https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/building-rust-based-r-pkgs/using-extendr-types.html</loc>
@@ -159,5 +159,197 @@
   <url>
     <loc>https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/building-rust-based-r-pkgs/vibe-check.html</loc>
     <lastmod>2025-06-19T21:58:13.698Z</lastmod>
+  </url>
+  <url>
+    <loc>https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/intro-to-rust-for-r-devs/01-why-rust.html</loc>
+    <lastmod>2026-06-26T02:01:26.159Z</lastmod>
+  </url>
+  <url>
+    <loc>https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/intro-to-rust-for-r-devs/02-hello-world.html</loc>
+    <lastmod>2026-06-26T02:03:27.517Z</lastmod>
+  </url>
+  <url>
+    <loc>https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/intro-to-rust-for-r-devs/03-types.html</loc>
+    <lastmod>2026-06-26T02:30:41.012Z</lastmod>
+  </url>
+  <url>
+    <loc>https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/intro-to-rust-for-r-devs/04-fizz-buzz.html</loc>
+    <lastmod>2026-06-25T16:23:18.148Z</lastmod>
+  </url>
+  <url>
+    <loc>https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/intro-to-rust-for-r-devs/05-collections.html</loc>
+    <lastmod>2026-06-25T16:23:19.639Z</lastmod>
+  </url>
+  <url>
+    <loc>https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/intro-to-rust-for-r-devs/06-for-loops.html</loc>
+    <lastmod>2026-06-25T16:23:21.006Z</lastmod>
+  </url>
+  <url>
+    <loc>https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/intro-to-rust-for-r-devs/07-mutability.html</loc>
+    <lastmod>2026-06-25T16:23:22.871Z</lastmod>
+  </url>
+  <url>
+    <loc>https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/intro-to-rust-for-r-devs/08-mutable-vectors.html</loc>
+    <lastmod>2026-06-25T16:23:24.413Z</lastmod>
+  </url>
+  <url>
+    <loc>https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/intro-to-rust-for-r-devs/09-is-odd.html</loc>
+    <lastmod>2026-06-25T16:23:28.155Z</lastmod>
+  </url>
+  <url>
+    <loc>https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/intro-to-rust-for-r-devs/10-references-slices.html</loc>
+    <lastmod>2026-06-25T18:26:38.505Z</lastmod>
+  </url>
+  <url>
+    <loc>https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/intro-to-rust-for-r-devs/11-iterators.html</loc>
+    <lastmod>2026-06-25T16:23:28.990Z</lastmod>
+  </url>
+  <url>
+    <loc>https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/intro-to-rust-for-r-devs/12-iter-map.html</loc>
+    <lastmod>2026-06-25T16:23:40.912Z</lastmod>
+  </url>
+  <url>
+    <loc>https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/intro-to-rust-for-r-devs/13-structs.html</loc>
+    <lastmod>2026-06-25T16:23:30.406Z</lastmod>
+  </url>
+  <url>
+    <loc>https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/intro-to-rust-for-r-devs/14-struct-methods.html</loc>
+    <lastmod>2026-06-25T16:23:32.401Z</lastmod>
+  </url>
+  <url>
+    <loc>https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/intro-to-rust-for-r-devs/15-enums.html</loc>
+    <lastmod>2026-06-25T16:23:33.694Z</lastmod>
+  </url>
+  <url>
+    <loc>https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/intro-to-rust-for-r-devs/16-options.html</loc>
+    <lastmod>2026-06-25T16:23:34.917Z</lastmod>
+  </url>
+  <url>
+    <loc>https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/intro-to-rust-for-r-devs/17-result.html</loc>
+    <lastmod>2026-06-25T18:01:37.459Z</lastmod>
+  </url>
+  <url>
+    <loc>https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/intro-to-rust-for-r-devs/18-anyhow.html</loc>
+    <lastmod>2026-06-25T18:03:36.873Z</lastmod>
+  </url>
+  <url>
+    <loc>https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/building-rust-based-r-pkgs/01-ffi.html</loc>
+    <lastmod>2026-06-25T22:29:57.193Z</lastmod>
+  </url>
+  <url>
+    <loc>https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/building-rust-based-r-pkgs/02-what-is-extendr.html</loc>
+    <lastmod>2026-06-25T22:30:33.144Z</lastmod>
+  </url>
+  <url>
+    <loc>https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/building-rust-based-r-pkgs/03-objective.html</loc>
+    <lastmod>2026-06-26T02:12:56.803Z</lastmod>
+  </url>
+  <url>
+    <loc>https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/building-rust-based-r-pkgs/04-hello-world.html</loc>
+    <lastmod>2026-06-26T02:06:57.710Z</lastmod>
+  </url>
+  <url>
+    <loc>https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/building-rust-based-r-pkgs/05-package-structure.html</loc>
+    <lastmod>2026-06-25T22:42:47.163Z</lastmod>
+  </url>
+  <url>
+    <loc>https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/building-rust-based-r-pkgs/06-extendr-dx.html</loc>
+    <lastmod>2026-06-25T22:43:27.011Z</lastmod>
+  </url>
+  <url>
+    <loc>https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/building-rust-based-r-pkgs/07-r-type-system.html</loc>
+    <lastmod>2026-06-25T22:44:06.376Z</lastmod>
+  </url>
+  <url>
+    <loc>https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/building-rust-based-r-pkgs/08-na-handling.html</loc>
+    <lastmod>2026-06-25T22:50:30.845Z</lastmod>
+  </url>
+  <url>
+    <loc>https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/building-rust-based-r-pkgs/09-centroid.html</loc>
+    <lastmod>2026-06-25T22:53:45.899Z</lastmod>
+  </url>
+  <url>
+    <loc>https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/building-rust-based-r-pkgs/10-use-crate-url.html</loc>
+    <lastmod>2026-06-25T22:58:29.212Z</lastmod>
+  </url>
+  <url>
+    <loc>https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/building-rust-based-r-pkgs/11-external-pointers.html</loc>
+    <lastmod>2026-06-26T01:32:47.960Z</lastmod>
+  </url>
+  <url>
+    <loc>https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/building-rust-based-r-pkgs/12-lists-of-pointers.html</loc>
+    <lastmod>2026-06-26T01:33:08.824Z</lastmod>
+  </url>
+  <url>
+    <loc>https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/building-rust-based-r-pkgs/13-print-helper.html</loc>
+    <lastmod>2026-06-26T04:20:33.588Z</lastmod>
+  </url>
+  <url>
+    <loc>https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/building-rust-based-r-pkgs/14-s3.html</loc>
+    <lastmod>2026-06-26T04:21:46.808Z</lastmod>
+  </url>
+  <url>
+    <loc>https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/building-rust-based-r-pkgs/15-url-getters.html</loc>
+    <lastmod>2026-06-26T05:03:04.007Z</lastmod>
+  </url>
+  <url>
+    <loc>https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/building-rust-based-r-pkgs/16-mapping-into-option.html</loc>
+    <lastmod>2026-06-26T04:26:34.696Z</lastmod>
+  </url>
+  <url>
+    <loc>https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/building-rust-based-r-pkgs/17-setters-cow.html</loc>
+    <lastmod>2026-06-26T05:12:15.442Z</lastmod>
+  </url>
+  <url>
+    <loc>https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/building-rust-based-r-pkgs/18-recycling-and-errors.html</loc>
+    <lastmod>2026-06-26T01:37:54.371Z</lastmod>
+  </url>
+  <url>
+    <loc>https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/building-rust-based-r-pkgs/19-path-segments.html</loc>
+    <lastmod>2026-06-26T01:38:07.903Z</lastmod>
+  </url>
+  <url>
+    <loc>https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/building-rust-based-r-pkgs/20-query-pairs.html</loc>
+    <lastmod>2026-06-26T01:38:21.543Z</lastmod>
+  </url>
+  <url>
+    <loc>https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/building-rust-based-r-pkgs/21-roxygen-docs.html</loc>
+    <lastmod>2026-06-26T01:38:51.455Z</lastmod>
+  </url>
+  <url>
+    <loc>https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/building-rust-based-r-pkgs/22-cran.html</loc>
+    <lastmod>2026-06-26T01:39:04.073Z</lastmod>
+  </url>
+  <url>
+    <loc>https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/building-rust-based-r-pkgs/07-use-crate-url.html</loc>
+    <lastmod>2026-06-25T22:58:29.212Z</lastmod>
+  </url>
+  <url>
+    <loc>https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/building-rust-based-r-pkgs/08-r-type-system.html</loc>
+    <lastmod>2026-06-25T22:44:06.376Z</lastmod>
+  </url>
+  <url>
+    <loc>https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/building-rust-based-r-pkgs/09-new-type-struct.html</loc>
+    <lastmod>2026-06-26T04:12:50.179Z</lastmod>
+  </url>
+  <url>
+    <loc>https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/building-rust-based-r-pkgs/10-external-pointers.html</loc>
+    <lastmod>2026-06-26T04:14:29.396Z</lastmod>
+  </url>
+  <url>
+    <loc>https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/building-rust-based-r-pkgs/11-vectorization.html</loc>
+    <lastmod>2026-06-26T04:16:41.965Z</lastmod>
+  </url>
+  <url>
+    <loc>https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/building-rust-based-r-pkgs/12-na-handling.html</loc>
+    <lastmod>2026-06-26T04:17:45.004Z</lastmod>
+  </url>
+  <url>
+    <loc>https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/building-rust-based-r-pkgs/18-combining-iterators.html</loc>
+    <lastmod>2026-06-26T05:12:59.666Z</lastmod>
+  </url>
+  <url>
+    <loc>https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/building-rust-based-r-pkgs/19-recycling-and-errors.html</loc>
+    <lastmod>2026-06-26T05:13:30.272Z</lastmod>
   </url>
 </urlset>

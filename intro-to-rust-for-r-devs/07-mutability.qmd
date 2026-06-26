@@ -1,0 +1,71 @@
+# Mutability
+
+::: callout-tip
+Understand the difference between immutable and mutable variables.
+:::
+
+In R everything is immutable (except environments). Immutable objects _cannot be altered_.
+
+::: aside
+
+Instead, when they are modified, they are copied. This is called copy-on-write (often referred to as **cow** semantics).
+
+:::
+
+In Rust, variables are immutable by default. This means once a value is assigned to a variable, it cannot be changed. To make a variable mutable, you must explicitly use the `mut` keyword.
+
+```rust
+let mut x = 5;
+x = 6; // ✅ works because x is mutable
+```
+
+- Use `mut` when you need to change a variable after it is created.
+- You do **not** re-bind the variable with `let` when changing its value.
+- This helps catch bugs early by making data changes explicit.
+
+
+By requiring `mut`, the compiler ensures that accidental mutations are caught at compile time.
+
+## Example
+
+Revisiting our loop from earlier:
+
+```rust
+fn main() {
+    // create a vector
+    let numbers = vec![1, 2, 3];
+    // create a mutable value
+    let mut doubled = 0;
+
+    // iterate through numbers to update doubled
+    for n in numbers {
+        doubled = n * 2;
+        println!("{} doubled is {}", n, doubled);
+    }
+
+    // ✅ compiles because `doubled` was declared
+    // _outside_ of the inner loop scope
+    println!("Last doubled: {}", doubled);
+}
+```
+
+## Exercise
+
+- Create a vector of 5 or more f64 values  (`Vec<f64>`)
+- Use a for loop to calculate the sum of the vector
+- Calculate the mean from the sum of the vector and the length of the vector
+- Print the result
+
+::: callout-tip
+You can use `+=` shorthand to add and assign all at the same time. For example `x += 10` is equivalent to `x = x + 10`.
+:::
+
+### Solution
+
+<details>
+<summary>View solution</summary>
+
+```{.rust}
+{{< include ../intro-to-rust/examples/07-mutability.rs >}}
+```
+</details>

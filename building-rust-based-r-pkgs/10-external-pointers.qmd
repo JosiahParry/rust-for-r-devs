@@ -1,0 +1,86 @@
+# External pointers
+
+::: callout-tip
+## Objective
+
+Use an `#[extendr]` impl to store a Rust struct inside an R object, and learn how to get it back out again.
+
+:::
+
+When we created the new type and exported that impl, that created an environment for the struct type, and its methods are stored as functions in that R environment. But we didn't actually create any methods that we could call on an instance of it.
+
+What we _really_ want is to be able to create that struct in Rust and hold onto it in R. This is possible through something called an **external pointer**.
+
+## What is an external pointer?
+
+An external pointer is a special type of object that essentially says "oh, i know where that is!" and lets you use it from other languages. For the rspatial nerds in the house, this is how the super fast geos package works.
+
+R doesn't know how to work with an external pointer, it just knows how to keep track of it and keep it alive.
+
+## A constructor
+
+To create one of these we need to have a helper to construct the type. We typically do this via a `new()` method on the struct like so:
+
+```rust
+impl RShape {
+    fn new(x: &str) -> anyhow::Result<Self> {
+        match x {
+            "triangle" => Ok(Self(Shape::Triangle)),
+            "rectangle" => Ok(Self(Shape::Rectangle)),
+            "pentagon" => Ok(Self(Shape::Pentagon)),
+            "hexagon" => Ok(Self(Shape::Hexagon)),
+            _ => Err(anyhow::anyhow!("unknown shape: {x}")),
+        }
+    }
+}
+```
+
+In this case it is **fallible** because it can error out.
+
+When we include the impl in `extendr_module! {}`, these methods are available from the environment.
+
+```rust
+extendr_module! {
+    mod mypackage;
+    impl RShape;
+}
+```
+
+Now `RShape$new("triangle")` returns an R object that holds a Rust `RShape`.
+
+## Exercise
+
+We're going to build a type `RUrl` that wraps a `url::Url`.
+
+- Define `struct RUrl(Url)` (a newtype) and derive `Clone`
+- Put `#[extendr]` on both the struct and an `impl RUrl` block
+- Write an associated function `new(url: &str)` that parses the string with `Url::parse()` and returns `anyhow::Result<Self>`
+- Register it with `impl RUrl;` in `extendr_module! {}`
+- Run `devtools::document()` and `devtools::load_all()`
+
+Then call the constructor directly from R with `https://google.com`:
+
+```r
+RUrl$new("https://google.com")
+#> <pointer: 0x6000021b9c60>
+#> attr(,"class")
+#> [1] "RUrl"
+```
+
+<details>
+    <summary>View solution</summary>
+
+```rust
+#[derive(Clone)]
+#[extendr]
+struct RUrl(Url);
+
+#[extendr]
+impl RUrl {
+    fn new(url: &str) -> anyhow::Result<Self> {
+        Ok(Self(Url::parse(url)?))
+    }
+}
+```
+
+</details>

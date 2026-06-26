@@ -1,0 +1,67 @@
+# Control Flow
+
+::: callout-tip
+## Objective
+
+Understand control flow and numeric operators in Rust. You will create the `FizzBuzz` program using Rust!
+
+:::
+
+## Numeric operators
+
+- `+` addition
+- `-` subtraction
+- `*` multiplication
+- `/` division
+- `%` remainder
+
+## Logical Operators:
+
+Logical operators are quite similar to R. The difference is that these operations are not vectorised. Furthermore, in Rust, a logical is called `bool` for booleans. `bool`s can take on only two values: `true` or `false`.
+
+- `==` check equality
+- `!=` check inequality
+- `!` negate a logical value
+- `&&` logical AND comparison
+- `||` logical OR comparison
+
+
+## Control flow
+
+Rust uses `if`, `else`, and `else if` statements just like R. Where each branch is delimted by curly braces.
+
+::: callout-warning
+Each branch of the `if` statement must return the same type. For this portion of the workshop, be sure to **terminate** each statement with `;` inside of the `if` statement so that nothing (unit type) is returned.
+:::
+
+
+```rust
+if x == y {
+  // do something
+} else {
+  // do something else
+}
+```
+
+The key difference is that the use of parentheses is not necessary for the conditional statement.
+
+
+## Exercise
+
+This exercise you will create the famous `FizzBuzz` program.
+
+For this, create a variable `i`. The rules are:
+
+- when `i` is a multiple of `3`, print `Fizz`
+- when `i` is a multiple of `5`, print `Buzz`
+- when `i` is a multiple of _both_ `3` and `5`, print `FizzBuzz`
+
+
+### Solution
+
+<details>
+<summary>View solution</summary>
+```{.rust}
+{{< include ../intro-to-rust/examples/04-fizz-buzz.rs >}}
+```
+</details>

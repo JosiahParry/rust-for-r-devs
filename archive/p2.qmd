@@ -1,0 +1,925 @@
+---
+title: "Building Rust based R Packages"
+format:
+  revealjs:
+    incremental: true
+---
+
+
+## Bathroom breaks
+
+- There will be 2 breaks at ~ each hour
+- Please use the restroom during exercises if need be
+
+## Exercises
+
+- Red 🟥 "I need help"
+- Green 🟩 "I'm done and ready to go!"
+
+# My objective
+
+Get you writing vectorized R code in Rust.
+
+# First a bit of background
+
+# Foreign Function Interfaces (FFI)
+
+::: callout-tip
+## Objective
+
+Understand the concept of FFI and broadly how it works with respect to R.
+
+:::
+
+# FFI
+
+- Mechanism to cross language boundary
+- Typically call compiled languages
+- R is an FFI powerhouse
+
+. . .
+
+
+| Package | Language |
+| ------- | ----------- |
+| [Rcpp](https://www.rcpp.org/) |  C++ |
+| [cpp11](https://github.com/r-lib/cpp11) | C++ |
+| [rJava](https://www.rforge.net/rJava/) | Java |
+| [V8](https://jeroen.r-universe.dev/V8) | JavaScript & WASM |
+
+# R's C API
+
+- Most languages know how to interact with C and C-types
+- R is literally written in C
+- Provides a C API
+- Rust can work with C and represent C types
+- This is where `extendr` comes in
+
+# What is extendr?
+
+::: callout-tip
+## Objective
+
+Learn the different components of the extendr ecosystem.
+:::
+
+
+## `extendr`
+
+`extendr` is a project that focuses on _extending_ R with Rust. It is comprised of:
+
+- [rextendr](https://extendr.github.io/rextendr/)
+- [extendr-api](https://extendr.github.io/extendr/extendr_api)
+- [extendr-ffi](https://extendr.github.io/extendr/extendr_ffi)
+- [extendr-engine](https://extendr.github.io/extendr/extendr_engine)
+
+
+## `extendr-ffi`
+
+- Defines Rust types corresponding to R's C API
+- Ensures Rust bindings are backwards compatible with C API changes
+- We will **not** touch this 😅
+
+## `extendr-api`
+
+- High level bindings built upon `extendr-ffi`
+- Feels natural from a Rust perspective
+- Handles R oddities e.g. garbage collection
+- We will **only** use `extendr-api`
+
+## `extendr-engine`
+
+- Calling R _from_ Rust
+- Lets us start an R process from inside of Rust
+- Great for CLI tools
+
+## `{rextendr}`
+
+- `{usethis}`-like for developing Rust based packages
+- Primarily for:
+  - scaffold R packages
+  - document Rust functions
+  - prepare packages for CRAN release
+
+# Workshop Scope
+
+::: callout-tip
+## Objective
+Define the scope and objective of the workshop.
+:::
+
+
+## Workshop
+
+Throughout the workshop we will touch on:
+
+- Advanced R topics
+- Rust concepts
+- Techniques for bridging the two
+
+## The `{geohashrs}` package
+
+- We will create a packcage `{geohashrs}`
+- R bindings to `geohash` Rust crate
+
+## Geohashes
+
+[epxlorer](https://geohash.softeng.co/)
+
+
+## Geohash
+
+- Encode a location as a string 1-12 characters
+- More shared character, the closer in physical proximity
+- Used to find near locations
+- Excpetionally helpful in web-development and database querying
+
+## The R package
+
+The R package will help us:
+
+- encode geohashes
+- find their neighbors
+- decode geohash into x and y (with error)
+- decode a geohash into bounding box
+
+
+# Hello, world!
+
+::: callout-tip
+## Objective
+
+Scaffold an extendr-powered R package using `rextendr` and run the `hello_world()` function.
+:::
+
+
+## Developer functions
+
+- `usethis::create_package()` creates an R package
+- `rextendr::use_extendr()` creates the Rust infrastructure
+- `rextendr::document()` document and update Rust function definitions
+
+## Developer workflow
+
+
+The typical workflow for developing an extendr package involves:
+
+1. Modify the Rust source code
+2. Update the bindings documentation using `rextendr::document()`
+3. Load the package `devtools::load_all()`
+4. Test the R functions
+5. Repeat
+
+## Exercises
+
+
+# Package structure
+
+::: callout-tip
+## Objective
+
+Understand the directory structure of extendr-based R packages.
+
+:::
+
+
+## Package structure
+
+```
+.
+├── DESCRIPTION
+├── NAMESPACE
+├── R
+├── configure
+├── configure.win
+├── man
+├── src
+└── tools
+```
+
+. . .
+
+
+- `tools/`, `configure`, and `configure.win` are used at package build and install time to ensure that Rust is avaialble.
+  - primarily for `R CMD check` and `CRAN` appeasement
+
+
+## Compiled Code
+
+- Compiled code is stored in `src/`
+
+. . .
+
+```
+.
+├── Makevars
+├── Makevars.in
+├── Makevars.win.in
+└── rust
+    ├── Cargo.lock
+    ├── Cargo.toml
+    ├── src
+```
+
+. . .
+
+- `rust/` is a **library** crate that is linked to by R
+- `Makevars` files builds the Rust library and links it to R
+
+## Developer experience
+
+- `use_extendr()` creates / updates `settings.json`
+- enables Rust analyzer to work in R package structure
+
+. . .
+
+```json
+{
+  "rust-analyzer.linkedProjects": [
+    "${workspaceFolder}/src/rust/Cargo.toml"
+  ],
+  "files.associations": {
+    "Makevars.in": "makefile",
+    "Makevars.win": "makefile",
+    "configure": "shellscript",
+    "configure.win": "shellscript",
+    "cleanup": "shellscript",
+    "cleanup.win": "shellscript"
+  }
+}
+```
+
+## Viewing problems
+
+![Problems Tab](/images/problems-tab.png)
+
+## Using `cargo check`
+
+- Alternatively run `cargo check` manually
+
+. . .
+
+```bash
+cd src/rust
+cargo check
+```
+
+![`cargo check`](/images/cargo-check.png)
+
+# Exercise
+
+
+# Adding dependencies
+
+::: callout-tip
+## Objective
+
+Add a dependency to our package and import items from it.
+
+:::
+
+
+## `Cargo.toml`
+
+- Akin to the `DESCRIPTION` file
+- Add dependencies via:
+  - `cargo add crate-name`
+  - or `rextendr::use_crate("cratename")`
+
+. . .
+
+```toml
+[package]
+name = "geohash"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.65"
+
+[lib]
+crate-type = [ "staticlib" ]
+name = "geohashrs"
+
+[dependencies]
+extendr-api = "*"
+```
+
+## Importing items from dependencies
+
+- Items from deps are accessed via namespace
+- Syntax `use crate_name::module::item;`
+-
+
+. . .
+
+```rust
+use extendr_api::prelude::*;
+// import multiple items using `{}`
+use crate_name::{StructName, function_name};
+```
+
+# Exercise
+
+
+# Your first function
+
+::: callout-tip
+## Objective
+
+Familiarize yourself with the `#[extendr]` attribute and `extendr_module! {}` macro. Scaffold a `gh_encode()` function.
+
+:::
+
+
+## `#[extendr]`
+
+The `hello_world()` function has two important things going on:
+
+1. roxygen2 documentation
+2. `#[extendr]` attribute
+
+. . .
+
+```rust
+/// Return string `"Hello world!"` to R.
+/// @export
+#[extendr]
+fn hello_world() -> &'static str {
+    "Hello world!"
+}
+```
+
+## `extendr_module! {}`
+
+
+- Functions exported to R need to be included in `extendr_module! {}`
+. . .
+
+```rust
+// Macro to generate exports.
+// This ensures exported functions are registered with R.
+// See corresponding C code in `entrypoint.c`.
+extendr_module! {
+    mod geohashrs;
+    fn hello_world;
+}
+```
+
+# Exercise
+
+
+# Encoding a geohash
+
+::: callout-tip
+## Objective
+
+Modify `gh_encode()` so that it returns a geohash.
+:::
+
+
+## `encode()`
+
+The `geohash::encode()` function has the following signature:
+
+```rust
+pub fn encode(c: Coord, len: usize) -> Result<String, GeohashError>
+```
+
+## `Result<T>`
+
+- In Rust errors are data
+- For now, we're going to ignore them
+- Results are a special enum
+
+. . .
+
+```rust
+enum Result {
+    Ok(T),
+    Err(E)
+}
+```
+
+- Results can be unwrapped
+
+# Exercise
+
+
+# Throwing errors
+
+::: callout-tip
+## Objective
+Perform early function validation and throw an error from Rust.
+:::
+
+## Validation
+
+- Emit an error using `throw_r_error("Error message")`
+- `geohash::encode()` will have an error in 3 cases:
+  - `x` is outside of the range [-180, 180]
+  - `y` is outside of the range [-90, 90]
+  - `length` is outside of the range [1, 12]
+
+
+# Exercise
+
+# Vectorizing
+
+::: callout-tip
+
+## Objective
+
+Learn how to vectorize a Rust function and combine iterators.
+:::
+
+
+## Vectorizing
+
+- R users expect vectorized functions
+- In high-level languages "vectorized" means the loop is written in fast language
+- We can use  `.iter()` and `.into_iter()`
+
+## Combinging iterators with `.zip()`
+
+- Iterators can be combined via `.zip()`
+- Creates a **tuple** of two items
+
+. . .
+
+
+```rust
+x.into_iter().zip(y.into_iter())
+```
+
+## Tuples
+
+- Heterogeneous data type for Rust
+- Fields are access by index
+  - e.g. `my_tuple.0` and `my_tuple.1`
+
+. . .
+
+```rust
+let my_tuple = (1.0, "One");
+let (one_one, one_two) = my_tuple;
+```
+
+## Example: Destructuring in an iterator
+
+- Finding parallel sum
+
+. . .
+
+```rust
+fn psum(x: Vec<f64>, y: Vec<f64>) -> Vec<f64> {
+    x
+        .into_iter()
+        .zip(y.into_iter())
+        // destructure tuple in the closure
+        .map(|(xi, yi)| {
+            xi + yi
+        })
+        .collect::<Vec<_>>()
+}
+```
+
+# Exercise
+
+
+# R's Type System
+
+::: callout-tip
+## Objective
+
+Get a basic grip on R's type system and develop an intuition for how Rust types map to R types.
+
+:::
+
+
+#
+
+
+![All SEXP everything](/images/all-sexp.png){width=70%}
+
+
+## Vector SEXP types
+
+
+
+![SEXP numeric types](/images/sexp-no-rust-types.svg){width=75%}
+
+
+## Scalar types
+
+- `i32` and `f64` do not have `NA`
+- `extendr-api` provides:
+  - `Rfloat`
+  - `Rint`
+  - `Rstr`
+  - `Rbool`
+
+## Creating scalars
+
+- Created using `ScalarType::from()`
+- NAs created via `ScalarType::na()`
+- Check `NA` using `x.is_na()`
+. . .
+
+```rust
+let my_float = Rfloat::from(3.14);
+let my_na = Rfloat::na();
+my_na.is_na() // returns true
+```
+
+
+## Wrapper types
+
+To work with vectors, we work with their wrapper types. These are:
+
+- `Doubles`
+- `Integers`
+- `Logicals`
+- `Strings`
+
+# Exercise
+
+
+# Collecting extendr types
+
+::: callout-tip
+## Objective
+Learn to collect iterators into extendr types.
+:::
+
+
+## Collecting
+
+- `.collect()` into `Vec<T>` is not native R types
+- Requires another allocation to get into vectors
+- We can collect into wrapper types.
+- Requires that each element is a scalar type
+
+## Example
+
+- Rewrite parallel sum using `Doubles`
+
+```rust
+#[extendr]
+fn psum(x: Doubles, y: Doubles) -> Doubles {
+    x.into_iter()
+        .zip(y.into_iter())
+        .map(|(xi, yi)| Rfloat::from(xi.inner() + yi.inner()))
+        .collect::<Doubles>()
+}
+```
+
+# Exercise
+
+
+# Handling Errors
+
+::: callout-tip
+## Objective
+
+Be able to `match` on a `Result<T>` and handle errors when they occur.
+:::
+
+## Errors
+
+- Functions can be **fallible**
+  - these return `Result`
+- **Infallible** functions will always return a valid type
+  - e.g. `fn add2(x: f64, y: f64) -> f64`
+
+## Errors are data
+
+- Errors are not quiet in Rust
+- _Must_ be handled
+- Data is stored in `Ok()` variant
+- Errors are data and stored in `Err()` variant.
+
+
+. . .
+
+
+```rust
+enum Result {
+    Ok(T),
+    Err(E)
+}
+```
+
+
+## Example
+
+- Parsing an invalid number
+
+```rust
+fn main() {
+    let number_str = "10 0 0";
+    let number = match number_str.parse::<i32>() {
+        Ok(number)  => println!("The number is {number}"),
+        Err(e) => println!("We ran into an error! {e:?}"),
+    };
+}
+```
+```
+We ran into an error! ParseIntError { kind: InvalidDigit }
+```
+
+## UX for Errors
+
+**Personal Opinion**:
+
+- If one element in a vectorized function errors, don't get rid of the rest.
+
+# Exercise
+
+
+# Handle NAs gracefully
+
+::: callout-tip
+## Objective
+
+Handle NA values in input vectors.
+
+:::
+
+
+
+## Handling NAs
+
+- The `x.inner()` is **infallible**
+- It will return a value even with NA
+- We should handle `NA` case
+- Use `.is_na()` to return a `bool`
+- We can match on `bool`
+
+## Example
+
+- Parsing an integer and matching on a `bool`
+
+. . .
+
+```rust
+let num_parsed = "10".parse::<i32>();
+
+match num_parsed {
+    Ok(num) => {
+        match num > 10 {
+            true => println!("Parsed number is greater than 10!"),
+            false => println!("Parsed number is less than or equal to 10")
+        }
+    },
+    Err(e) => println!("Failed to parse number with error: {e:?}")
+}
+```
+
+# Exercise
+
+
+# Translating Enums
+
+::: callout-tip
+## Objective
+
+Be able to parse a string into an enum variant.
+:::
+
+
+## `geohash::neighbor()`
+
+- Next objective is to find neighbor of geohash
+
+```rust
+pub fn neighbor(
+    hash_str: &str,
+    direction: Direction,
+) -> Result<String, GeohashError>
+```
+
+
+## `Direction`
+
+Is an enum specifying which direction to go in.
+
+
+```rust
+enum Direction {
+    N,
+    NE,
+    E,
+    SE,
+    S,
+    SW,
+    W,
+    NW,
+}
+```
+
+## An R analogue
+
+- `match.arg()` lets us enumate possible values
+
+```r
+neighbor <- function(
+    hash_str,
+    direction = c("n", "ne", "e", "se", "s", "sw", "w", "nm")
+) {
+  match.arg(direction)
+}
+```
+
+## Matching strings
+
+- Naturally, an enum in R will be created via character vectors
+- Translating a string to an enum requires matching strings
+- There will _always_ be a fallback
+
+## Example
+
+Back to the `Shape`
+
+::: callout-important
+
+## Cannot compile
+```rust
+fn as_shape(x: String) -> Shape {
+    match x {
+        "triangle" => Shape::Triangle,
+        "square" => Shape::Square,
+        "pentagon" => Shape::Pentagon,
+        "hexagon" => Shape::Hexagon,
+        _ => throw_r_error("Unrecognized shape provided"),
+    }
+}
+```
+:::
+
+## `String` vs `&str`
+
+- `String` is an **owned** container
+- `"hello, world!"` is short lived **reference**
+- They are difference and cannot be compared
+- Convert `String` to `&str` via `.as_str()`
+
+## Example
+
+This does work:
+
+```rust
+fn as_shape(x: String) -> Shape {
+    match x.as_str() {
+        "triangle" => Shape::Triangle,
+        "square" => Shape::Square,
+        "pentagon" => Shape::Pentagon,
+        "hexagon" => Shape::Hexagon,
+        _ => throw_r_error("Unrecognized shape provided"),
+    }
+}
+```
+
+# Exercise
+
+
+# Geohash Neighbor
+
+::: callout-tip
+## Objective
+
+Create an R function that finds a directional neighbor for a geohash.
+
+:::
+
+
+## `gh_neighbor()
+
+- Create an analogue to `neighbor()`
+- Takes a `String` for both geohash and direction
+
+## Exercise
+
+
+# Vectorize `gh_neighbor()`
+
+::: callout-tip
+## Objective
+Vectorize the `gh_neighbor()` function and make it robust to errors.
+:::
+
+# Exercises
+
+
+# Decode a geohash
+
+::: callout-tip
+
+- use `Robj`
+- `data_frame!()` macro
+:::
+
+
+## Decoding
+
+- Decoding returns x, y, and error
+- Has signature
+
+. . .
+
+
+The `decode()` function has the signature:
+
+```rust
+fn decode(hash_str: &str) -> Result<(Coord<f64>, f64, f64), GeohashError>
+```
+
+
+- Naturally want to return as a `data.frame`
+
+## What's a `data.frame`?
+
+
+> _It is not vector nor row, but list, in constume, pretending to be square._
+
+
+## What's a `data.frame`?
+
+
+A data.frame is a list masquerading as a rectangle. A data.frame consists of:
+
+- vectors of equal length
+- column names
+- row names
+- the data.frame class
+
+
+## `data_frame!()` macro
+
+- No type-safe representation in extendr
+- Costructing them is awkward
+- `data_frame!()` macro
+- Returns `Robj`
+- `Robj` is _opaque_ can be literally anything
+
+## Example
+
+```rust
+#[extendr]
+fn xyz(x: Doubles, y: Doubles, z: Doubles) -> Robj {
+    data_frame!(x = x, y = y, z = z)
+}
+```
+```
+xyz(rnorm(5), rnorm(5), rnorm(5))
+#>            x          y          z
+#> 1 -0.2688881  0.2349470  1.3468095
+#> 2 -1.1228202  2.3786258  0.2405386
+#> 3  1.6705694  1.4699630 -0.1370552
+#> 4  3.1485605  0.6131987  0.9025077
+#> 5  0.1374142 -1.5969236 -0.6165083
+```
+
+
+## Exercise
+
+
+# Vectorize `decode()`
+
+::: callout-tip
+## Objective
+
+Create a vectorized `gh_decode()` function utilizing much of what we have learned today.
+
+:::
+
+
+## `Doubles::from_values()`
+
+- Instead of using `.collect()` use `from_values()`
+- Allows us to use `Vec<Rfloat>`
+
+. . .
+
+
+```rust
+// instantiate empty vector
+let mut my_vec = Vec::new();
+
+// iterate through something and push into the vector
+for xi in x {
+    my_vec.push(Rfloat::from(xi));
+}
+
+// Create a double vector from the vector
+let res = Doubles::from_values(my_vec);
+```
+
+# Exercise
+
+
+## Vibe check
+
+At this point, we may or may not have spare time. What we do next is up to you all:
+
+- We can spend time doing Q&A
+- Spend the rest of the time creating `gh_decode_bbox()`
+- Discuss submitting an extendr-package to CRAN

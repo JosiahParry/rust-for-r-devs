@@ -1,0 +1,89 @@
+# New types
+
+::: callout-tip
+## Objective
+
+Use the newtype pattern to wrap a foreign type and add our own methods to it.
+
+:::
+
+There is a pattern in Rust called the "newtype" pattern. We create a special kind of struct called a "tuple struct" which takes the structure `struct NewType(OtherType)`. This helps us be able to add our flair (aka. methods) to these structs.
+
+## The orphan rule
+
+For the sake of example, lets say we have an enum.
+
+```rust
+#[derive(Debug, Clone)]
+enum Shape {
+    Triangle,
+    Rectangle,
+    Pentagon,
+    Hexagon,
+}
+```
+
+Lets pretend for the sake of example that this is owned by another crate. Structs and enums that are owned by other crates cannot have an `impl` added to them. That is called the **"orphan rule"**.
+
+We can actually side step this! We can create our own type on top of this by creating a "newtype" struct:
+
+```rust
+#[derive(Debug, Clone)]
+#[extendr]
+struct RShape(Shape);
+```
+
+## Adding methods
+
+Now, with our own struct, we can add methods to it via an `impl` block!
+
+```rust
+#[extendr]
+impl RShape {
+    fn new(x: &str) -> anyhow::Result<Self> {
+        match x {
+            "triangle" => Ok(Self(Shape::Triangle)),
+            "rectangle" => Ok(Self(Shape::Rectangle)),
+            "pentagon" => Ok(Self(Shape::Pentagon)),
+            "hexagon" => Ok(Self(Shape::Hexagon)),
+            _ => Err(anyhow::anyhow!("unknown shape: {x}")),
+        }
+    }
+}
+```
+
+## Exporting our impl to R
+
+To make these methods available from R, we register the `impl` with `extendr_module! { impl RShape; }`.
+
+
+## Exercise (2 minutes)
+
+- Import `url::Url`
+- Create a new type `RUrl`
+- Add it to the `extendr_module!`
+- Run `devtools::document()` and `devtools::load_all()`
+- Print the `RUrl` to the console and notice that it is an environment
+
+<details>
+    <summary>View solution</summary>
+
+```rust
+#[derive(Clone)]
+#[extendr]
+struct RUrl(Url);
+
+#[extendr]
+impl RUrl {
+    fn new(url: &str) -> anyhow::Result<Self> {
+        Ok(Self(Url::parse(url)?))
+    }
+}
+
+extendr_module! {
+    mod rurls;
+    impl RUrl;
+}
+```
+
+</details>

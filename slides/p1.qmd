@@ -671,7 +671,7 @@ Remember: when in doubt, clone it out!
 #### Cannot compile
 
 ```rust
-let x  = v![0.0, 3.14, 10.1, 44.8];
+let x  = vec![0.0, 3.14, 10.1, 44.8];
 
 let avg1 = mean(x); // ⬅️ x moved here!
 let avg2 = mean(x); // ❌ compiler error
@@ -685,7 +685,7 @@ let avg2 = mean(x); // ❌ compiler error
 #### Can compile
 
 ```rust
-let x  = v![0.0, 3.14, 10.1, 44.8];
+let x  = vec![0.0, 3.14, 10.1, 44.8];
 
 let avg1 = mean(x.clone()); // ⬅️ x cloned here!
 let avg2 = mean(x); // ✅ compiler happy
@@ -1365,6 +1365,148 @@ thread 'main' panicked at src/main.rs:4:41:
 called `Option::unwrap()` on a `None` value
 ```
 
+
+# Exercise
+
+# `Ok()` or `Err()`?
+
+::: callout-tip
+## Objective
+
+Understand how Rust handles fallible operations with `Result<T, E>`. Recover from errors with `match` and propagate them with `?`.
+:::
+
+## Result
+
+- R uses _exceptions_—we `stop()` and throw
+- Rust has **no exceptions**
+- Errors are **data**: fallible functions return a `Result`
+- Like `Option`, `Result` is just an `enum`
+
+. . .
+
+```rust
+enum Result {
+    Ok(T),
+    Err(E),
+}
+```
+
+## `T` and `E`
+
+- `T` and `E` are placeholders for types
+- `T` is the value on success—inside `Ok(T)`
+- `E` is the value on error—inside `Err(E)`
+
+. . .
+
+```rust
+fn divide(a: f64, b: f64) -> Result<f64, String> {
+    if b == 0.0 {
+        Err(String::from("cannot divide by zero"))
+    } else {
+        Ok(a / b)
+    }
+}
+```
+
+## Recovering with `match`
+
+- The error is just data
+- `match` lets us decide _how_ to behave on error
+- This makes the error **recoverable**
+
+. . .
+
+```rust
+match divide(10.0, 0.0) {
+    Ok(value) => println!("The answer is {value}"),
+    Err(msg) => println!("Error: {msg}"),
+}
+```
+
+## Propagating with `?`
+
+- Sometimes we don't want to recover
+- `?` **bubbles the error up** to the caller
+  - `Ok(T)` → unwraps to the value `T`
+  - `Err(E)` → returns it early and stops
+- Only usable in a function that returns `Result`
+
+. . .
+
+```rust
+fn main() -> Result<(), String> {
+    let result = divide(10.0, 2.0)?;
+    println!("The answer is {result}");
+    Ok(())
+}
+```
+
+# Exercise
+
+# Adding a crate: `anyhow`
+
+::: callout-tip
+## Objective
+
+Add your first dependency with `cargo add`. Use `anyhow` to propagate errors of (almost) any type with `?`.
+:::
+
+## Library error types
+
+- We invented `String` errors ourselves
+- Usually we call _other people's_ code
+- Almost every library has its **own** error types
+- These are `enum`s listing every possible error
+- e.g. `.parse::<f64>()` errors with `std::num::ParseFloatError`
+
+## `anyhow` to the rescue
+
+- Naming every error type is a chore
+- [`anyhow`](https://docs.rs/anyhow) provides `anyhow::Result<T>`
+- Lets you return (almost) **any** error type
+- Magic from Rust's trait system (not today!)
+- `?` "just works" across different errors
+
+## Adding a dependency
+
+- `Cargo.toml` has had no dependencies so far
+- Add `anyhow` from the terminal:
+
+. . .
+
+```bash
+cargo add anyhow
+```
+
+- Updates `[dependencies]` in `Cargo.toml`:
+
+```toml
+[dependencies]
+anyhow = "1"
+```
+
+## Using `anyhow`
+
+- Bring `anyhow::Result` into scope
+- `?` propagates the parse error without naming it
+
+. . .
+
+```rust
+use anyhow::Result;
+
+impl Point {
+    fn from_strings(x: &str, y: &str) -> Result<Self> {
+        let x = x.parse::<f64>()?;
+        let y = y.parse::<f64>()?;
+        Ok(Point { x, y })
+    }
+}
+```
+
+- `main` can return `anyhow::Result<()>` too, so errors bubble all the way up
 
 # Exercise
 

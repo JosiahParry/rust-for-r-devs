@@ -1,0 +1,52 @@
+# Path segments
+
+::: callout-tip
+## Objective
+
+Return a different-length result for each url by building a list of character vectors.
+
+:::
+
+A url's path is split by slashes into **segments**. The url `https://example.com/foo/bar` has segments `foo` and `bar`. Each url has a different number of segments, so a flat character vector won't do. Instead we return a list where each element is a character vector of that url's segments.
+
+## `path_segments()` returns an `Option`
+
+The `path_segments()` method gives back `Option<Split>`. The `Split` is an iterator over the segments. It returns `None` for urls that "cannot be a base" (like `data:text/plain,...`), which have no path segments at all.
+
+So we match on the `Option`:
+
+- `Some(segments)` means we have an iterator. Collect the segments into a `Strings`.
+- `None` means there are no segments. Return `NULL`.
+
+## Exercise
+
+- Write `url_path_segments(url: List) -> List`
+- For each url, get the pointer with `get_extptr`
+- Match on `path_segments()`
+  - `Some(segments)`: collect the segments into a `Strings`
+  - `None`: return `NULL`
+- A failed pointer also returns `NULL`
+- Collect into a `List`
+
+<details>
+    <summary>View solution</summary>
+
+```rust
+#[extendr]
+fn url_path_segments(url: List) -> List {
+    url.into_iter()
+        .map(|(_, robj)| match RUrl::get_extptr(robj) {
+            Ok(v) => match v.0.path_segments() {
+                Some(segments) => segments
+                    .map(|vi| Rstr::from(vi))
+                    .collect::<Strings>()
+                    .into_robj(),
+                None => ().into_robj(),
+            },
+            Err(_) => ().into_robj(),
+        })
+        .collect()
+}
+```
+
+</details>

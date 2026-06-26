@@ -1,0 +1,93 @@
+# 🐮 CoWs and Modifying in place
+
+::: callout-tip
+## Objective
+
+Modify a value held in an external pointer without mutating the original.
+
+:::
+
+- the idea of mutability is alien to R 👽
+- R uses the idea copy-on-write (CoW) semantics 🐮
+- When you modify an object in R, you don't change it in place.
+- R makes a copy first and modifies the copy.
+
+The `Url` struct has methods to modfiy parts of the url _in place_.
+We want to be able to do that, but doing so goes against the philosopby of R a bit
+TO handle this we want to create a **clone** of the Url before we modify it.
+
+For now we'll take a single `String` as the second argument and apply it to every url. In the next chapter we'll learn how to take a whole vector instead.
+
+:::{.callout-important}
+Cloning an `ExternalPtr<T>` only clones the external pointer and **not** the underlying data.
+:::
+
+To set a value, we clone the Rust object out of the pointer, modify the clone, and return a brand new object.
+
+## A helper to clone
+
+Getting a fresh, owned copy out of a pointer is its own little dance: 
+
+- get the pointer
+- borrow its data with `as_ref()`, then `.clone()`
+
+We'll do this in every method that modifies the `Url` struct in place.
+To help, we can make a small method on the `RUrl`
+
+```rust
+impl RUrl {
+    fn clone_from_robj(robj: Robj) -> anyhow::Result<Self> {
+        match ExternalPtr::<RUrl>::try_from(robj) {
+            Ok(v) => Ok(v.as_ref().clone()),
+            Err(e) => Err(anyhow!("Expected an object of class `rurl`:\n{e}")),
+        }
+    }
+}
+```
+
+This requires `RUrl` to derive `Clone`, which we did back when we defined it.
+
+## Mutable values
+
+Once we have an owned clone, we can mark it `mut` and call a method that takes `&mut self`. The setter methods on `Url` look like this:
+
+```rust
+pub fn set_host(&mut self, host: Option<&str>) -> Result<(), ()>
+```
+
+The `host` is an `Option` because passing `None` removes the host. We always want to set one, so we pass `Some(host)`.
+
+## Exercise
+
+- Write `url_set_host(url: List, host: String) -> List`
+- For each url, if it is `NULL`, return `NULL` for that element
+- Otherwise clone the url with `clone_from_robj`, set the host, and return the new object
+- Collect into a `List`
+
+We take a single `host` and apply it to every url. We'll learn how to take a vector of hosts in the next chapter.
+
+<details>
+    <summary>View solution</summary>
+
+```rust
+#[extendr]
+fn url_set_host(url: List, host: String) -> List {
+    url.into_iter()
+        .map(|(_, url)| {
+            if url.is_null() {
+                return ().into_robj();
+            }
+
+            match RUrl::clone_from_robj(url) {
+                Ok(mut rurl) => match rurl.0.set_host(Some(&host)) {
+                    Ok(_) => rurl.into_robj(),
+                    Err(_) => ().into_robj(),
+                },
+                Err(_) => ().into_robj(),
+            }
+        })
+        .collect()
+}
+```
+
+</details>

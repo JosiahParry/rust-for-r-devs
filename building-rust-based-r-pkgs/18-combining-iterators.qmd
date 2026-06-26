@@ -1,0 +1,61 @@
+# Combining iterators
+
+::: callout-tip
+## Objective
+
+Combine two vectors element-by-element using `.zip()`.
+
+:::
+
+Previously we only used a scalar string value for our methods that modified the url struct.
+
+Typically we want to be able to take EITHER a scalar string and apply it to every element of the first argument in a vectorized manner OR a vector that is the same length as the first argument.
+
+## `.zip()`
+
+To do this effectively we can combine iterators using `.zip()`. It pairs up the elements of two iterators, one at a time, into a tuple.
+
+```rust
+url.into_iter().zip(host.into_iter())
+```
+
+Each step of the combined iterator gives us a tuple of `((name, url), host)`. We destructure it in the closure and ignore the name with `_`.
+
+`.zip()` works best when both vectors are the same length. For now we'll take a `host` that is the same length as `url`. In the next chapter we'll handle the case where they aren't.
+
+## Exercise
+
+- Write `url_set_host(url: List, host: Strings) -> List`
+- Zip the urls together with the hosts
+- If the url is `NULL` or the host is `NA`, return `NULL` for that element
+- Otherwise clone the url with `clone_from_robj`, set the host, and return the new object
+- Collect into a `List`
+
+For now, assume `url` and `host` are the same length.
+
+<details>
+    <summary>View solution</summary>
+
+```rust
+#[extendr]
+fn url_set_host(url: List, host: Strings) -> List {
+    url.into_iter()
+        .zip(host.into_iter())
+        .map(|((_, url), host)| {
+            if url.is_null() || host.is_na() {
+                return ().into_robj();
+            }
+
+            match RUrl::clone_from_robj(url) {
+                Ok(mut rurl) => match rurl.0.set_host(Some(host)) {
+                    Ok(_) => rurl.into_robj(),
+                    Err(_) => ().into_robj(),
+                },
+                Err(_) => ().into_robj(),
+            }
+        })
+        .collect()
+}
+```
+
+</details>

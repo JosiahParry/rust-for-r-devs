@@ -1,0 +1,128 @@
+# R's Type System
+
+::: callout-tip
+## Objective
+
+Get a basic grip on R's type system and develop an intuition for how Rust types map to R types.
+
+:::
+
+
+In R, everything is an **`SEXP`**.
+
+![All SEXP everything](/images/all-sexp.png){width=70%}
+
+<details>
+<summary>All SEXP types</summary>
+
+| no |	`SEXPTYPE`|	Description |
+| ---- | ----- | ----- |
+| 0 |	`NILSXP`|	NULL |
+| 1 |	`SYMSXP`|	symbols |
+| 2 |	`LISTSXP`|	pairlists |
+| 3 |	`CLOSXP`|	closures |
+| 4 |	`ENVSXP`|	environments |
+| 5 |	`PROMSXP`|	promises |
+| 6 |	`LANGSXP`|	language objects |
+| 7 |	`SPECIALSXP`|	special functions |
+| 8 |	`BUILTINSXP`|	builtin functions |
+| 9 |	`CHARSXP`|	internal character strings |
+| 10 |	`LGLSXP`|	logical vectors |
+| 13 |	`INTSXP`|	integer vectors |
+| 14 |	`REALSXP`|	numeric vectors |
+| 15 |	`CPLXSXP`|	complex vectors |
+| 16 |	`STRSXP`|	character vectors |
+| 17 |	`DOTSXP`|	dot-dot-dot object |
+| 18 |	`ANYSXP`|	make “any” args work |
+| 19 |	`VECSXP`|	list (generic vector) |
+| 20 |	`EXPRSXP`|	expression vector |
+| 21 |	`BCODESXP`|	byte code |
+| 22 |	`EXTPTRSXP`|	external pointer |
+| 23 |	`WEAKREFSXP`|	weak reference |
+| 24 |	`RAWSXP`|	raw vector |
+| 25 |	`OBJSXP`|	objects not of simple type |
+
+</details>
+
+
+To extendr, an SEXP is an `Robj`—it can be _anything_.
+
+::: callout-note
+Notice `EXTPTRSXP`, the **external pointer**. Later, when we hold onto a parsed
+`Url` in R, that's the SEXP type we'll be using. More on that soon.
+:::
+
+## Vector SEXP types
+
+There are a subset of SEXP types that we actually care about—the vector kinds. For the sake of simplicity, we'll only talk about the numeric vector types.
+
+![SEXP numeric types](/images/sexp-no-rust-types.svg){width=75%}
+
+- Integers are represented by 32 bit integers `i32` in Rust.
+- Doubles are represented by 64 bit floats `f64` in Rust.
+
+## Scalar types
+
+`i32` and `f64` do not have a concept of `NA` or missing. How do we address this?
+
+extendr provides scalar types such as:
+
+- `Rfloat`
+- `Rint`
+- `Rstr`
+- `Rbool`
+
+and others.
+
+These scalar types are created using `ScalarType::from()`. For example:
+
+```rust
+let my_float = Rfloat::from(3.14);
+```
+
+Or, NAs can be created explicitly by using the associated method `ScalarType::na()`
+
+```rust
+let my_na = Rfloat::na();
+```
+
+- Missingness can also be _checked_ by using the `my_na.is_na()` method.
+- To access the inner type—e.g. `f64` or `i32` we can use the `.inner()` method.
+
+## Wrapper types
+
+To work with vectors, we work with their wrapper types. These are:
+
+- `Doubles`
+- `Integers`
+- `Logicals`
+- `Strings`
+
+We should always prefer these types over using `Vec<f64>` or `Vec<i32>`.
+
+:::{.callout-note collapse=true}
+## When in doubt, clone it out
+
+Cloning an extendr `Robj` (or other wrapper type) is quite cheap. When cloning an `Robj`, we are only incrementing a _reference count_ and **not** performing a full copy like we do when working in R.
+
+:::
+
+
+![Wrapper types](/images/sexp-wrapper-types.svg){width=70%}
+
+## A quick taste
+
+A vectorized extendr function takes a wrapper type in, iterates over its scalar
+elements, and collects back into a wrapper type. For example, doubling every
+value of a numeric vector:
+
+```rust
+#[extendr]
+fn double_it(x: Doubles) -> Doubles {
+    x.into_iter()
+        .map(|xi| Rfloat::from(xi.inner() * 2.0))
+        .collect::<Doubles>()
+}
+```
+
+We'll put this exact shape to work in our first warm-up exercise.

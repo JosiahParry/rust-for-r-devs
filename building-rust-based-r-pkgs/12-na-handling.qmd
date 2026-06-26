@@ -1,0 +1,59 @@
+# NA handling
+
+::: callout-tip
+## Objective
+
+Improve our vectorized function to handle NAs and errors gracefully instead of unwrapping.
+
+:::
+
+In the previous version of this we didn't handle errors and we didn't handle NAs. We can add some checks and match statements to do safe error handling.
+
+There are different schools of thought here. Some people think that any error should cause the operation to fail. I believe that for vectorized operations, errors should be handled with grace. To me that means that we ignore them and return an `NA`.
+
+In the previous example we used `.unwrap()`. I want us to improve that function with error handling.
+
+## Handling NAs and errors
+
+- During the `.into_iter()`, lets first check if the `Rstr` is an NA by using the `.is_na()` method
+  - If it is `true`, then we return a `NULL`. We can do this by using `Robj::from(())`
+  - `()` is called the unit-type, a special type of nothingness in Rust (technically an empty tuple)
+- Otherwise we try to parse!
+- Then when we parse, we match on the result. If an error, same thing with `Robj::from(())`
+- Otherwise we convert the result into an `Robj` with `.into_robj()`
+
+::: callout-tip
+A tip for multiple line expressions in an iterator: wrap it in a bracket!
+:::
+
+## Exercise
+
+Improve `url_parse()` so that NAs and parse errors both become `NULL` instead of panicking.
+
+- Check each element for NA with `.is_na()` and return `().into_robj()` if so
+- Otherwise `match` on `RUrl::new(xi)` and return `().into_robj()` on `Err`
+- Collect into a `List`
+
+<details>
+    <summary>View solution</summary>
+
+```rust
+#[extendr]
+fn url_parse(url: Strings) -> List {
+    url
+        .into_iter()
+        .map(|xi| {
+            if xi.is_na() {
+                return ().into_robj();
+            }
+
+            match RUrl::new(xi) {
+                Ok(v) => v.into_robj(),
+                Err(_) => ().into_robj(),
+            }
+        })
+        .collect::<List>()
+}
+```
+
+</details>

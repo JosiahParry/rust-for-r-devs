@@ -1,0 +1,105 @@
+# Modifying an `Option<T>` 
+
+::: callout-tip
+## Objective
+
+Transform the value *inside* an `Option` (or `Result`) without unwrapping it.
+
+:::
+
+Some methods don't return a plain value—they return an `Option`. For example, a
+url may or may not have a host, so `host_str()` returns `Option<&str>`. 
+
+The approach we used in the last exercise doesn't work as see4mlessley here
+
+Remember, the `Option` is essentially Rust's version of an NA! 
+
+## `.map()` works on `Option` too
+
+Just like we `.map()` over the elements of an iterator, we can `.map()` over the
+value inside an `Option` or `Result`. 
+
+The closure inside of `.map()` is only applied when 
+`Some` (or `Ok`); if it's `None`, nothing happens and we still have `None`.
+
+```rust
+let maybe_num: Option<i32> = Some(10);
+let doubled = maybe_num.map(|n| n * 2);
+// doubled == Some(20)
+
+let nothing: Option<i32> = None;
+let still_nothing = nothing.map(|n| n * 2);
+// still_nothing == None
+```
+
+## Why we need
+
+A method like `host_str()` returns `Option<&str>`—a *borrowed* string slice. To
+hand it to R we need an *owned* `String`. So we map into the option and call
+`.to_string()` on the inner `&str`:
+
+```rust
+rurl.0.host_str().map(|v| v.to_string())
+// Option<&str> -> Option<String>
+```
+
+:::{.callout-tip}
+`Rstr::from(Option<String>)` turns a `None` in `NA` otherwise the value.
+:::
+## Exercise
+
+Write a getter for each `Url` method that returns an `Option` and collect into a `Strings`
+
+- `url_host()` calls `host_str()` (`Option<&str>`)
+- `url_query()` calls `query()` (`Option<&str>`)
+- `url_domain()` calls `domain()` (`Option<&str>`)
+- `url_port()` calls `port()` (`Option<u16>`, collect into `Integers`)
+
+For the string ones, map with `.to_string()`. For `port`, map the `u16` to `i32` via `as i32`
+
+<details>
+    <summary>View solution</summary>
+
+```rust
+#[extendr]
+fn url_host(url: List) -> Strings {
+    url.into_iter()
+        .map(|(_, vi)| match RUrl::get_extptr(vi) {
+            Ok(rurl) => Rstr::from(rurl.0.host_str().map(|v| v.to_string())),
+            Err(_) => Rstr::na(),
+        })
+        .collect()
+}
+
+#[extendr]
+fn url_query(url: List) -> Strings {
+    url.into_iter()
+        .map(|(_, vi)| match RUrl::get_extptr(vi) {
+            Ok(rurl) => Rstr::from(rurl.0.query().map(|v| v.to_string())),
+            Err(_) => Rstr::na(),
+        })
+        .collect()
+}
+
+#[extendr]
+fn url_domain(url: List) -> Strings {
+    url.into_iter()
+        .map(|(_, vi)| match RUrl::get_extptr(vi) {
+            Ok(rurl) => Rstr::from(rurl.0.domain().map(|v| v.to_string())),
+            Err(_) => Rstr::na(),
+        })
+        .collect()
+}
+
+#[extendr]
+fn url_port(url: List) -> Integers {
+    url.into_iter()
+        .map(|(_, vi)| match RUrl::get_extptr(vi) {
+            Ok(rurl) => Rint::from(rurl.0.port().map(|inner| inner as i32)),
+            Err(_) => Rint::na(),
+        })
+        .collect()
+}
+```
+
+</details>

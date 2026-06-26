@@ -1,0 +1,24 @@
+# Foreign Function Interfaces (FFI)
+
+::: callout-tip
+## Objective
+
+Understand the concept of FFI and broadly how it works with respect to R.
+
+:::
+
+Foreign function interfaces (FFI) are mechanisms by which other (foreign) languages can be used in our programming langauge of choice. They are typically used to call compiled languages (like C / Rust) from an interpretted langauge (R).
+
+Much of R's success and power comes from a robust FFI tooling ecosystem. Some of the more prominent FFI libraries are:
+
+| Package | Language |
+| ------- | ----------- |
+| [Rcpp](https://www.rcpp.org/) |  C++ |
+| [cpp11](https://github.com/r-lib/cpp11) | C++ |
+| [rJava](https://www.rforge.net/rJava/) | Java |
+| [V8](https://jeroen.r-universe.dev/V8) | JavaScript & WASM |
+
+
+## R's C API
+
+Most langauges have the ability to interact with C and C-types. R is written in C and exposes a C API. Rust is able to work with C and represent C types. This is where extendr comes in.

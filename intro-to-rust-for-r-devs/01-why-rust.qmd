@@ -1,0 +1,25 @@
+# Why Rust?
+
+::: callout-tip
+## Objective
+
+Provide motivation for _why_ learning Rust is a use of our time. Discuss _what_ Rust is and how it is unique compared to other compiled langauges.
+
+🧠 Think of Rust as "C for people who like error messages that actually help."
+:::
+
+## TL;DR
+
+- R is interpreted. Code runs line by line.
+- R (and Python) are built on C.
+- C is compiled — it builds a binary that runs directly on your machine.
+- Rust is also compiled, like C, C++, Go, Java, and Fortran.
+- These languages are "close to the metal" — fast, efficient, and powerful.
+- Rust matches C++ in speed, but with some key advantages:
+    - **Memory safety** without a garbage collector (unlike Go), thanks to the borrow checker.
+    - A great developer experience:
+        - Helpful, friendly compiler errors (Tidyverse-level DX).
+        - Modern tooling (cargo, rustdoc, rustfmt, *rust-analyzer*, etc.).
+- Rust is easy to get started with and rewards best practices.
+    - We won’t go deep into memory safety or concurrency today
+- Rust uses errors as data, unlike R and C++, Rust does not support exceptions
