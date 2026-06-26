@@ -46,19 +46,19 @@ book:
         - building-rust-based-r-pkgs/04-hello-world.qmd
         - building-rust-based-r-pkgs/05-package-structure.qmd
         - building-rust-based-r-pkgs/06-extendr-dx.qmd
-        - building-rust-based-r-pkgs/07-r-type-system.qmd
-        - building-rust-based-r-pkgs/08-na-handling.qmd
-        - building-rust-based-r-pkgs/09-centroid.qmd
-        - building-rust-based-r-pkgs/10-use-crate-url.qmd
-        - building-rust-based-r-pkgs/11-external-pointers.qmd
-        - building-rust-based-r-pkgs/12-lists-of-pointers.qmd
+        - building-rust-based-r-pkgs/07-use-crate-url.qmd
+        - building-rust-based-r-pkgs/08-r-type-system.qmd
+        - building-rust-based-r-pkgs/09-new-type-struct.qmd
+        - building-rust-based-r-pkgs/10-external-pointers.qmd
+        - building-rust-based-r-pkgs/11-vectorization.qmd
+        - building-rust-based-r-pkgs/12-na-handling.qmd
         - building-rust-based-r-pkgs/13-print-helper.qmd
         - building-rust-based-r-pkgs/14-s3.qmd
         - building-rust-based-r-pkgs/15-url-getters.qmd
         - building-rust-based-r-pkgs/16-mapping-into-option.qmd
         - building-rust-based-r-pkgs/17-setters-cow.qmd
-        - building-rust-based-r-pkgs/18-recycling-and-errors.qmd
-        - building-rust-based-r-pkgs/19-path-segments.qmd
+        - building-rust-based-r-pkgs/18-combining-iterators.qmd
+        - building-rust-based-r-pkgs/19-recycling-and-errors.qmd
         - building-rust-based-r-pkgs/20-query-pairs.qmd
         - building-rust-based-r-pkgs/21-roxygen-docs.qmd
         - building-rust-based-r-pkgs/22-cran.qmd

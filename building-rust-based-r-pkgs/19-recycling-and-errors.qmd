@@ -41,7 +41,7 @@ The condition reads: error when the length is neither equal to the url length no
 
 ## Exercise
 
-Write the remaining setters, each with a length check up front and `.cycle()` for recycling:
+Write the remaining mutable methods, each with a length check up front and `.cycle()` for recycling:
 
 - `url_set_path()` calls `set_path()`, which is infallible (returns `()`)
 - `url_set_port()` calls `set_port()`, which takes `Option<u16>` and returns a `Result`

@@ -1,0 +1,972 @@
+---
+title: "Building Rust based R Packages"
+format:
+  revealjs:
+    incremental: true
+---
+
+# Welcome back!
+
+## Bathroom breaks
+
+- There will be 2 breaks at ~ each hour
+- Please use the restroom during exercises if need be
+
+## Exercises
+
+- Red 🟥 "I need help"
+- Green 🟩 "I'm done and ready to go!"
+
+# My objective
+
+Get you writing vectorized R code in Rust.
+
+# First a bit of background
+
+# Foreign Function Interfaces (FFI)
+
+::: callout-tip
+## Objective
+
+Understand the concept of FFI and broadly how it works with respect to R.
+
+:::
+
+# FFI
+
+- Mechanism to cross language boundary
+- Typically call compiled languages
+- R is an FFI powerhouse
+
+. . .
+
+
+| Package | Language |
+| ------- | ----------- |
+| [Rcpp](https://www.rcpp.org/) |  C++ |
+| [cpp11](https://github.com/r-lib/cpp11) | C++ |
+| [rJava](https://www.rforge.net/rJava/) | Java |
+| [V8](https://jeroen.r-universe.dev/V8) | JavaScript & WASM |
+
+# R's C API
+
+- Most languages know how to interact with C and C-types
+- R is literally written in C
+- Provides a C API
+- Rust can work with C and represent C types
+- This is where `extendr` comes in
+
+# What is extendr?
+
+::: callout-tip
+## Objective
+
+Learn the different components of the extendr ecosystem.
+:::
+
+
+## `extendr`
+
+`extendr` is a project that focuses on _extending_ R with Rust. It is comprised of:
+
+- [rextendr](https://extendr.github.io/rextendr/)
+- [extendr-api](https://extendr.github.io/extendr/extendr_api)
+- [extendr-ffi](https://extendr.github.io/extendr/extendr_ffi)
+- [extendr-engine](https://extendr.github.io/extendr/extendr_engine)
+
+::: callout-note
+There is no single "extendr" library. Rather, that is the name of the project.
+:::
+
+## `extendr-ffi`
+
+- Defines Rust types corresponding to R's C API
+- Ensures Rust bindings are backwards compatible with C API changes
+- We will **not** touch this 😅
+
+## `extendr-api`
+
+- High level bindings built upon `extendr-ffi`
+- Feels natural from a Rust perspective
+- Handles R oddities e.g. garbage collection
+- We will **only** use `extendr-api`
+
+## `extendr-engine`
+
+- Calling R _from_ Rust
+- Lets us start an R process from inside of Rust
+- Great for CLI tools
+
+## `{rextendr}`
+
+- `{usethis}`-like for developing Rust based packages
+- Primarily for:
+  - scaffold R packages
+  - document Rust functions
+  - prepare packages for CRAN release
+
+# Workshop Scope
+
+::: callout-tip
+## Objective
+
+Define the scope and objective of the workshop.
+
+:::
+
+## The `{rurl}` package
+
+There's no better way to learn than by doing.
+
+- We'll build a Rust-powered R package called `{rurl}`
+- R bindings to the [`url` crate](https://docs.rs/url)
+- one of the most downloaded rust crates of all time
+
+. . .
+
+We'll touch on:
+
+- Advanced R topics
+- Fundamental Rust concepts
+- Approaches for ergonomics
+
+## Why URLs?
+
+The `Url` crate has a bit of almost everything:
+
+- associated methods
+- mutable methods
+- errors
+- iterators
+
+## Why URLs?
+
+The deceptively complex string:
+
+`https://user@example.com:8080/path/to/page?q=rust#section`
+
+- contains a scheme, host, port, path, query, and fragment
+- parsing urls correctly is a touch thing to do!
+- a great place for Rust's type system
+
+## The R package
+
+The `{rurl}` package we build will let us:
+
+- parse character vectors of URLs into Url structs
+- create a `{vctrs}` compatible vector
+- extract components (host, scheme, path, port, query)
+- join, modify, and decompose URLs
+
+# Hello, world!
+
+::: callout-tip
+## Objective
+
+Scaffold an extendr-powered R package using `rextendr` and run the `hello_world()` function.
+:::
+
+## Developer functions
+
+- `usethis::create_package()` creates an R package
+- `rextendr::use_extendr()` creates the Rust infrastructure
+- `devtools::document()` document and update Rust function definitions
+
+## Developer workflow
+
+The typical workflow for developing an extendr package involves:
+
+1. Modify the Rust source code
+2. Update the bindings documentation using `devtools::document()`
+3. Load the package `devtools::load_all()`
+4. Test the R functions
+5. Repeat
+
+## Exercises
+
+# Package structure
+
+::: callout-tip
+## Objective
+
+Understand the directory structure of extendr-based R packages.
+
+:::
+
+## Package structure
+
+```
+.
+├── DESCRIPTION
+├── NAMESPACE
+├── R
+├── configure
+├── configure.win
+├── man
+├── src
+└── tools
+```
+
+. . .
+
+- `tools/`, `configure`, and `configure.win` ensure Rust is available at build and install time
+  - primarily for `R CMD check` and `CRAN` appeasement
+
+## Compiled Code
+
+- Compiled code is stored in `src/`
+
+. . .
+
+```
+.
+├── Makevars
+├── Makevars.in
+├── Makevars.win.in
+└── rust
+    ├── Cargo.lock
+    ├── Cargo.toml
+    ├── src
+```
+
+. . .
+
+- `rust/` is a **library** crate that is linked to by R
+- `Makevars` files build the Rust library and link it to R
+
+## Rust libraries
+
+- Library crates have `lib.rs` instead of `main.rs`
+- No entrypoint that gets executed
+- Instead we define functions, structs, enums, etc.
+- Used by the R package
+
+# Developer Experience
+
+::: callout-tip
+## Objective
+
+Learn how to check your Rust code for warnings and errors.
+
+:::
+
+## `settings.json`
+
+- `use_extendr()` creates / updates `settings.json`
+- Lets `rust-analyzer` find the Rust package
+- Rust files are automatically linted and checked
+
+. . .
+
+```json
+{
+  "rust-analyzer.linkedProjects": [
+    "${workspaceFolder}/src/rust/Cargo.toml"
+  ],
+  "files.associations": {
+    "Makevars.in": "makefile",
+    "Makevars.win": "makefile",
+    "configure": "shellscript",
+    "configure.win": "shellscript",
+    "cleanup": "shellscript",
+    "cleanup.win": "shellscript"
+  }
+}
+```
+
+## Viewing Problems
+
+- rust-analyzer is always running
+- Identifies errors and warnings as you write them
+- View them in the problems tab
+
+. . .
+
+![Problems Tab](/images/problems-tab.png)
+
+## Using `cargo check`
+
+- Or run `cargo check` from the terminal
+- This is my preference, personally
+
+. . .
+
+```bash
+cd src/rust
+cargo check
+```
+
+![`cargo check`](/images/cargo-check.png)
+
+# Exercise
+
+# Adding the `url` crate
+
+::: callout-tip
+## Objective
+
+Add a dependency to our package and import items from it.
+
+:::
+
+## Declaring dependencies
+
+- R lets you use packages on your machine without declaring them
+- Rust will **not**
+- You must declare dependencies
+
+## `Cargo.toml`
+
+- Akin to the `DESCRIPTION` file
+- Dependencies set via the `[dependencies]` table
+- Add them via:
+  - `cargo add crate-name`
+  - or `rextendr::use_crate("cratename")`
+
+. . .
+
+```toml
+[package]
+name = "rurl"
+publish = false
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.65"
+
+[lib]
+crate-type = [ "staticlib" ]
+name = "rurl"
+
+[dependencies]
+extendr-api = "*"
+```
+
+## Importing items from dependencies
+
+- Items from deps are accessed via namespace, similar to R
+- Format `crate_name::module::item`
+- The `*` is a wildcard for importing everything
+- The **`prelude`** re-exports commonly used items
+
+. . .
+
+```rust
+use extendr_api::prelude::*;
+// import multiple items using `{}`
+use crate_name::{StructName, function_name};
+```
+
+# Exercise
+
+# R's Type System
+
+::: callout-tip
+## Objective
+
+Get a basic grip on R's type system and develop an intuition for how Rust types map to R types.
+
+:::
+
+## Everything is an `SEXP`
+
+![All SEXP everything](/images/all-sexp.png){width=70%}
+
+- To extendr, an SEXP is an `Robj`—it can be _anything_
+- Notice `EXTPTRSXP`, the **external pointer**—more on that soon
+
+## Vector SEXP types
+
+![SEXP numeric types](/images/sexp-no-rust-types.svg){width=75%}
+
+- Integers are `i32` in Rust
+- Doubles are `f64` in Rust
+
+## Scalar types
+
+- `i32` and `f64` do not have `NA`
+- `extendr-api` provides:
+  - `Rfloat`
+  - `Rint`
+  - `Rstr`
+  - `Rbool`
+
+## Creating scalars
+
+- Created using `ScalarType::from()`
+- NAs created via `ScalarType::na()`
+- Check `NA` using `x.is_na()`
+- Access the inner type with `.inner()`
+
+. . .
+
+```rust
+let my_float = Rfloat::from(3.14);
+let my_na = Rfloat::na();
+my_na.is_na() // returns true
+```
+
+## Wrapper types
+
+To work with vectors, we work with their wrapper types. These are:
+
+- `Doubles`
+- `Integers`
+- `Logicals`
+- `Strings`
+
+. . .
+
+Always prefer these over `Vec<f64>` or `Vec<i32>`.
+
+## When in doubt, clone it out
+
+::: callout-note
+Cloning an extendr `Robj` (or other wrapper type) is cheap. We only increment a _reference count_—**not** a full copy like we do in R.
+:::
+
+# Exercise
+
+# New types
+
+::: callout-tip
+## Objective
+
+Use the newtype pattern to wrap a foreign type and add our own methods to it.
+
+:::
+
+## The newtype pattern
+
+- A "tuple struct" with the structure `struct NewType(OtherType)`
+- Helps us add our flair (aka. methods) to these structs
+
+. . .
+
+```rust
+#[derive(Debug, Clone)]
+enum Shape {
+    Triangle,
+    Rectangle,
+    Pentagon,
+    Hexagon,
+}
+```
+
+## The orphan rule
+
+- Structs and enums owned by other crates cannot have an `impl` added to them
+- That is called the **"orphan rule"**
+- We can side step this with a newtype struct
+
+. . .
+
+```rust
+#[derive(Debug, Clone)]
+#[extendr]
+struct RShape(Shape);
+```
+
+## Adding methods
+
+Now, with our own struct, we can add methods to it via an `impl` block!
+
+```rust
+#[extendr]
+impl RShape {
+    fn new(x: &str) -> anyhow::Result<Self> {
+        match x {
+            "triangle" => Ok(Self(Shape::Triangle)),
+            "rectangle" => Ok(Self(Shape::Rectangle)),
+            "pentagon" => Ok(Self(Shape::Pentagon)),
+            "hexagon" => Ok(Self(Shape::Hexagon)),
+            _ => Err(anyhow::anyhow!("unknown shape: {x}")),
+        }
+    }
+}
+```
+
+## Exporting our impl to R
+
+- Register the `impl` with `extendr_module! { impl RShape; }`
+
+# Exercise
+
+# External pointers
+
+::: callout-tip
+## Objective
+
+Use an `#[extendr]` impl to store a Rust struct inside an R object, and learn how to get it back out again.
+
+:::
+
+## What we want
+
+- We want to create a struct in Rust and hold onto it in R
+- This is possible through an **external pointer**
+
+## What is an external pointer?
+
+- A special object that essentially says "oh, i know where that is!"
+- Lets you use it from other languages
+- For the rspatial nerds in the house, this is how the super fast geos package works
+
+. . .
+
+- R doesn't know how to work with an external pointer
+- It just keeps track of it and keeps it alive
+
+## A constructor
+
+- To create one we need a helper to construct the type
+- We do this via a `new()` method on the struct
+
+. . .
+
+```rust
+impl RShape {
+    fn new(x: &str) -> anyhow::Result<Self> {
+        match x {
+            "triangle" => Ok(Self(Shape::Triangle)),
+            "rectangle" => Ok(Self(Shape::Rectangle)),
+            "pentagon" => Ok(Self(Shape::Pentagon)),
+            "hexagon" => Ok(Self(Shape::Hexagon)),
+            _ => Err(anyhow::anyhow!("unknown shape: {x}")),
+        }
+    }
+}
+```
+
+## Calling it from R
+
+- It is **fallible** because it can error out
+- Include the impl in `extendr_module! {}`
+
+. . .
+
+```rust
+extendr_module! {
+    mod mypackage;
+    impl RShape;
+}
+```
+
+. . .
+
+Now `RShape$new("triangle")` returns an R object that holds a Rust `RShape`.
+
+# Exercise
+
+# Vectorization
+
+::: callout-tip
+## Objective
+
+Take a character vector and create a list of external pointers.
+
+:::
+
+## Working with many
+
+- In R we typically work with a vector of values
+- We want hundreds and thousands of urls, not one at a time
+- How? Through vectorization (a fancy name for iteration and looping)
+
+## How do we store them?
+
+- An external pointer isn't any type of vector
+- Remember!!!!! Lists **are vectors**
+- Lists can hold any R object they want!!
+- So this is a natural way to contain multiple external pointers
+
+. . .
+
+- Use the `Strings` wrapper type (an NA-aware version of `Vec<String>`)
+
+## Strings wrapper type
+
+- Use `.into_iter()` to iterate through it
+- Each element is an `Rstr`, an NA aware `&str`
+- It can be used in most places that `&str` can be used
+
+## Collecting into a list
+
+- We can `.collect()` directly into a `List`
+- Every wrapper type can be turned into an `Robj` (everything is an SEXP!)
+- Our external pointer can be turned into an `Robj`
+
+. . .
+
+```rust
+#[extendr]
+fn parse_shapes(shapes: Strings) -> List {
+    shapes
+        .into_iter()
+        .map(|vi| RShape::new(vi).unwrap())
+        .collect()
+}
+```
+
+# Exercise
+
+# NA handling
+
+::: callout-tip
+## Objective
+
+Improve our vectorized function to handle NAs and errors gracefully instead of unwrapping.
+
+:::
+
+## Different schools of thought
+
+- Fail on any error?
+- Or handle errors with grace?
+- For vectorized ops: ignore them, return `NA`
+
+## Handling NAs and errors
+
+- Check for NA with `.is_na()`
+- Return `NULL` with `Robj::from(())`
+- `()` is the unit-type—nothingness
+- Otherwise parse and `match` the result
+- Convert success into an `Robj` with `.into_robj()`
+
+. . .
+
+::: callout-tip
+Multiple line expressions in an iterator? Wrap it in a bracket!
+:::
+
+# Exercise
+
+# A print helper
+
+::: callout-tip
+## Objective
+
+Write a function that reads a list of external pointers and turns it back into a character vector.
+
+:::
+
+## Ugly printing
+
+- R can't see inside an external pointer
+- All it can show is the memory address
+
+. . .
+
+```r
+parse_shapes(c("triangle", "hexagon"))
+#> [[1]]
+#> <pointer: 0x600000abc120>
+#>
+#> [[2]]
+#> <pointer: 0x600000abc480>
+```
+
+## Accessing the external pointer
+
+- Stored in a struct called `ExternalPtr`
+- Has an associated type—the "turbo-fish"
+- Each type has a `try_from()` that fallibly converts
+- extendr provides `ExternalPtr::try_from()`
+
+. . .
+
+```rust
+impl RShape {
+    fn get_extptr(robj: Robj) -> extendr_api::Result<ExternalPtr<Self>> {
+        ExternalPtr::<Self>::try_from(robj)
+    }
+}
+```
+
+## Iterating a list
+
+- Each item is a **tuple** (like a tuple in python lol!)
+- Fixed size, each element can be a different type
+- `.0` is the name (`&str`), `.1` is the value (`Robj`)
+- We usually ignore the name with `_`
+
+## Example
+
+```rust
+#[extendr]
+fn format_shapes(x: List) -> Strings {
+    x.into_iter()
+        .map(|(_, robj)| match RShape::get_extptr(robj) {
+            Ok(v) => Rstr::from(format!("{:?}", v.0)),
+            Err(_) => Rstr::na(),
+        })
+        .collect()
+}
+```
+
+# Exercise
+
+# Integrating with {vctrs}
+
+::: callout-tip
+## Objective
+
+Create a vctrs compatible vector for our urls.
+
+:::
+
+## S3 to the rescue
+
+- We build `List` objects from Rust
+- So we can lean on R's S3 system
+- S3 dispatches on an object's classes
+
+. . .
+
+- Two steps:
+  - assign a class to the list
+  - define an R generic
+
+## The `vctrs_vctr` class
+
+- `{vctrs}` gives a `vctrs_vctr` class
+- Sensible default vector behavior for free
+- Assign `c("rurls", "vctrs_vctr", "list")`
+
+## Setting the class from Rust
+
+- Use `.set_class()` on a **mutable** `Robj`
+- Needs `mut`—we modify the underlying object
+- Fallible, so we return a `Result`
+
+. . .
+
+```rust
+res.set_class(&["rurls", "vctrs_vctr", "list"])?;
+```
+
+## The R method
+
+- A class alone gives basic printing
+- For `format_rurls()` we need a real R generic
+
+. . .
+
+```r
+#' @export
+format.rurls <- function(x, ...) {
+    format_rurls(x)
+}
+```
+
+# Exercise
+
+# Getters
+
+::: callout-tip
+## Objective
+
+Write a family of functions that call a method on each object and collect the result.
+
+:::
+
+## A formulaic pattern
+
+- Iterate the list
+- Recover the pointer with `get_extptr`
+- Call the method
+- Collect into the right R type, `NA` on failure
+
+## Example
+
+```rust
+#[extendr]
+fn shape_coords(x: List) -> Integers {
+    x.into_iter()
+        .map(|(_, vi)| match RShape::get_extptr(vi) {
+            Ok(shape) => Rint::from(shape.n_coords() as i32),
+            Err(_) => Rint::na(),
+        })
+        .collect::<Integers>()
+}
+```
+
+## Finding the methods
+
+- Docs: <https://docs.rs/url/latest/url/struct.Url.html#implementations>
+- LSP autocomplete—type `rurl.0.` and let rust-analyzer list them
+- Easy ones return a plain `&str`
+- Others return an `Option`—next chapter
+
+# Exercise
+
+# Mapping into an `Option`
+
+::: callout-tip
+## Objective
+
+Transform the value *inside* an `Option` (or `Result`) without unwrapping it.
+
+:::
+
+## Some methods return `Option`
+
+- e.g. `host_str()` returns `Option<&str>`
+- The `Option` is Rust's version of an NA
+- Plain getters won't work on these
+
+## `.map()` works on `Option`
+
+- Just like mapping over an iterator
+- Closure runs only on `Some` (or `Ok`)
+- `None` stays `None`
+
+. . .
+
+```rust
+let maybe_num: Option<i32> = Some(10);
+let doubled = maybe_num.map(|n| n * 2); // Some(20)
+```
+
+## Owned strings for R
+
+- `host_str()` gives a borrowed `&str`
+- R needs an owned `String`
+- Map into the option and call `.to_string()`
+
+. . .
+
+```rust
+rurl.0.host_str().map(|v| v.to_string())
+```
+
+. . .
+
+::: callout-tip
+`Rstr::from(Option<String>)` turns `None` into `NA`.
+:::
+
+# Exercise
+
+# 🐮 CoWs and Modifying in place
+
+::: callout-tip
+## Objective
+
+Modify a value held in an external pointer without mutating the original.
+
+:::
+
+## Mutability is alien to R
+
+- R uses copy-on-write (CoW) 🐮
+- Modifying doesn't change in place
+- R copies first, then modifies the copy
+
+. . .
+
+- `Url` has methods that modify in place
+- So we clone before we modify
+
+## A helper to clone
+
+- Get the pointer
+- Borrow with `as_ref()`, then `.clone()`
+
+. . .
+
+```rust
+impl RUrl {
+    fn clone_from_robj(robj: Robj) -> anyhow::Result<Self> {
+        match ExternalPtr::<RUrl>::try_from(robj) {
+            Ok(v) => Ok(v.as_ref().clone()),
+            Err(e) => Err(anyhow!("Expected an object of class `rurl`:\n{e}")),
+        }
+    }
+}
+```
+
+## Mutable values
+
+- Mark the clone `mut`
+- Call a method taking `&mut self`
+- A single `String` applied to every url for now
+
+. . .
+
+```rust
+pub fn set_host(&mut self, host: Option<&str>) -> Result<(), ()>
+```
+
+# Exercise
+
+# Combining iterators
+
+::: callout-tip
+## Objective
+
+Combine two vectors element-by-element using `.zip()`.
+
+:::
+
+## Scalar or vector?
+
+- A scalar applied to every element
+- Or a vector the same length as the first arg
+- `.zip()` pairs two iterators into tuples
+
+. . .
+
+```rust
+url.into_iter().zip(host.into_iter())
+```
+
+## Destructuring the pair
+
+- Each step gives `((name, url), host)`
+- Destructure in the closure
+- Ignore the name with `_`
+- Best when both are the same length
+
+# Exercise
+
+# Recycling & errors
+
+::: callout-tip
+## Objective
+
+Recycle a scalar argument over a vector and throw an error when lengths don't line up.
+
+:::
+
+## R users expect recycling
+
+- A length-1 value applies to every element
+- `url_set_scheme(urls, "https")` reuses `"https"`
+
+## Recycling with `.cycle()`
+
+- `.cycle()` repeats an iterator forever
+- Zip a cycled iterator against the urls
+- The shorter one keeps repeating
+
+. . .
+
+```rust
+url.into_iter().zip(scheme.into_iter().cycle())
+```
+
+## Length checks
+
+- Recycling is valid for a scalar or equal length
+- Anything else is a mistake
+- Stop the whole call with `throw_r_error()`
+
+. . .
+
+```rust
+if (scheme.len() != url.len()) & (scheme.len() != 1) {
+    throw_r_error("`scheme` must be a scalar or the same length as `url`");
+}
+```
+
+# Exercise
