@@ -1,1 +1,1 @@
-Sitemap: https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/sitemap.xml
+Sitemap: https://josiahparry.github.io/rust-for-r-devs/sitemap.xml

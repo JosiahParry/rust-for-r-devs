@@ -9,9 +9,9 @@ book:
   author:
     - "Josiah Parry"
     - "Mossa Merhi Reimert, PhD"
-  date: "2025-06-20"
-  site-url: https://josiahparry.github.io/2025-cascadia-rust-for-r-devs/
-  repo-url: https://github.com/JosiahParry/2025-cascadia-rust-for-r-devs/
+  date: "2026-06-26"
+  site-url: https://josiahparry.github.io/rust-for-r-devs/
+  repo-url: https://github.com/JosiahParry/rust-for-r-devs/
   repo-branch: main
   repo-actions: [edit, issue]
   chapters:

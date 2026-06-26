@@ -572,7 +572,7 @@ fn main() {
 }
 ```
 
-# Exercise
+# Exercise (4 min)
 
 
 # Functions
@@ -627,7 +627,7 @@ fn is_odd(x: i32) -> bool {
 :::
 :::
 
-# Exercise
+# Exercise (4 min)
 
 
 # Ownership
@@ -750,7 +750,7 @@ let avg_y = mean(&y);
   2. reference
   3. owned
 
-# Exercises
+# Exercises (8 min)
 
 # Iterators
 
@@ -855,7 +855,7 @@ fn main() {
 }
 ```
 
-# Exercises
+# Exercises (6 min)
 
 # Break 5 minutes
 
@@ -955,7 +955,7 @@ fn main() {
 }
 ```
 
-# Exercises
+# Exercises (8 min)
 
 
 # Defining Struct(ure)s
@@ -1083,7 +1083,7 @@ fn main() {
 ```
 
 
-# Exercise
+# Exercise (5 min)
 
 # Struct Methods
 
@@ -1199,7 +1199,7 @@ impl Person {
 }
 ```
 
-# Exercise
+# Exercise (7 min)
 
 # Enum(eration)s
 
@@ -1316,7 +1316,7 @@ impl Shape {
 }
 ```
 
-# Exercises
+# Exercises (6 min)
 
 # `Some()` or `None`?
 
@@ -1378,7 +1378,7 @@ called `Option::unwrap()` on a `None` value
 ```
 
 
-# Exercise
+# Exercise (6 min)
 
 # `Ok()` or `Err()`?
 
@@ -1455,7 +1455,7 @@ fn main() -> Result<(), String> {
 }
 ```
 
-# Exercise
+# Exercise (6 min)
 
 # Adding a crate: `anyhow`
 
@@ -1520,7 +1520,7 @@ impl Point {
 
 - `main` can return `anyhow::Result<()>` too, so errors bubble all the way up
 
-# Exercise
+# Exercise (6 min)
 
 # Thanks!
 Have a good lunch and see you for the next workshop :)
