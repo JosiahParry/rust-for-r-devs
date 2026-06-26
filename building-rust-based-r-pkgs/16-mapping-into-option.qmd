@@ -1,4 +1,4 @@
-# Mapping into an `Option`
+# Modifying an `Option<T>` 
 
 ::: callout-tip
 ## Objective
@@ -8,8 +8,9 @@ Transform the value *inside* an `Option` (or `Result`) without unwrapping it.
 :::
 
 Some methods don't return a plain value—they return an `Option`. For example, a
-url may or may not have a host, so `host_str()` returns `Option<&str>`. The
-getters in the last chapter won't work directly on these.
+url may or may not have a host, so `host_str()` returns `Option<&str>`. 
+
+The approach we used in the last exercise doesn't work as see4mlessley here
 
 Remember, the `Option` is essentially Rust's version of an NA! 
 
