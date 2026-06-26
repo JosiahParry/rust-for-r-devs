@@ -21,3 +21,27 @@ boundary before we touch the `url` crate.
 
 This is the conservative timeline for the workshop. The first hour is the most
 "lesson"-heavy. Once we start building `{rurls}` it's almost entirely hands-on.
+
+|Section                              |Duration | End time |
+|:------------------------------------|:--------|:---------|
+|Foreign Function Interfaces (FFI)    |0:10     |1:40 PM   |
+|What is extendr?                     |0:10     |1:50 PM   |
+|Workshop Scope                       |0:05     |1:55 PM   |
+|Hello, world!                        |0:10     |2:05 PM   |
+|Package structure                    |0:10     |2:15 PM   |
+|Developer Experience                 |0:10     |2:25 PM   |
+|Break                                |0:05     |2:30 PM   |
+|Adding the `url` crate               |0:05     |2:35 PM   |
+|R's Type System                      |0:10     |2:45 PM   |
+|New types                            |0:10     |2:55 PM   |
+|External pointers                    |0:10     |3:05 PM   |
+|Vectorization                        |0:10     |3:15 PM   |
+|NA handling                          |0:10     |3:25 PM   |
+|A print helper                       |0:05     |3:30 PM   |
+|Break                                |0:05     |3:35 PM   |
+|Integrating with {vctrs}             |0:10     |3:45 PM   |
+|Accessing Struct Methods from R      |0:10     |3:55 PM   |
+|Modifying an `Option<T>`             |0:05     |4:00 PM   |
+|🐮 CoWs and Modifying in place        |0:10     |4:10 PM   |
+|Combining iterators                  |0:10     |4:20 PM   |
+|Recycling & errors                   |0:10     |4:30 PM   |

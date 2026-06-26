@@ -145,8 +145,8 @@ The deceptively complex string:
 
 `https://user@example.com:8080/path/to/page?q=rust#section`
 
-- contains a scheme, host, port, path, query, and fragment
-- parsing urls correctly is a touch thing to do!
+- contains a `scheme`, `host`, `port`, `path`, `query`, and `fragment`
+- parsing urls correctly is a tough thing to do!
 - a great place for Rust's type system
 
 ## The R package
@@ -286,8 +286,7 @@ Learn how to check your Rust code for warnings and errors.
 
 ## Using `cargo check`
 
-- Or run `cargo check` from the terminal
-- This is my preference, personally
+- Or run `cargo check` from the terminal (my preference)
 
 . . .
 
@@ -323,7 +322,7 @@ Add a dependency to our package and import items from it.
   - `cargo add crate-name`
   - or `rextendr::use_crate("cratename")`
 
-. . .
+## `Cargo.toml`
 
 ```toml
 [package]
@@ -341,7 +340,7 @@ name = "rurl"
 extendr-api = "*"
 ```
 
-## Importing items from dependencies
+## Importing from dependencies
 
 - Items from deps are accessed via namespace, similar to R
 - Format `crate_name::module::item`
@@ -369,14 +368,14 @@ Get a basic grip on R's type system and develop an intuition for how Rust types 
 
 ## Everything is an `SEXP`
 
-![All SEXP everything](/images/all-sexp.png){width=70%}
+![](/images/all-sexp.png){width=70%}
 
 - To extendr, an SEXP is an `Robj`—it can be _anything_
-- Notice `EXTPTRSXP`, the **external pointer**—more on that soon
+<!--- Notice `EXTPTRSXP`, the **external pointer**—more on that soon-->
 
 ## Vector SEXP types
 
-![SEXP numeric types](/images/sexp-no-rust-types.svg){width=75%}
+![](/images/sexp-no-rust-types.svg){width=75%}
 
 - Integers are `i32` in Rust
 - Doubles are `f64` in Rust
@@ -395,7 +394,7 @@ Get a basic grip on R's type system and develop an intuition for how Rust types 
 - Created using `ScalarType::from()`
 - NAs created via `ScalarType::na()`
 - Check `NA` using `x.is_na()`
-- Access the inner type with `.inner()`
+- Access the inner type with `.0`
 
 . . .
 
@@ -407,7 +406,7 @@ my_na.is_na() // returns true
 
 ## Wrapper types
 
-To work with vectors, we work with their wrapper types. These are:
+To work with vectors, we work with their "wrapper" types:
 
 - `Doubles`
 - `Integers`
@@ -421,8 +420,11 @@ Always prefer these over `Vec<f64>` or `Vec<i32>`.
 ## When in doubt, clone it out
 
 ::: callout-note
-Cloning an extendr `Robj` (or other wrapper type) is cheap. We only increment a _reference count_—**not** a full copy like we do in R.
+Cloning an extendr `Robj` (or other wrapper type) is cheap. 
 :::
+
+- Use `.clone()` when something has been "moved"
+- Technically "expensive" for `Vec<T>` but still fast!
 
 # Exercise
 

@@ -88,8 +88,8 @@ fn gh_encode(x: Doubles, y: Doubles, length: usize) -> Strings {
         .zip(y.into_iter())
         .map(|(xi, yi)| {
             let coord = Coord {
-                x: xi.inner(),
-                y: yi.inner(),
+                x: xi.0(),
+                y: yi.0(),
             };
             match encode(coord, length) {
                 Ok(res) => Rstr::from(res),

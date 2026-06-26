@@ -87,7 +87,7 @@ let my_na = Rfloat::na();
 ```
 
 - Missingness can also be _checked_ by using the `my_na.is_na()` method.
-- To access the inner type—e.g. `f64` or `i32` we can use the `.inner()` method.
+- To access the inner type—e.g. `f64` or `i32` we can use the `.0()` method.
 
 ## Wrapper types
 
@@ -120,9 +120,32 @@ value of a numeric vector:
 #[extendr]
 fn double_it(x: Doubles) -> Doubles {
     x.into_iter()
-        .map(|xi| Rfloat::from(xi.inner() * 2.0))
+        .map(|xi| Rfloat::from(xi.0 * 2.0))
         .collect::<Doubles>()
 }
 ```
 
-We'll put this exact shape to work in our first warm-up exercise.
+We'll put this exact shape to work in the warm-up exercise below.
+
+## Exercise (3 minutes)
+
+Write a vectorized function `powi()` that raises each element of a numeric
+vector to an integer power.
+
+- It takes a `Doubles` (`x`) and an `i32` (`power`)
+- It returns a `Doubles`
+- Iterate over the scalar `Rfloat` elements, reach the inner `f64` with `.0`,
+  and raise it with `f64::powi()`
+- Collect into a `Doubles`
+
+<details>
+    <summary>View solution</summary>
+
+```rust
+#[extendr]
+fn powi(x: Doubles, power: i32) -> Doubles {
+    x.into_iter().map(|xi| xi.0.powi(power)).collect()
+}
+```
+
+</details>

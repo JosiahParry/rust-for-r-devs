@@ -1,4 +1,4 @@
-# Query pairs
+# Returning a List of Vectors
 
 ::: callout-tip
 ## Objective

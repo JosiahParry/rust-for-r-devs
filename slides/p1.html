@@ -6,8 +6,8 @@
 <script src="p1_files/libs/quarto-html/tippy.umd.min.js"></script>
 <link href="p1_files/libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="p1_files/libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="p1_files/libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.6.42">
+<link href="p1_files/libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.8.25">
 
   <title>Intro to Rust for R Developers</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -28,8 +28,9 @@
       vertical-align: middle;
     }
     /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
     pre > code.sourceCode { white-space: pre; position: relative; }
-    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
     pre > code.sourceCode > span:empty { height: 1.2em; }
     .sourceCode { overflow: visible; }
     code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -40,7 +41,7 @@
     }
     @media print {
     pre > code.sourceCode { white-space: pre-wrap; }
-    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
     }
     pre.numberSource code
       { counter-reset: source-line 0; }
@@ -93,7 +94,7 @@
     code span.vs { color: #20794d; } /* VerbatimString */
     code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </style>
-  <link rel="stylesheet" href="p1_files/libs/revealjs/dist/theme/quarto-2f366650f320edcfcf53d73c80250a32.css">
+  <link rel="stylesheet" href="p1_files/libs/revealjs/dist/theme/quarto-534cd8e3a96973385dffff3f4709048d.css">
   <link href="p1_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="p1_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="p1_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -279,24 +280,24 @@
 <section id="your-first-crate" class="slide level2">
 <h2>Your first crate!</h2>
 <p>Use <code>cargo new {name of crate}</code></p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href=""></a><span class="co"># create a new crate</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href=""></a><span class="co"># create a new crate</span></span>
 <span id="cb1-2"><a href=""></a><span class="ex">cargo</span> new intro-to-rust</span>
 <span id="cb1-3"><a href=""></a></span>
-<span id="cb1-4"><a href=""></a><span class="bu">cd</span> intro-to-rust</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-4"><a href=""></a><span class="bu">cd</span> intro-to-rust</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="crate-anatomy" class="slide level2">
 <h2>Crate anatomy</h2>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href=""></a><span class="ex">intro-to-rust/</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href=""></a><span class="ex">intro-to-rust/</span></span>
 <span id="cb2-2"><a href=""></a><span class="ex">├──</span> Cargo.toml      <span class="co"># Metadata &amp; dependencies (like DESCRIPTION)</span></span>
 <span id="cb2-3"><a href=""></a><span class="ex">├──</span> Cargo.lock      <span class="co"># Dependency versions (like renv.lock)</span></span>
 <span id="cb2-4"><a href=""></a><span class="ex">└──</span> src/</span>
-<span id="cb2-5"><a href=""></a>    <span class="ex">└──</span> main.rs     <span class="co"># Entry point — like main.R</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-5"><a href=""></a>    <span class="ex">└──</span> main.rs     <span class="co"># Entrypoint</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="main.rs" class="slide level2">
 <h2><code>main.rs</code></h2>
-<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb3-1"><a href=""></a><span class="kw">fn</span> main() <span class="op">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb3-1"><a href=""></a><span class="kw">fn</span> main() <span class="op">{</span></span>
 <span id="cb3-2"><a href=""></a>    <span class="pp">println!</span>(<span class="st">"Hello, world!"</span>)<span class="op">;</span></span>
-<span id="cb3-3"><a href=""></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-3"><a href=""></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ul>
 <li class="fragment">Functions are declared using the <code>fn</code> keyword</li>
 <li class="fragment">The <code>main()</code> function is the entrypoint of the program (and required)</li>
@@ -313,20 +314,17 @@
 <li class="fragment">It supports format strings:</li>
 </ul>
 <div class="fragment">
-<div>
-
-</div>
 <div class="quarto-layout-panel" data-layout-ncol="2">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <p><strong>Using placeholder</strong></p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb4-1"><a href=""></a><span class="kw">let</span> name <span class="op">=</span> <span class="st">"Josiah"</span><span class="op">;</span></span>
-<span id="cb4-2"><a href=""></a><span class="pp">println!</span>(<span class="st">"Hello, {}!"</span><span class="op">,</span> name)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb4-1"><a href=""></a><span class="kw">let</span> name <span class="op">=</span> <span class="st">"Josiah"</span><span class="op">;</span></span>
+<span id="cb4-2"><a href=""></a><span class="pp">println!</span>(<span class="st">"Hello, {}!"</span><span class="op">,</span> name)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <p><strong>Direct interpolation</strong></p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb5-1"><a href=""></a><span class="kw">let</span> name <span class="op">=</span> <span class="st">"Josiah"</span><span class="op">;</span></span>
-<span id="cb5-2"><a href=""></a><span class="pp">println!</span>(<span class="st">"Hello, {name}!"</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb5-1"><a href=""></a><span class="kw">let</span> name <span class="op">=</span> <span class="st">"Josiah"</span><span class="op">;</span></span>
+<span id="cb5-2"><a href=""></a><span class="pp">println!</span>(<span class="st">"Hello, {name}!"</span>)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -455,9 +453,9 @@
 <li class="fragment">Must <em>cast</em> to a similar type using <code>as</code></li>
 </ul>
 <div class="fragment">
-<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb6-1"><a href=""></a><span class="kw">fn</span> add2(x<span class="op">:</span> <span class="dt">f64</span><span class="op">,</span> y<span class="op">:</span> <span class="dt">i32</span>) <span class="op">-&gt;</span> <span class="dt">f64</span> <span class="op">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb6-1"><a href=""></a><span class="kw">fn</span> add2(x<span class="op">:</span> <span class="dt">f64</span><span class="op">,</span> y<span class="op">:</span> <span class="dt">i32</span>) <span class="op">-&gt;</span> <span class="dt">f64</span> <span class="op">{</span></span>
 <span id="cb6-2"><a href=""></a>   x <span class="op">+</span> y <span class="kw">as</span> <span class="dt">f64</span></span>
-<span id="cb6-3"><a href=""></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-3"><a href=""></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="unit-type" class="slide level2">
@@ -493,6 +491,7 @@
 <ul>
 <li class="fragment"><code>+</code> addition</li>
 <li class="fragment"><code>-</code> subtraction</li>
+<li class="fragment"><code>*</code> multiplication</li>
 <li class="fragment"><code>/</code> division</li>
 <li class="fragment"><code>%</code> remainder</li>
 </ul>
@@ -516,11 +515,11 @@
 <li class="fragment"><code>if</code>, <code>else</code>, and <code>else if</code> is similar to R</li>
 <li class="fragment">Branches use <code>{}</code></li>
 </ul>
-<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb7-1"><a href=""></a><span class="cf">if</span> x <span class="op">==</span> y <span class="op">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb7-1"><a href=""></a><span class="cf">if</span> x <span class="op">==</span> y <span class="op">{</span></span>
 <span id="cb7-2"><a href=""></a>  <span class="co">// do something</span></span>
 <span id="cb7-3"><a href=""></a><span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
 <span id="cb7-4"><a href=""></a>  <span class="co">// do something else</span></span>
-<span id="cb7-5"><a href=""></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-5"><a href=""></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="exercise-2" class="slide level2">
 <h2>Exercise</h2>
@@ -551,12 +550,15 @@
 <li class="fragment">Very inflexible</li>
 </ul>
 <div class="fragment">
-<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb8-1"><a href=""></a><span class="kw">fn</span> main() <span class="op">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb8-1"><a href=""></a><span class="kw">fn</span> main() <span class="op">{</span></span>
 <span id="cb8-2"><a href=""></a>    <span class="kw">let</span> arr <span class="op">=</span> [<span class="dv">10</span><span class="op">,</span> <span class="dv">20</span><span class="op">,</span> <span class="dv">30</span><span class="op">,</span> <span class="dv">40</span>]<span class="op">;</span></span>
 <span id="cb8-3"><a href=""></a>    <span class="pp">println!</span>(<span class="st">"Array: {:?}"</span><span class="op">,</span> arr)<span class="op">;</span></span>
-<span id="cb8-4"><a href=""></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-4"><a href=""></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+
 </div>
-</section>
+<aside><div>
+<p><code>{:?}</code> uses a “debug” print method. Good when a “display” method isn’t available.</p>
+</div></aside></section>
 <section id="debug-syntax" class="slide level2">
 <h2>Debug syntax</h2>
 <ul>
@@ -584,10 +586,10 @@
 <li class="fragment">Construct using <code>vec![]</code></li>
 </ul>
 <div class="fragment">
-<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb9-1"><a href=""></a><span class="kw">fn</span> main() <span class="op">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb9-1"><a href=""></a><span class="kw">fn</span> main() <span class="op">{</span></span>
 <span id="cb9-2"><a href=""></a>    <span class="kw">let</span> v <span class="op">=</span> <span class="pp">vec!</span>[<span class="dv">1</span><span class="op">,</span> <span class="dv">2</span><span class="op">,</span> <span class="dv">3</span><span class="op">,</span> <span class="dv">4</span><span class="op">,</span> <span class="dv">5</span>]<span class="op">;</span></span>
 <span id="cb9-3"><a href=""></a>    <span class="pp">println!</span>(<span class="st">"Vector: {:?}"</span><span class="op">,</span> v)<span class="op">;</span></span>
-<span id="cb9-4"><a href=""></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-4"><a href=""></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="vectors-1" class="slide level2">
@@ -607,15 +609,20 @@
 <p><strong>Cannot compile</strong></p>
 </div>
 <div class="callout-content">
-<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb10-1"><a href=""></a><span class="kw">fn</span> main() <span class="op">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb10-1"><a href=""></a><span class="kw">fn</span> main() <span class="op">{</span></span>
 <span id="cb10-2"><a href=""></a>    <span class="kw">let</span> x <span class="op">=</span> <span class="dt">Vec</span><span class="pp">::</span>new()<span class="op">;</span></span>
 <span id="cb10-3"><a href=""></a>    <span class="pp">println!</span>(<span class="st">"x is empty: {}"</span><span class="op">,</span> x<span class="op">.</span>is_empty())<span class="op">;</span></span>
-<span id="cb10-4"><a href=""></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-4"><a href=""></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
 </div>
-</section>
+<div class="fragment">
+
+</div>
+<aside><div>
+<p><code>&lt;T&gt;</code> is a placeholder for any <em>type</em>. Mostly used as a shorthand.</p>
+</div></aside></section>
 <section id="array-vector-methods" class="slide level2">
 <h2>Array / Vector methods</h2>
 <ul>
@@ -623,10 +630,10 @@
 <li class="fragment"><code>.is_empty()</code></li>
 </ul>
 <div class="fragment">
-<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb11-1"><a href=""></a><span class="kw">fn</span> main() <span class="op">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb11-1"><a href=""></a><span class="kw">fn</span> main() <span class="op">{</span></span>
 <span id="cb11-2"><a href=""></a>    <span class="kw">let</span> x<span class="op">:</span> <span class="dt">Vec</span><span class="op">&lt;</span><span class="dt">f64</span><span class="op">&gt;</span> <span class="op">=</span> <span class="dt">Vec</span><span class="pp">::</span>new()<span class="op">;</span></span>
 <span id="cb11-3"><a href=""></a>    <span class="pp">println!</span>(<span class="st">"x is empty: {}"</span><span class="op">,</span> x<span class="op">.</span>is_empty())<span class="op">;</span></span>
-<span id="cb11-4"><a href=""></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb11-4"><a href=""></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="exercise-3" class="slide level2">
@@ -655,9 +662,9 @@
 <li class="fragment">Used to iterate through a <strong>collection</strong></li>
 </ul>
 <div class="fragment">
-<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb12-1"><a href=""></a><span class="cf">for</span> value <span class="kw">in</span> collection <span class="op">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb12-1"><a href=""></a><span class="cf">for</span> value <span class="kw">in</span> collection <span class="op">{</span></span>
 <span id="cb12-2"><a href=""></a>    <span class="co">// do something with value</span></span>
-<span id="cb12-3"><a href=""></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb12-3"><a href=""></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="for-loop-syntax-1" class="slide level2">
@@ -665,12 +672,12 @@
 <ul>
 <li class="fragment">Each iteration takes on the value of the name provided to <code>in</code></li>
 </ul>
-<div class="sourceCode" id="cb13"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb13-1"><a href=""></a><span class="kw">fn</span> main() <span class="op">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb13-1"><a href=""></a><span class="kw">fn</span> main() <span class="op">{</span></span>
 <span id="cb13-2"><a href=""></a>    <span class="kw">let</span> nums <span class="op">=</span> <span class="pp">vec!</span>[<span class="dv">1</span><span class="op">,</span> <span class="dv">2</span><span class="op">,</span> <span class="dv">3</span>]<span class="op">;</span></span>
 <span id="cb13-3"><a href=""></a>    <span class="cf">for</span> n <span class="kw">in</span> nums <span class="op">{</span></span>
 <span id="cb13-4"><a href=""></a>        <span class="pp">println!</span>(<span class="st">"n is: {}"</span><span class="op">,</span> n)<span class="op">;</span></span>
 <span id="cb13-5"><a href=""></a>    <span class="op">}</span></span>
-<span id="cb13-6"><a href=""></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb13-6"><a href=""></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="scope" class="slide level2">
 <h2>Scope</h2>
@@ -688,14 +695,14 @@
 <p><strong>This does compile</strong></p>
 </div>
 <div class="callout-content">
-<div class="sourceCode" id="cb14"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb14-1"><a href=""></a><span class="kw">fn</span> main() <span class="op">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb14-1"><a href=""></a><span class="kw">fn</span> main() <span class="op">{</span></span>
 <span id="cb14-2"><a href=""></a>    <span class="kw">let</span> greeting <span class="op">=</span> <span class="st">"Hi"</span><span class="op">;</span></span>
 <span id="cb14-3"><a href=""></a>    <span class="kw">let</span> names <span class="op">=</span> <span class="pp">vec!</span>[<span class="st">"Alice"</span><span class="op">,</span> <span class="st">"Bob"</span>]<span class="op">;</span></span>
 <span id="cb14-4"><a href=""></a></span>
 <span id="cb14-5"><a href=""></a>    <span class="cf">for</span> name <span class="kw">in</span> names <span class="op">{</span></span>
 <span id="cb14-6"><a href=""></a>        <span class="pp">println!</span>(<span class="st">"{greeting}, {name}!"</span>)<span class="op">;</span></span>
 <span id="cb14-7"><a href=""></a>    <span class="op">}</span></span>
-<span id="cb14-8"><a href=""></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb14-8"><a href=""></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -710,7 +717,7 @@
 <p><strong>This does not compile!</strong></p>
 </div>
 <div class="callout-content">
-<div class="sourceCode" id="cb15"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb15-1"><a href=""></a><span class="kw">fn</span> main() <span class="op">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb15-1"><a href=""></a><span class="kw">fn</span> main() <span class="op">{</span></span>
 <span id="cb15-2"><a href=""></a>    <span class="kw">let</span> numbers <span class="op">=</span> <span class="pp">vec!</span>[<span class="dv">1</span><span class="op">,</span> <span class="dv">2</span><span class="op">,</span> <span class="dv">3</span>]<span class="op">;</span></span>
 <span id="cb15-3"><a href=""></a></span>
 <span id="cb15-4"><a href=""></a>    <span class="cf">for</span> n <span class="kw">in</span> numbers <span class="op">{</span></span>
@@ -720,7 +727,7 @@
 <span id="cb15-8"><a href=""></a></span>
 <span id="cb15-9"><a href=""></a>    <span class="co">// ❌ `doubled` doesn't exist here</span></span>
 <span id="cb15-10"><a href=""></a>    <span class="co">// println!("Last doubled: {}", doubled);</span></span>
-<span id="cb15-11"><a href=""></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb15-11"><a href=""></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -729,6 +736,11 @@
 </section></section>
 <section id="exercise-4" class="title-slide slide level1 center">
 <h1>Exercise</h1>
+
+</section>
+
+<section id="break-5-minutes" class="title-slide slide level1 center">
+<h1>Break 5 minutes</h1>
 
 </section>
 
@@ -759,14 +771,14 @@
 <li class="fragment">Can override value use <code>var = new_val</code> <em>without</em> <code>let</code></li>
 </ul>
 <div class="fragment">
-<div class="sourceCode" id="cb16"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb16-1"><a href=""></a><span class="kw">let</span> <span class="kw">mut</span> x <span class="op">=</span> <span class="dv">5</span><span class="op">;</span></span>
-<span id="cb16-2"><a href=""></a>x <span class="op">=</span> <span class="dv">6</span><span class="op">;</span> <span class="co">// ✅ works because x is mutable</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb16-1"><a href=""></a><span class="kw">let</span> <span class="kw">mut</span> x <span class="op">=</span> <span class="dv">5</span><span class="op">;</span></span>
+<span id="cb16-2"><a href=""></a>x <span class="op">=</span> <span class="dv">6</span><span class="op">;</span> <span class="co">// ✅ works because x is mutable</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="example" class="slide level2">
 <h2>Example</h2>
 <p>Revisiting our loop from earlier:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb17-1"><a href=""></a><span class="kw">fn</span> main() <span class="op">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb17-1"><a href=""></a><span class="kw">fn</span> main() <span class="op">{</span></span>
 <span id="cb17-2"><a href=""></a>    <span class="co">// create a vector</span></span>
 <span id="cb17-3"><a href=""></a>    <span class="kw">let</span> numbers <span class="op">=</span> <span class="pp">vec!</span>[<span class="dv">1</span><span class="op">,</span> <span class="dv">2</span><span class="op">,</span> <span class="dv">3</span>]<span class="op">;</span></span>
 <span id="cb17-4"><a href=""></a>    <span class="co">// create a mutable value</span></span>
@@ -781,7 +793,7 @@
 <span id="cb17-13"><a href=""></a>    <span class="co">// ✅ compiles because `doubled` was declared</span></span>
 <span id="cb17-14"><a href=""></a>    <span class="co">// _outside_ of the inner loop scope</span></span>
 <span id="cb17-15"><a href=""></a>    <span class="pp">println!</span>(<span class="st">"Last doubled: {}"</span><span class="op">,</span> doubled)<span class="op">;</span></span>
-<span id="cb17-16"><a href=""></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb17-16"><a href=""></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section></section>
 <section id="exercise-5" class="title-slide slide level1 center">
 <h1>Exercise</h1>
@@ -814,32 +826,32 @@
 <li class="fragment"><code>.push()</code> adds an element to the end of a vector.</li>
 </ul>
 <div class="fragment">
-<div class="sourceCode" id="cb18"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb18-1"><a href=""></a><span class="kw">fn</span> main() <span class="op">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb18-1"><a href=""></a><span class="kw">fn</span> main() <span class="op">{</span></span>
 <span id="cb18-2"><a href=""></a>    <span class="kw">let</span> <span class="kw">mut</span> names <span class="op">=</span> <span class="dt">Vec</span><span class="pp">::</span>new()<span class="op">;</span></span>
 <span id="cb18-3"><a href=""></a>    names<span class="op">.</span>push(<span class="st">"Alice"</span>)<span class="op">;</span></span>
 <span id="cb18-4"><a href=""></a>    names<span class="op">.</span>push(<span class="st">"Bob"</span>)<span class="op">;</span></span>
 <span id="cb18-5"><a href=""></a>    <span class="pp">println!</span>(<span class="st">"{:?}"</span><span class="op">,</span> names)<span class="op">;</span></span>
-<span id="cb18-6"><a href=""></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb18-6"><a href=""></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="clearing-vectors" class="slide level2">
 <h2>Clearing vectors</h2>
 <p>You can remove all elements from a vector using <code>.clear()</code>:</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb19-1"><a href=""></a><span class="kw">fn</span> main() <span class="op">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb19-1"><a href=""></a><span class="kw">fn</span> main() <span class="op">{</span></span>
 <span id="cb19-2"><a href=""></a>    <span class="kw">let</span> <span class="kw">mut</span> nums <span class="op">=</span> <span class="pp">vec!</span>[<span class="dv">1</span><span class="op">,</span> <span class="dv">2</span><span class="op">,</span> <span class="dv">3</span>]<span class="op">;</span></span>
 <span id="cb19-3"><a href=""></a>    nums<span class="op">.</span>clear()<span class="op">;</span></span>
 <span id="cb19-4"><a href=""></a>    <span class="pp">println!</span>(<span class="st">"{:?}"</span><span class="op">,</span> nums)<span class="op">;</span> <span class="co">// prints []</span></span>
-<span id="cb19-5"><a href=""></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb19-5"><a href=""></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="sorting-vectors" class="slide level2">
 <h2>Sorting vectors</h2>
 <p>Use <code>.sort()</code> to sort a vector. Important to note that not all types can be sorted.</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb20-1"><a href=""></a><span class="kw">fn</span> main() <span class="op">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb20-1"><a href=""></a><span class="kw">fn</span> main() <span class="op">{</span></span>
 <span id="cb20-2"><a href=""></a>    <span class="kw">let</span> <span class="kw">mut</span> x <span class="op">=</span> <span class="pp">vec!</span>[<span class="dv">11</span><span class="op">,</span> <span class="dv">3</span><span class="op">,</span> <span class="dv">7</span><span class="op">,</span> <span class="dv">10</span><span class="op">,</span> <span class="dv">1</span>]<span class="op">;</span></span>
 <span id="cb20-3"><a href=""></a>    <span class="pp">println!</span>(<span class="st">"x before sorting: {x:?}"</span>)<span class="op">;</span></span>
 <span id="cb20-4"><a href=""></a>    x<span class="op">.</span>sort()<span class="op">;</span></span>
 <span id="cb20-5"><a href=""></a>    <span class="pp">println!</span>(<span class="st">"x after sorting:  {x:?}"</span>)<span class="op">;</span></span>
-<span id="cb20-6"><a href=""></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb20-6"><a href=""></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code>x before sorting: [11, 3, 7, 10, 1]
 x after sorting:  [1, 3, 7, 10, 11]</code></pre>
 </section>
@@ -852,14 +864,14 @@ x after sorting:  [1, 3, 7, 10, 11]</code></pre>
 <li class="fragment"><code>b</code> can no longer be used.</li>
 </ul>
 <div class="fragment">
-<div class="sourceCode" id="cb22"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb22-1"><a href=""></a><span class="kw">fn</span> main() <span class="op">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb22-1"><a href=""></a><span class="kw">fn</span> main() <span class="op">{</span></span>
 <span id="cb22-2"><a href=""></a>    <span class="kw">let</span> <span class="kw">mut</span> a <span class="op">=</span> <span class="pp">vec!</span>[<span class="dv">1</span><span class="op">,</span> <span class="dv">2</span>]<span class="op">;</span></span>
 <span id="cb22-3"><a href=""></a>    <span class="kw">let</span> b <span class="op">=</span> <span class="pp">vec!</span>[<span class="dv">3</span><span class="op">,</span> <span class="dv">4</span>]<span class="op">;</span></span>
 <span id="cb22-4"><a href=""></a>    <span class="co">// note that we don't assign.</span></span>
 <span id="cb22-5"><a href=""></a>    <span class="co">// Instead, `a` is modified in place</span></span>
 <span id="cb22-6"><a href=""></a>    a<span class="op">.</span>extend(b)<span class="op">;</span></span>
 <span id="cb22-7"><a href=""></a>    <span class="pp">println!</span>(<span class="st">"{:?}"</span><span class="op">,</span> a)<span class="op">;</span> <span class="co">// prints [1, 2, 3, 4]</span></span>
-<span id="cb22-8"><a href=""></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb22-8"><a href=""></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section></section>
 <section id="exercise-6" class="title-slide slide level1 center">
@@ -893,10 +905,10 @@ x after sorting:  [1, 3, 7, 10, 11]</code></pre>
 <li class="fragment">Arguments are typed</li>
 </ul>
 <div class="fragment">
-<div class="sourceCode" id="cb23"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb23-1"><a href=""></a><span class="kw">fn</span> name_of_function(arg1<span class="op">:</span> ArgType) <span class="op">-&gt;</span> ReturnType <span class="op">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb23-1"><a href=""></a><span class="kw">fn</span> name_of_function(arg1<span class="op">:</span> ArgType) <span class="op">-&gt;</span> ReturnType <span class="op">{</span></span>
 <span id="cb23-2"><a href=""></a>    <span class="co">// function body</span></span>
 <span id="cb23-3"><a href=""></a>    my_return_object</span>
-<span id="cb23-4"><a href=""></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb23-4"><a href=""></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section></section>
 <section>
@@ -908,13 +920,13 @@ x after sorting:  [1, 3, 7, 10, 11]</code></pre>
 <h2>Example</h2>
 <div class="columns">
 <div class="column">
-<div class="sourceCode" id="cb24"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb24-1"><a href=""></a><span class="kw">fn</span> is_even(x<span class="op">:</span> <span class="dt">i32</span>) <span class="op">-&gt;</span> <span class="dt">bool</span> <span class="op">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb24-1"><a href=""></a><span class="kw">fn</span> is_even(x<span class="op">:</span> <span class="dt">i32</span>) <span class="op">-&gt;</span> <span class="dt">bool</span> <span class="op">{</span></span>
 <span id="cb24-2"><a href=""></a>    x <span class="op">%</span> <span class="dv">2</span> <span class="op">==</span> <span class="dv">0</span></span>
-<span id="cb24-3"><a href=""></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb24-3"><a href=""></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div><div class="column">
-<div class="sourceCode" id="cb25"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb25-1"><a href=""></a><span class="kw">fn</span> is_odd(x<span class="op">:</span> <span class="dt">i32</span>) <span class="op">-&gt;</span> <span class="dt">bool</span> <span class="op">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb25-1"><a href=""></a><span class="kw">fn</span> is_odd(x<span class="op">:</span> <span class="dt">i32</span>) <span class="op">-&gt;</span> <span class="dt">bool</span> <span class="op">{</span></span>
 <span id="cb25-2"><a href=""></a>    <span class="op">!</span>is_even(x)</span>
-<span id="cb25-3"><a href=""></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb25-3"><a href=""></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></div>
 </section></section>
 <section id="exercise-7" class="title-slide slide level1 center">
@@ -958,11 +970,11 @@ x after sorting:  [1, 3, 7, 10, 11]</code></pre>
 <li class="fragment">Variable <strong>moved</strong> when used by a function or method</li>
 </ul>
 <div class="fragment">
-<div class="sourceCode" id="cb26"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb26-1"><a href=""></a><span class="kw">fn</span> main() <span class="op">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb26-1"><a href=""></a><span class="kw">fn</span> main() <span class="op">{</span></span>
 <span id="cb26-2"><a href=""></a>    <span class="kw">let</span> x <span class="op">=</span> <span class="pp">vec!</span>[<span class="dv">1.0</span><span class="op">,</span> <span class="dv">2.0</span><span class="op">,</span> <span class="dv">3.0</span>]<span class="op">;</span></span>
 <span id="cb26-3"><a href=""></a>    <span class="kw">let</span> y <span class="op">=</span> x<span class="op">;</span> <span class="co">// ⬅️ ownership moved</span></span>
 <span id="cb26-4"><a href=""></a>    <span class="pp">println!</span>(<span class="st">"{:?}"</span><span class="op">,</span> x)<span class="op">;</span> <span class="co">// ❌ error: value used after move</span></span>
-<span id="cb26-5"><a href=""></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb26-5"><a href=""></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ul>
 <li class="fragment"><code>x</code> was moved and cannot be used again</li>
 </ul>
@@ -1000,10 +1012,10 @@ x after sorting:  [1, 3, 7, 10, 11]</code></pre>
 <p><strong>Cannot compile</strong></p>
 </div>
 <div class="callout-content">
-<div class="sourceCode" id="cb27"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb27-1"><a href=""></a><span class="kw">let</span> x  <span class="op">=</span> <span class="pp">v!</span>[<span class="dv">0.0</span><span class="op">,</span> <span class="dv">3.14</span><span class="op">,</span> <span class="dv">10.1</span><span class="op">,</span> <span class="dv">44.8</span>]<span class="op">;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb27-1"><a href=""></a><span class="kw">let</span> x  <span class="op">=</span> <span class="pp">vec!</span>[<span class="dv">0.0</span><span class="op">,</span> <span class="dv">3.14</span><span class="op">,</span> <span class="dv">10.1</span><span class="op">,</span> <span class="dv">44.8</span>]<span class="op">;</span></span>
 <span id="cb27-2"><a href=""></a></span>
 <span id="cb27-3"><a href=""></a><span class="kw">let</span> avg1 <span class="op">=</span> mean(x)<span class="op">;</span> <span class="co">// ⬅️ x moved here!</span></span>
-<span id="cb27-4"><a href=""></a><span class="kw">let</span> avg2 <span class="op">=</span> mean(x)<span class="op">;</span> <span class="co">// ❌ compiler error</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb27-4"><a href=""></a><span class="kw">let</span> avg2 <span class="op">=</span> mean(x)<span class="op">;</span> <span class="co">// ❌ compiler error</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -1017,10 +1029,10 @@ x after sorting:  [1, 3, 7, 10, 11]</code></pre>
 <p><strong>Can compile</strong></p>
 </div>
 <div class="callout-content">
-<div class="sourceCode" id="cb28"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb28-1"><a href=""></a><span class="kw">let</span> x  <span class="op">=</span> <span class="pp">v!</span>[<span class="dv">0.0</span><span class="op">,</span> <span class="dv">3.14</span><span class="op">,</span> <span class="dv">10.1</span><span class="op">,</span> <span class="dv">44.8</span>]<span class="op">;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb28"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb28-1"><a href=""></a><span class="kw">let</span> x  <span class="op">=</span> <span class="pp">vec!</span>[<span class="dv">0.0</span><span class="op">,</span> <span class="dv">3.14</span><span class="op">,</span> <span class="dv">10.1</span><span class="op">,</span> <span class="dv">44.8</span>]<span class="op">;</span></span>
 <span id="cb28-2"><a href=""></a></span>
 <span id="cb28-3"><a href=""></a><span class="kw">let</span> avg1 <span class="op">=</span> mean(x<span class="op">.</span>clone())<span class="op">;</span> <span class="co">// ⬅️ x cloned here!</span></span>
-<span id="cb28-4"><a href=""></a><span class="kw">let</span> avg2 <span class="op">=</span> mean(x)<span class="op">;</span> <span class="co">// ✅ compiler happy</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb28-4"><a href=""></a><span class="kw">let</span> avg2 <span class="op">=</span> mean(x)<span class="op">;</span> <span class="co">// ✅ compiler happy</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -1034,11 +1046,11 @@ x after sorting:  [1, 3, 7, 10, 11]</code></pre>
 <li class="fragment">Create a reference (borrow) with <code>&amp;</code></li>
 </ul>
 <div class="fragment">
-<div class="sourceCode" id="cb29"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb29-1"><a href=""></a><span class="kw">fn</span> main() <span class="op">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb29"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb29-1"><a href=""></a><span class="kw">fn</span> main() <span class="op">{</span></span>
 <span id="cb29-2"><a href=""></a>    <span class="kw">let</span> x <span class="op">=</span> <span class="pp">vec!</span>[<span class="dv">1.0</span><span class="op">,</span> <span class="dv">2.0</span><span class="op">,</span> <span class="dv">3.0</span>]<span class="op">;</span></span>
 <span id="cb29-3"><a href=""></a>    <span class="kw">let</span> avg <span class="op">=</span> mean(<span class="op">&amp;</span>x)<span class="op">;</span> <span class="co">// 👈 borrowing `x`</span></span>
 <span id="cb29-4"><a href=""></a>    <span class="pp">println!</span>(<span class="st">"x is still usable: {:?}"</span><span class="op">,</span> x)<span class="op">;</span></span>
-<span id="cb29-5"><a href=""></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb29-5"><a href=""></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="slices" class="slide level2">
@@ -1055,11 +1067,11 @@ x after sorting:  [1, 3, 7, 10, 11]</code></pre>
 <h2>Example: slices</h2>
 <p><code>[f64; N]</code> and a <code>Vec&lt;f64&gt;</code> can be a <code>&amp;[f64]</code></p>
 <div class="fragment">
-<div class="sourceCode" id="cb30"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb30-1"><a href=""></a><span class="kw">let</span> x <span class="op">=</span> [<span class="dv">0.0</span><span class="op">,</span> <span class="dv">20.0</span><span class="op">,</span> <span class="dv">742.3</span>]<span class="op">;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb30"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb30-1"><a href=""></a><span class="kw">let</span> x <span class="op">=</span> [<span class="dv">0.0</span><span class="op">,</span> <span class="dv">20.0</span><span class="op">,</span> <span class="dv">742.3</span>]<span class="op">;</span></span>
 <span id="cb30-2"><a href=""></a><span class="kw">let</span> y <span class="op">=</span> <span class="pp">vec!</span>[<span class="dv">1.0</span><span class="op">,</span> <span class="dv">2.0</span><span class="op">,</span> <span class="dv">3.0</span>]<span class="op">;</span></span>
 <span id="cb30-3"><a href=""></a></span>
 <span id="cb30-4"><a href=""></a><span class="kw">let</span> avg_x <span class="op">=</span> mean(<span class="op">&amp;</span>x)</span>
-<span id="cb30-5"><a href=""></a><span class="kw">let</span> avg_y <span class="op">=</span> mean(<span class="op">&amp;</span>y)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb30-5"><a href=""></a><span class="kw">let</span> avg_y <span class="op">=</span> mean(<span class="op">&amp;</span>y)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="slices-1" class="slide level2">
@@ -1118,7 +1130,7 @@ x after sorting:  [1, 3, 7, 10, 11]</code></pre>
 <li class="fragment"><code>for xi in x</code> is identical to <code>for xi in x.into_iter()</code></li>
 </ul>
 <div class="fragment">
-<div class="sourceCode" id="cb31"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb31-1"><a href=""></a><span class="kw">fn</span> main() <span class="op">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb31"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb31-1"><a href=""></a><span class="kw">fn</span> main() <span class="op">{</span></span>
 <span id="cb31-2"><a href=""></a>    <span class="kw">let</span> nums <span class="op">=</span> <span class="pp">vec!</span>[<span class="dv">3</span><span class="op">,</span> <span class="dv">6</span><span class="op">,</span> <span class="dv">9</span>]<span class="op">;</span></span>
 <span id="cb31-3"><a href=""></a></span>
 <span id="cb31-4"><a href=""></a>    <span class="cf">for</span> n <span class="kw">in</span> nums<span class="op">.</span>into_iter() <span class="op">{</span></span>
@@ -1127,7 +1139,7 @@ x after sorting:  [1, 3, 7, 10, 11]</code></pre>
 <span id="cb31-7"><a href=""></a></span>
 <span id="cb31-8"><a href=""></a>    <span class="co">// nums has been moved ❌</span></span>
 <span id="cb31-9"><a href=""></a>    <span class="co">// println!("nums: {:?}", nums);</span></span>
-<span id="cb31-10"><a href=""></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb31-10"><a href=""></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="borrowing-iterators" class="slide level2">
@@ -1137,7 +1149,7 @@ x after sorting:  [1, 3, 7, 10, 11]</code></pre>
 <li class="fragment">Each item is a <code>reference()</code></li>
 </ul>
 <div class="fragment">
-<div class="sourceCode" id="cb32"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb32-1"><a href=""></a><span class="kw">fn</span> main() <span class="op">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb32"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb32-1"><a href=""></a><span class="kw">fn</span> main() <span class="op">{</span></span>
 <span id="cb32-2"><a href=""></a>    <span class="kw">let</span> nums <span class="op">=</span> <span class="pp">vec!</span>[<span class="dv">3</span><span class="op">,</span> <span class="dv">6</span><span class="op">,</span> <span class="dv">9</span>]<span class="op">;</span></span>
 <span id="cb32-3"><a href=""></a></span>
 <span id="cb32-4"><a href=""></a>    <span class="cf">for</span> n <span class="kw">in</span> nums<span class="op">.</span>iter() <span class="op">{</span></span>
@@ -1145,7 +1157,7 @@ x after sorting:  [1, 3, 7, 10, 11]</code></pre>
 <span id="cb32-6"><a href=""></a>    <span class="op">}</span></span>
 <span id="cb32-7"><a href=""></a>    <span class="co">// nums is still usable ✅</span></span>
 <span id="cb32-8"><a href=""></a>    <span class="pp">println!</span>(<span class="st">"nums: {:?}"</span><span class="op">,</span> nums)<span class="op">;</span></span>
-<span id="cb32-9"><a href=""></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb32-9"><a href=""></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="basic-iterator-methods" class="slide level2">
@@ -1157,12 +1169,12 @@ x after sorting:  [1, 3, 7, 10, 11]</code></pre>
 <li class="fragment"><code>.enumerate()</code> — Pairs each value with its index.</li>
 </ul>
 <div class="fragment">
-<div class="sourceCode" id="cb33"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb33-1"><a href=""></a><span class="kw">fn</span> main() <span class="op">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb33"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb33-1"><a href=""></a><span class="kw">fn</span> main() <span class="op">{</span></span>
 <span id="cb33-2"><a href=""></a>    <span class="kw">let</span> nums <span class="op">=</span> <span class="pp">vec!</span>[<span class="dv">2</span><span class="op">,</span> <span class="dv">4</span><span class="op">,</span> <span class="dv">8</span>]<span class="op">;</span></span>
 <span id="cb33-3"><a href=""></a></span>
 <span id="cb33-4"><a href=""></a>    <span class="kw">let</span> total<span class="op">:</span> <span class="dt">i32</span> <span class="op">=</span> nums<span class="op">.</span>iter()<span class="op">.</span>sum()<span class="op">;</span> <span class="co">// requires type annotation</span></span>
 <span id="cb33-5"><a href=""></a>    <span class="pp">println!</span>(<span class="st">"Sum is: {}"</span><span class="op">,</span> total)<span class="op">;</span></span>
-<span id="cb33-6"><a href=""></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb33-6"><a href=""></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="enumerated-iterators" class="slide level2">
@@ -1173,7 +1185,7 @@ x after sorting:  [1, 3, 7, 10, 11]</code></pre>
 <li class="fragment">Each element is a <strong>tuple</strong> with <code>(i, xi)</code></li>
 </ul>
 <div class="fragment">
-<div class="sourceCode" id="cb34"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb34-1"><a href=""></a><span class="kw">fn</span> is_even(x<span class="op">:</span> <span class="dt">i32</span>) <span class="op">-&gt;</span> <span class="dt">bool</span> <span class="op">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb34"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb34-1"><a href=""></a><span class="kw">fn</span> is_even(x<span class="op">:</span> <span class="dt">i32</span>) <span class="op">-&gt;</span> <span class="dt">bool</span> <span class="op">{</span></span>
 <span id="cb34-2"><a href=""></a>    x <span class="op">%</span> <span class="dv">2</span> <span class="op">==</span> <span class="dv">0</span></span>
 <span id="cb34-3"><a href=""></a><span class="op">}</span></span>
 <span id="cb34-4"><a href=""></a></span>
@@ -1185,11 +1197,16 @@ x after sorting:  [1, 3, 7, 10, 11]</code></pre>
 <span id="cb34-10"><a href=""></a>            <span class="pp">println!</span>(<span class="st">"i is even with value {xi}"</span>)<span class="op">;</span></span>
 <span id="cb34-11"><a href=""></a>        <span class="op">}</span></span>
 <span id="cb34-12"><a href=""></a>    <span class="op">}</span></span>
-<span id="cb34-13"><a href=""></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb34-13"><a href=""></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section></section>
 <section id="exercises-2" class="title-slide slide level1 center">
 <h1>Exercises</h1>
+
+</section>
+
+<section id="break-5-minutes-1" class="title-slide slide level1 center">
+<h1>Break 5 minutes</h1>
 
 </section>
 
@@ -1230,9 +1247,9 @@ x after sorting:  [1, 3, 7, 10, 11]</code></pre>
 <li class="fragment">returns another iterator</li>
 </ul>
 <div class="fragment">
-<div class="sourceCode" id="cb35"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb35-1"><a href=""></a><span class="kw">let</span> x <span class="op">=</span> <span class="pp">vec!</span>[<span class="dv">5.9f64</span><span class="op">,</span> <span class="dv">6.8</span><span class="op">,</span> <span class="dv">4.5</span><span class="op">,</span> <span class="dv">7.3</span><span class="op">,</span> <span class="dv">6.2</span>]<span class="op">;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb35"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb35-1"><a href=""></a><span class="kw">let</span> x <span class="op">=</span> <span class="pp">vec!</span>[<span class="dv">5.9f64</span><span class="op">,</span> <span class="dv">6.8</span><span class="op">,</span> <span class="dv">4.5</span><span class="op">,</span> <span class="dv">7.3</span><span class="op">,</span> <span class="dv">6.2</span>]<span class="op">;</span></span>
 <span id="cb35-2"><a href=""></a></span>
-<span id="cb35-3"><a href=""></a>x<span class="op">.</span>iter()<span class="op">.</span>map(<span class="op">|</span>xi<span class="op">|</span> xi<span class="op">.</span>powi(<span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb35-3"><a href=""></a>x<span class="op">.</span>iter()<span class="op">.</span>map(<span class="op">|</span>xi<span class="op">|</span> xi<span class="op">.</span>powi(<span class="dv">2</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="closures" class="slide level2">
@@ -1243,12 +1260,12 @@ x after sorting:  [1, 3, 7, 10, 11]</code></pre>
 <li class="fragment">Format <code>|arg| expression</code></li>
 </ul>
 <div class="fragment">
-<div class="sourceCode" id="cb36"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb36-1"><a href=""></a>x</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb36"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb36-1"><a href=""></a>x</span>
 <span id="cb36-2"><a href=""></a>    <span class="op">.</span>iter()</span>
 <span id="cb36-3"><a href=""></a>    <span class="op">.</span>map(<span class="op">|</span>xi<span class="op">|</span> <span class="op">{</span></span>
 <span id="cb36-4"><a href=""></a>        <span class="kw">let</span> squared <span class="op">=</span> xi<span class="op">.</span>powi(<span class="dv">2</span>)<span class="op">;</span></span>
 <span id="cb36-5"><a href=""></a>        xi<span class="op">.</span>sqrt()</span>
-<span id="cb36-6"><a href=""></a>    <span class="op">}</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb36-6"><a href=""></a>    <span class="op">}</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="closures-with-enumerated-iterators" class="slide level2">
@@ -1257,12 +1274,12 @@ x after sorting:  [1, 3, 7, 10, 11]</code></pre>
 <li class="fragment">The enumerated tuple can be <strong>destructured</strong></li>
 </ul>
 <div class="fragment">
-<div class="sourceCode" id="cb37"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb37-1"><a href=""></a>x</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb37"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb37-1"><a href=""></a>x</span>
 <span id="cb37-2"><a href=""></a>    <span class="op">.</span>iter()</span>
 <span id="cb37-3"><a href=""></a>    <span class="op">.</span>enumerate()</span>
 <span id="cb37-4"><a href=""></a>    <span class="op">.</span>map(<span class="op">|</span>(i<span class="op">,</span> xi)<span class="op">|</span> <span class="op">{</span></span>
 <span id="cb37-5"><a href=""></a>        <span class="co">// do stuff here</span></span>
-<span id="cb37-6"><a href=""></a>    <span class="op">}</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb37-6"><a href=""></a>    <span class="op">}</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="collecting-results" class="slide level2">
@@ -1275,7 +1292,7 @@ x after sorting:  [1, 3, 7, 10, 11]</code></pre>
 <li class="fragment">Need to specify the type</li>
 </ul>
 <div class="fragment">
-<div class="sourceCode" id="cb38"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb38-1"><a href=""></a><span class="kw">let</span> x_squared<span class="op">:</span> <span class="dt">Vec</span><span class="op">&lt;</span><span class="dt">f64</span><span class="op">&gt;</span> <span class="op">=</span> x<span class="op">.</span>iter()<span class="op">.</span>map(<span class="op">|</span>xi<span class="op">|</span> xi<span class="op">.</span>powi(<span class="dv">2</span>))<span class="op">.</span>collect()<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb38"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb38-1"><a href=""></a><span class="kw">let</span> x_squared<span class="op">:</span> <span class="dt">Vec</span><span class="op">&lt;</span><span class="dt">f64</span><span class="op">&gt;</span> <span class="op">=</span> x<span class="op">.</span>iter()<span class="op">.</span>map(<span class="op">|</span>xi<span class="op">|</span> xi<span class="op">.</span>powi(<span class="dv">2</span>))<span class="op">.</span>collect()<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="turbofish" class="slide level2">
@@ -1286,7 +1303,7 @@ x after sorting:  [1, 3, 7, 10, 11]</code></pre>
 </section>
 <section id="turbofish-example" class="slide level2">
 <h2>Turbofish 🐠💨 Example</h2>
-<div class="sourceCode" id="cb39"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb39-1"><a href=""></a><span class="kw">fn</span> main() <span class="op">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb39"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb39-1"><a href=""></a><span class="kw">fn</span> main() <span class="op">{</span></span>
 <span id="cb39-2"><a href=""></a>    <span class="kw">let</span> nums <span class="op">=</span> <span class="pp">vec!</span>[<span class="dv">1</span><span class="op">,</span> <span class="dv">2</span><span class="op">,</span> <span class="dv">3</span>]<span class="op">;</span></span>
 <span id="cb39-3"><a href=""></a></span>
 <span id="cb39-4"><a href=""></a>    <span class="co">// Add 1 to each element</span></span>
@@ -1295,7 +1312,7 @@ x after sorting:  [1, 3, 7, 10, 11]</code></pre>
 <span id="cb39-7"><a href=""></a>        <span class="op">.</span><span class="pp">collect::</span><span class="op">&lt;</span><span class="dt">Vec</span><span class="op">&lt;</span>_<span class="op">&gt;&gt;</span>()<span class="op">;</span></span>
 <span id="cb39-8"><a href=""></a></span>
 <span id="cb39-9"><a href=""></a>    <span class="pp">println!</span>(<span class="st">"{:?}"</span><span class="op">,</span> incremented)<span class="op">;</span></span>
-<span id="cb39-10"><a href=""></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb39-10"><a href=""></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section></section>
 <section id="exercises-3" class="title-slide slide level1 center">
 <h1>Exercises</h1>
@@ -1326,10 +1343,10 @@ x after sorting:  [1, 3, 7, 10, 11]</code></pre>
 <li class="fragment">Use pascal case</li>
 </ul>
 <div class="fragment">
-<div class="sourceCode" id="cb40"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb40-1"><a href=""></a><span class="kw">struct</span> Person <span class="op">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb40"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb40-1"><a href=""></a><span class="kw">struct</span> Person <span class="op">{</span></span>
 <span id="cb40-2"><a href=""></a>    name<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
 <span id="cb40-3"><a href=""></a>    age<span class="op">:</span> <span class="dt">i32</span></span>
-<span id="cb40-4"><a href=""></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb40-4"><a href=""></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="structs-1" class="slide level2">
@@ -1338,7 +1355,7 @@ x after sorting:  [1, 3, 7, 10, 11]</code></pre>
 <li class="fragment">Constructed using a “literal” syntax</li>
 <li class="fragment">No special behavior and cannot be printed</li>
 </ul>
-<div class="sourceCode" id="cb41"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb41-1"><a href=""></a><span class="kw">struct</span> Person <span class="op">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb41"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb41-1"><a href=""></a><span class="kw">struct</span> Person <span class="op">{</span></span>
 <span id="cb41-2"><a href=""></a>    name<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
 <span id="cb41-3"><a href=""></a>    age<span class="op">:</span> <span class="dt">i32</span></span>
 <span id="cb41-4"><a href=""></a><span class="op">}</span></span>
@@ -1346,7 +1363,7 @@ x after sorting:  [1, 3, 7, 10, 11]</code></pre>
 <span id="cb41-6"><a href=""></a><span class="kw">fn</span> main() <span class="op">{</span></span>
 <span id="cb41-7"><a href=""></a>    <span class="kw">let</span> me <span class="op">=</span> Person <span class="op">{</span> name<span class="op">:</span> <span class="st">"Josiah"</span><span class="op">.</span>to_string()<span class="op">,</span> age<span class="op">:</span> <span class="dv">29</span> <span class="op">};</span></span>
 <span id="cb41-8"><a href=""></a>    <span class="pp">println!</span>(<span class="st">"{me:?}"</span>)<span class="op">;</span></span>
-<span id="cb41-9"><a href=""></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb41-9"><a href=""></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code>error[E0277]: `Person` doesn't implement `Debug`
  --&gt; src/main.rs:8:15
   |
@@ -1361,15 +1378,15 @@ x after sorting:  [1, 3, 7, 10, 11]</code></pre>
 <li class="fragment"><code>Debug</code> is a trait allowing for printing</li>
 <li class="fragment">Use <code>#[derive()]</code> to inherit</li>
 </ul>
-<div class="sourceCode" id="cb43"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb43-1"><a href=""></a><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Debug</span><span class="op">,</span> <span class="bu">Clone</span><span class="at">)]</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb43"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb43-1"><a href=""></a><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Debug</span><span class="op">,</span> <span class="bu">Clone</span><span class="at">)]</span></span>
 <span id="cb43-2"><a href=""></a><span class="kw">struct</span> Person <span class="op">{</span></span>
 <span id="cb43-3"><a href=""></a>    name<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
 <span id="cb43-4"><a href=""></a>    age<span class="op">:</span> <span class="dt">i32</span></span>
-<span id="cb43-5"><a href=""></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb43-5"><a href=""></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="example-3" class="slide level2">
 <h2>Example</h2>
-<div class="sourceCode" id="cb44"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb44-1"><a href=""></a><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Debug</span><span class="op">,</span> <span class="bu">Clone</span><span class="at">)]</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb44"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb44-1"><a href=""></a><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Debug</span><span class="op">,</span> <span class="bu">Clone</span><span class="at">)]</span></span>
 <span id="cb44-2"><a href=""></a><span class="kw">struct</span> Person <span class="op">{</span></span>
 <span id="cb44-3"><a href=""></a>    name<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
 <span id="cb44-4"><a href=""></a>    age<span class="op">:</span> <span class="dt">i32</span></span>
@@ -1378,7 +1395,7 @@ x after sorting:  [1, 3, 7, 10, 11]</code></pre>
 <span id="cb44-7"><a href=""></a><span class="kw">fn</span> main() <span class="op">{</span></span>
 <span id="cb44-8"><a href=""></a>    <span class="kw">let</span> me <span class="op">=</span> Person <span class="op">{</span> name<span class="op">:</span> <span class="st">"Josiah"</span><span class="op">.</span>to_string()<span class="op">,</span> age<span class="op">:</span> <span class="dv">29</span> <span class="op">};</span></span>
 <span id="cb44-9"><a href=""></a>    <span class="pp">println!</span>(<span class="st">"{me:?}"</span>)<span class="op">;</span></span>
-<span id="cb44-10"><a href=""></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb44-10"><a href=""></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code>Person { name: "Josiah", age: 29 }</code></pre>
 </section>
 <section id="accessing-fields" class="slide level2">
@@ -1394,13 +1411,13 @@ x after sorting:  [1, 3, 7, 10, 11]</code></pre>
     let name = me.name;
     println!("{me:?}");
 }</code></pre>
-<div class="sourceCode" id="cb47"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb47-1"><a href=""></a>error[E0382]<span class="op">:</span> borrow of partially moved value<span class="op">:</span> `me`</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb47"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb47-1"><a href=""></a>error[E0382]<span class="op">:</span> borrow of partially moved value<span class="op">:</span> `me`</span>
 <span id="cb47-2"><a href=""></a>  <span class="op">--&gt;</span> src<span class="op">/</span>main<span class="op">.</span>rs<span class="op">:</span><span class="dv">10</span><span class="op">:</span><span class="dv">15</span></span>
 <span id="cb47-3"><a href=""></a>   <span class="op">|</span></span>
 <span id="cb47-4"><a href=""></a><span class="dv">9</span>  <span class="op">|</span>     <span class="kw">let</span> name <span class="op">=</span> me<span class="op">.</span>name<span class="op">;</span></span>
 <span id="cb47-5"><a href=""></a>   <span class="op">|</span>                <span class="op">-------</span> value partially moved here</span>
 <span id="cb47-6"><a href=""></a><span class="dv">10</span> <span class="op">|</span>     <span class="pp">println!</span>(<span class="st">"{me:?}"</span>)<span class="op">;</span></span>
-<span id="cb47-7"><a href=""></a>   <span class="op">|</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb47-7"><a href=""></a>   <span class="op">|</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="destructuring" class="slide level2">
@@ -1411,11 +1428,11 @@ x after sorting:  [1, 3, 7, 10, 11]</code></pre>
 <li class="fragment">Syntax: <code>let StructName { field, field } = variable;</code></li>
 </ul>
 <div class="fragment">
-<div class="sourceCode" id="cb48"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb48-1"><a href=""></a><span class="kw">fn</span> main() <span class="op">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb48"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb48-1"><a href=""></a><span class="kw">fn</span> main() <span class="op">{</span></span>
 <span id="cb48-2"><a href=""></a>    <span class="kw">let</span> me <span class="op">=</span> Person <span class="op">{</span> name<span class="op">:</span> <span class="st">"Josiah"</span><span class="op">.</span>to_string()<span class="op">,</span> age<span class="op">:</span> <span class="dv">29</span> <span class="op">};</span></span>
 <span id="cb48-3"><a href=""></a>    <span class="kw">let</span> Person <span class="op">{</span> name<span class="op">,</span> age <span class="op">}</span> <span class="op">=</span> me<span class="op">;</span></span>
 <span id="cb48-4"><a href=""></a>    <span class="pp">println!</span>(<span class="st">"{name} is {age} years old"</span>)<span class="op">;</span></span>
-<span id="cb48-5"><a href=""></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb48-5"><a href=""></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section></section>
 <section id="exercise-8" class="title-slide slide level1 center">
@@ -1446,8 +1463,8 @@ x after sorting:  [1, 3, 7, 10, 11]</code></pre>
 <li class="fragment">Methods are typically made on instantiations of a variable</li>
 </ul>
 <div class="fragment">
-<div class="sourceCode" id="cb49"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb49-1"><a href=""></a><span class="kw">let</span> me <span class="op">=</span> Person <span class="op">{</span> name<span class="op">:</span> <span class="st">"Josiah"</span><span class="op">.</span>to_string()<span class="op">,</span> age<span class="op">:</span> <span class="dv">29</span> <span class="op">};</span></span>
-<span id="cb49-2"><a href=""></a><span class="kw">let</span> birth_year <span class="op">=</span> me<span class="op">.</span>year_of_birth()<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb49"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb49-1"><a href=""></a><span class="kw">let</span> me <span class="op">=</span> Person <span class="op">{</span> name<span class="op">:</span> <span class="st">"Josiah"</span><span class="op">.</span>to_string()<span class="op">,</span> age<span class="op">:</span> <span class="dv">29</span> <span class="op">};</span></span>
+<span id="cb49-2"><a href=""></a><span class="kw">let</span> birth_year <span class="op">=</span> me<span class="op">.</span>year_of_birth()<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ul>
 <li class="fragment">Sometimes a type has an <strong>associated function</strong> which is called from the type
 <ul>
@@ -1457,7 +1474,7 @@ x after sorting:  [1, 3, 7, 10, 11]</code></pre>
 </ul>
 </div>
 <div class="fragment">
-<div class="sourceCode" id="cb50"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb50-1"><a href=""></a><span class="kw">let</span> me <span class="op">=</span> <span class="pp">Person::</span>new(<span class="st">"Josiah"</span><span class="op">.</span>to_string()<span class="op">,</span> <span class="dv">29</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb50"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb50-1"><a href=""></a><span class="kw">let</span> me <span class="op">=</span> <span class="pp">Person::</span>new(<span class="st">"Josiah"</span><span class="op">.</span>to_string()<span class="op">,</span> <span class="dv">29</span>)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="implementing-methods" class="slide level2">
@@ -1467,11 +1484,11 @@ x after sorting:  [1, 3, 7, 10, 11]</code></pre>
 <li class="fragment">Implement methods using the syntax:</li>
 </ul>
 <div class="fragment">
-<div class="sourceCode" id="cb51"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb51-1"><a href=""></a><span class="kw">impl</span> TypeName <span class="op">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb51"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb51-1"><a href=""></a><span class="kw">impl</span> TypeName <span class="op">{</span></span>
 <span id="cb51-2"><a href=""></a>    <span class="kw">fn</span> method() <span class="op">{</span></span>
 <span id="cb51-3"><a href=""></a>        <span class="pp">todo!</span>()</span>
 <span id="cb51-4"><a href=""></a>    <span class="op">}</span></span>
-<span id="cb51-5"><a href=""></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb51-5"><a href=""></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="associated-functions" class="slide level2">
@@ -1481,11 +1498,11 @@ x after sorting:  [1, 3, 7, 10, 11]</code></pre>
 <li class="fragment">Methods can return <code>Self</code> which refers to the type of the struct</li>
 </ul>
 <div class="fragment">
-<div class="sourceCode" id="cb52"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb52-1"><a href=""></a><span class="kw">impl</span> Person <span class="op">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb52"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb52-1"><a href=""></a><span class="kw">impl</span> Person <span class="op">{</span></span>
 <span id="cb52-2"><a href=""></a>    <span class="kw">fn</span> new(name<span class="op">:</span> <span class="dt">String</span><span class="op">,</span> age<span class="op">:</span> <span class="dt">i32</span>) <span class="op">-&gt;</span> <span class="dt">Self</span> <span class="op">{</span></span>
 <span id="cb52-3"><a href=""></a>        Person <span class="op">{</span> name<span class="op">,</span> age <span class="op">}</span></span>
 <span id="cb52-4"><a href=""></a>    <span class="op">}</span></span>
-<span id="cb52-5"><a href=""></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb52-5"><a href=""></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ul>
 <li class="fragment">Lets us call <code>Person::new()</code></li>
 </ul>
@@ -1498,11 +1515,11 @@ x after sorting:  [1, 3, 7, 10, 11]</code></pre>
 <li class="fragment">Use argument <code>&amp;self</code> creates a <strong>refernce</strong></li>
 <li class="fragment"><code>&amp;self</code> is a reference so inner fields cannot be moved</li>
 </ul>
-<div class="sourceCode" id="cb53"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb53-1"><a href=""></a><span class="kw">impl</span> Person <span class="op">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb53"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb53-1"><a href=""></a><span class="kw">impl</span> Person <span class="op">{</span></span>
 <span id="cb53-2"><a href=""></a>    <span class="kw">fn</span> greet(<span class="op">&amp;</span><span class="kw">self</span>) <span class="op">{</span></span>
 <span id="cb53-3"><a href=""></a>        <span class="pp">println!</span>(<span class="st">"Hello, my name is {} and I am {} years old."</span><span class="op">,</span> <span class="kw">self</span><span class="op">.</span>name<span class="op">,</span> <span class="kw">self</span><span class="op">.</span>age)<span class="op">;</span></span>
 <span id="cb53-4"><a href=""></a>    <span class="op">}</span></span>
-<span id="cb53-5"><a href=""></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb53-5"><a href=""></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="references-to-other-variables" class="slide level2">
 <h2>References to other variables</h2>
@@ -1511,11 +1528,11 @@ x after sorting:  [1, 3, 7, 10, 11]</code></pre>
 <li class="fragment">Refer to <em>other</em> instantiations using <code>&amp;Self</code> or <code>Self</code></li>
 </ul>
 <div class="fragment">
-<div class="sourceCode" id="cb54"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb54-1"><a href=""></a><span class="kw">impl</span> Person <span class="op">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb54"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb54-1"><a href=""></a><span class="kw">impl</span> Person <span class="op">{</span></span>
 <span id="cb54-2"><a href=""></a>    <span class="kw">fn</span> is_older_than(<span class="op">&amp;</span><span class="kw">self</span><span class="op">,</span> other_person<span class="op">:</span> <span class="op">&amp;</span><span class="dt">Self</span>) <span class="op">-&gt;</span> <span class="dt">bool</span> <span class="op">{</span></span>
 <span id="cb54-3"><a href=""></a>        <span class="kw">self</span><span class="op">.</span>age <span class="op">&gt;</span> other_person<span class="op">.</span>age</span>
 <span id="cb54-4"><a href=""></a>    <span class="op">}</span></span>
-<span id="cb54-5"><a href=""></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb54-5"><a href=""></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="mutable-self" class="slide level2">
@@ -1526,7 +1543,7 @@ x after sorting:  [1, 3, 7, 10, 11]</code></pre>
 <li class="fragment">Uses <code>&amp;mut self</code></li>
 </ul>
 <div class="fragment">
-<div class="sourceCode" id="cb55"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb55-1"><a href=""></a><span class="kw">impl</span> Person <span class="op">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb55"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb55-1"><a href=""></a><span class="kw">impl</span> Person <span class="op">{</span></span>
 <span id="cb55-2"><a href=""></a>    <span class="kw">fn</span> rename(<span class="op">&amp;</span><span class="kw">mut</span> <span class="kw">self</span><span class="op">,</span> new_name<span class="op">:</span> <span class="op">&amp;</span><span class="dt">str</span>) <span class="op">{</span></span>
 <span id="cb55-3"><a href=""></a>        <span class="kw">self</span><span class="op">.</span>name <span class="op">=</span> new_name<span class="op">.</span>to_string()<span class="op">;</span></span>
 <span id="cb55-4"><a href=""></a>    <span class="op">}</span></span>
@@ -1534,7 +1551,7 @@ x after sorting:  [1, 3, 7, 10, 11]</code></pre>
 <span id="cb55-6"><a href=""></a>    <span class="kw">fn</span> celebrate_birthday(<span class="op">&amp;</span><span class="kw">mut</span> <span class="kw">self</span>) <span class="op">{</span></span>
 <span id="cb55-7"><a href=""></a>        <span class="kw">self</span><span class="op">.</span>age <span class="op">+=</span> <span class="dv">1</span><span class="op">;</span></span>
 <span id="cb55-8"><a href=""></a>    <span class="op">}</span></span>
-<span id="cb55-9"><a href=""></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb55-9"><a href=""></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section></section>
 <section id="exercise-9" class="title-slide slide level1 center">
@@ -1570,23 +1587,23 @@ x after sorting:  [1, 3, 7, 10, 11]</code></pre>
 <section id="enums-in-r" class="slide level2">
 <h2>Enums in R</h2>
 <p>We use enums <em>all the time</em> in R and almost exclusively as function arguments.</p>
-<div class="sourceCode" id="cb56"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href=""></a><span class="fu">args</span>(cor)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="sourceCode" id="cb57"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href=""></a><span class="cf">function</span>(</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb56"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href=""></a><span class="fu">args</span>(cor)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb57"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href=""></a><span class="cf">function</span>(</span>
 <span id="cb57-2"><a href=""></a>  x, <span class="at">y =</span> <span class="cn">NULL</span>, <span class="at">use =</span> <span class="st">"everything"</span>,</span>
 <span id="cb57-3"><a href=""></a>  <span class="at">method =</span> <span class="fu">c</span>(<span class="st">"pearson"</span>, <span class="st">"kendall"</span>, <span class="st">"spearman"</span>) <span class="co"># 👈🏼 enum!</span></span>
-<span id="cb57-4"><a href=""></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb57-4"><a href=""></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="example-4" class="slide level2">
 <h2>Example</h2>
 <ul>
 <li class="fragment">Enumerate all shapes we will use</li>
 </ul>
-<div class="sourceCode" id="cb58"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb58-1"><a href=""></a><span class="kw">enum</span> Shape <span class="op">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb58"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb58-1"><a href=""></a><span class="kw">enum</span> Shape <span class="op">{</span></span>
 <span id="cb58-2"><a href=""></a>    Triangle<span class="op">,</span></span>
 <span id="cb58-3"><a href=""></a>    Rectangle<span class="op">,</span></span>
 <span id="cb58-4"><a href=""></a>    Pentagon<span class="op">,</span></span>
 <span id="cb58-5"><a href=""></a>    Hexagon<span class="op">,</span></span>
-<span id="cb58-6"><a href=""></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb58-6"><a href=""></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="variant-specific-behavior" class="slide level2">
 <h2>Variant-specific behavior</h2>
@@ -1605,12 +1622,12 @@ x after sorting:  [1, 3, 7, 10, 11]</code></pre>
 <li class="fragment">Ecah arm uses syntax <code>Enum::Variant =&gt; action</code></li>
 </ul>
 <div class="fragment">
-<div class="sourceCode" id="cb59"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb59-1"><a href=""></a><span class="cf">match</span> my_shape <span class="op">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb59"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb59-1"><a href=""></a><span class="cf">match</span> my_shape <span class="op">{</span></span>
 <span id="cb59-2"><a href=""></a>    <span class="pp">Shape::</span>Triangle <span class="op">=&gt;</span> <span class="pp">todo!</span>()<span class="op">,</span></span>
 <span id="cb59-3"><a href=""></a>    <span class="pp">Shape::</span>Rectangle <span class="op">=&gt;</span> <span class="pp">todo!</span>()<span class="op">,</span></span>
 <span id="cb59-4"><a href=""></a>    <span class="pp">Shape::</span>Pentagon <span class="op">=&gt;</span> <span class="pp">todo!</span>()<span class="op">,</span></span>
 <span id="cb59-5"><a href=""></a>    <span class="pp">Shape::</span>Hexagon <span class="op">=&gt;</span> <span class="pp">todo!</span>()<span class="op">,</span></span>
-<span id="cb59-6"><a href=""></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb59-6"><a href=""></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="example-5" class="slide level2">
@@ -1619,14 +1636,14 @@ x after sorting:  [1, 3, 7, 10, 11]</code></pre>
 <li class="fragment">Print the number of vertices per shape</li>
 </ul>
 <div class="fragment">
-<div class="sourceCode" id="cb60"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb60-1"><a href=""></a><span class="kw">let</span> my_shape <span class="op">=</span> <span class="pp">Shape::</span>Triangle<span class="op">;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb60"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb60-1"><a href=""></a><span class="kw">let</span> my_shape <span class="op">=</span> <span class="pp">Shape::</span>Triangle<span class="op">;</span></span>
 <span id="cb60-2"><a href=""></a></span>
 <span id="cb60-3"><a href=""></a><span class="cf">match</span> my_shape <span class="op">{</span></span>
 <span id="cb60-4"><a href=""></a>    <span class="pp">Shape::</span>Triangle <span class="op">=&gt;</span> <span class="pp">println!</span>(<span class="st">"A triangle has 3 vertices"</span>)<span class="op">,</span></span>
 <span id="cb60-5"><a href=""></a>    <span class="pp">Shape::</span>Rectangle <span class="op">=&gt;</span> <span class="pp">println!</span>(<span class="st">"A rectangle has 4 vertices"</span>)<span class="op">,</span></span>
 <span id="cb60-6"><a href=""></a>    <span class="pp">Shape::</span>Pentagon <span class="op">=&gt;</span> <span class="pp">println!</span>(<span class="st">"A pentagon has 5 vertices"</span>)<span class="op">,</span></span>
 <span id="cb60-7"><a href=""></a>    <span class="pp">Shape::</span>Hexagon <span class="op">=&gt;</span> <span class="pp">println!</span>(<span class="st">"A hexagon has 6 vertices"</span>)<span class="op">,</span></span>
-<span id="cb60-8"><a href=""></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb60-8"><a href=""></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="wild-card-matching" class="slide level2">
@@ -1636,10 +1653,10 @@ x after sorting:  [1, 3, 7, 10, 11]</code></pre>
 <li class="fragment"><code>_</code> is a catch all</li>
 </ul>
 <div class="fragment">
-<div class="sourceCode" id="cb61"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb61-1"><a href=""></a><span class="cf">match</span> my_shape <span class="op">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb61"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb61-1"><a href=""></a><span class="cf">match</span> my_shape <span class="op">{</span></span>
 <span id="cb61-2"><a href=""></a>    <span class="pp">Shape::</span>Hexagon <span class="op">=&gt;</span> <span class="pp">println!</span>(<span class="st">"Hexagons are the bestagons"</span>)<span class="op">,</span></span>
 <span id="cb61-3"><a href=""></a>    _ <span class="op">=&gt;</span> <span class="pp">println!</span>(<span class="st">"Every other polygon is mid"</span>)<span class="op">,</span></span>
-<span id="cb61-4"><a href=""></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb61-4"><a href=""></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="enums-can-impl-too" class="slide level2">
@@ -1648,14 +1665,14 @@ x after sorting:  [1, 3, 7, 10, 11]</code></pre>
 <li class="fragment">Enums can have methods too using <code>impl</code></li>
 </ul>
 <div class="fragment">
-<div class="sourceCode" id="cb62"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb62-1"><a href=""></a><span class="kw">impl</span> Shape <span class="op">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb62"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb62-1"><a href=""></a><span class="kw">impl</span> Shape <span class="op">{</span></span>
 <span id="cb62-2"><a href=""></a>    <span class="kw">fn</span> is_bestagon(<span class="op">&amp;</span><span class="kw">self</span>) <span class="op">-&gt;</span> <span class="dt">bool</span> <span class="op">{</span></span>
 <span id="cb62-3"><a href=""></a>        <span class="cf">match</span> <span class="kw">self</span> <span class="op">{</span></span>
 <span id="cb62-4"><a href=""></a>            <span class="dt">Self</span><span class="pp">::</span>Hexagon <span class="op">=&gt;</span> <span class="cn">true</span><span class="op">,</span></span>
 <span id="cb62-5"><a href=""></a>            _ <span class="op">=&gt;</span> <span class="cn">false</span></span>
 <span id="cb62-6"><a href=""></a>        <span class="op">}</span></span>
 <span id="cb62-7"><a href=""></a>    <span class="op">}</span></span>
-<span id="cb62-8"><a href=""></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb62-8"><a href=""></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section></section>
 <section id="exercises-4" class="title-slide slide level1 center">
@@ -1688,10 +1705,10 @@ x after sorting:  [1, 3, 7, 10, 11]</code></pre>
 <li class="fragment">Defined as an <code>enum</code> called <code>Option</code>.</li>
 </ul>
 <div class="fragment">
-<div class="sourceCode" id="cb63"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb63-1"><a href=""></a><span class="kw">enum</span> <span class="dt">Option</span> <span class="op">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb63"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb63-1"><a href=""></a><span class="kw">enum</span> <span class="dt">Option</span> <span class="op">{</span></span>
 <span id="cb63-2"><a href=""></a>    <span class="cn">Some</span>(T)<span class="op">,</span></span>
 <span id="cb63-3"><a href=""></a>    <span class="cn">None</span></span>
-<span id="cb63-4"><a href=""></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb63-4"><a href=""></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="accessing-some-value" class="slide level2">
@@ -1700,13 +1717,13 @@ x after sorting:  [1, 3, 7, 10, 11]</code></pre>
 <li class="fragment">Options are enums and can be matched</li>
 </ul>
 <div class="fragment">
-<div class="sourceCode" id="cb64"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb64-1"><a href=""></a><span class="co">// create an Option&lt;Measure&gt; that contains a value</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb64"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb64-1"><a href=""></a><span class="co">// create an Option&lt;Measure&gt; that contains a value</span></span>
 <span id="cb64-2"><a href=""></a><span class="kw">let</span> measure <span class="op">=</span> <span class="cn">Some</span>(<span class="pp">Measure::</span>Euclidean)<span class="op">;</span></span>
 <span id="cb64-3"><a href=""></a></span>
 <span id="cb64-4"><a href=""></a><span class="cf">match</span> measure <span class="op">{</span></span>
 <span id="cb64-5"><a href=""></a>    <span class="cn">Some</span>(v) <span class="op">=&gt;</span> <span class="pp">println!</span>(<span class="st">"The measure is not missing!"</span>)<span class="op">,</span></span>
 <span id="cb64-6"><a href=""></a>    <span class="cn">None</span> <span class="op">=&gt;</span> <span class="pp">println!</span>(<span class="st">"Oh no! The measure is missing"</span>)<span class="op">,</span></span>
-<span id="cb64-7"><a href=""></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb64-7"><a href=""></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="danger-.unwrap-.expect" class="slide level2">
@@ -1717,11 +1734,176 @@ x after sorting:  [1, 3, 7, 10, 11]</code></pre>
 <li class="fragment">We ignore <code>None</code> which can lead to a <strong>panic</strong></li>
 </ul>
 <div class="fragment">
-<div class="sourceCode" id="cb65"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb65-1"><a href=""></a>thread <span class="ot">'mai</span>n<span class="ch">'</span> panicked at src<span class="op">/</span>main<span class="op">.</span>rs<span class="op">:</span><span class="dv">4</span><span class="op">:</span><span class="dv">41</span><span class="op">:</span></span>
-<span id="cb65-2"><a href=""></a>called `<span class="pp">Option::</span>unwrap()` on a `None` value</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb65"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb65-1"><a href=""></a>thread <span class="ot">'mai</span>n<span class="ch">'</span> panicked at src<span class="op">/</span>main<span class="op">.</span>rs<span class="op">:</span><span class="dv">4</span><span class="op">:</span><span class="dv">41</span><span class="op">:</span></span>
+<span id="cb65-2"><a href=""></a>called `<span class="pp">Option::</span>unwrap()` on a `None` value</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section></section>
 <section id="exercise-10" class="title-slide slide level1 center">
+<h1>Exercise</h1>
+
+</section>
+
+<section>
+<section id="ok-or-err" class="title-slide slide level1 center">
+<h1><code>Ok()</code> or <code>Err()</code>?</h1>
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Objective</strong></p>
+</div>
+<div class="callout-content">
+<p>Understand how Rust handles fallible operations with <code>Result&lt;T, E&gt;</code>. Recover from errors with <code>match</code> and propagate them with <code>?</code>.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="result" class="slide level2">
+<h2>Result</h2>
+<ul>
+<li class="fragment">R uses <em>exceptions</em>—we <code>stop()</code> and throw</li>
+<li class="fragment">Rust has <strong>no exceptions</strong></li>
+<li class="fragment">Errors are <strong>data</strong>: fallible functions return a <code>Result</code></li>
+<li class="fragment">Like <code>Option</code>, <code>Result</code> is just an <code>enum</code></li>
+</ul>
+<div class="fragment">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb66"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb66-1"><a href=""></a><span class="kw">enum</span> <span class="dt">Result</span> <span class="op">{</span></span>
+<span id="cb66-2"><a href=""></a>    <span class="cn">Ok</span>(T)<span class="op">,</span></span>
+<span id="cb66-3"><a href=""></a>    <span class="cn">Err</span>(E)<span class="op">,</span></span>
+<span id="cb66-4"><a href=""></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="t-and-e" class="slide level2">
+<h2><code>T</code> and <code>E</code></h2>
+<ul>
+<li class="fragment"><code>T</code> and <code>E</code> are placeholders for types</li>
+<li class="fragment"><code>T</code> is the value on success—inside <code>Ok(T)</code></li>
+<li class="fragment"><code>E</code> is the value on error—inside <code>Err(E)</code></li>
+</ul>
+<div class="fragment">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb67"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb67-1"><a href=""></a><span class="kw">fn</span> divide(a<span class="op">:</span> <span class="dt">f64</span><span class="op">,</span> b<span class="op">:</span> <span class="dt">f64</span>) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span><span class="dt">f64</span><span class="op">,</span> <span class="dt">String</span><span class="op">&gt;</span> <span class="op">{</span></span>
+<span id="cb67-2"><a href=""></a>    <span class="cf">if</span> b <span class="op">==</span> <span class="dv">0.0</span> <span class="op">{</span></span>
+<span id="cb67-3"><a href=""></a>        <span class="cn">Err</span>(<span class="dt">String</span><span class="pp">::</span>from(<span class="st">"cannot divide by zero"</span>))</span>
+<span id="cb67-4"><a href=""></a>    <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb67-5"><a href=""></a>        <span class="cn">Ok</span>(a <span class="op">/</span> b)</span>
+<span id="cb67-6"><a href=""></a>    <span class="op">}</span></span>
+<span id="cb67-7"><a href=""></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="recovering-with-match" class="slide level2">
+<h2>Recovering with <code>match</code></h2>
+<ul>
+<li class="fragment">The error is just data</li>
+<li class="fragment"><code>match</code> lets us decide <em>how</em> to behave on error</li>
+<li class="fragment">This makes the error <strong>recoverable</strong></li>
+</ul>
+<div class="fragment">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb68"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb68-1"><a href=""></a><span class="cf">match</span> divide(<span class="dv">10.0</span><span class="op">,</span> <span class="dv">0.0</span>) <span class="op">{</span></span>
+<span id="cb68-2"><a href=""></a>    <span class="cn">Ok</span>(value) <span class="op">=&gt;</span> <span class="pp">println!</span>(<span class="st">"The answer is {value}"</span>)<span class="op">,</span></span>
+<span id="cb68-3"><a href=""></a>    <span class="cn">Err</span>(msg) <span class="op">=&gt;</span> <span class="pp">println!</span>(<span class="st">"Error: {msg}"</span>)<span class="op">,</span></span>
+<span id="cb68-4"><a href=""></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="propagating-with" class="slide level2">
+<h2>Propagating with <code>?</code></h2>
+<ul>
+<li class="fragment">Sometimes we don’t want to recover</li>
+<li class="fragment"><code>?</code> <strong>bubbles the error up</strong> to the caller
+<ul>
+<li class="fragment"><code>Ok(T)</code> → unwraps to the value <code>T</code></li>
+<li class="fragment"><code>Err(E)</code> → returns it early and stops</li>
+</ul></li>
+<li class="fragment">Only usable in a function that returns <code>Result</code></li>
+</ul>
+<div class="fragment">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb69"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb69-1"><a href=""></a><span class="kw">fn</span> main() <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span>()<span class="op">,</span> <span class="dt">String</span><span class="op">&gt;</span> <span class="op">{</span></span>
+<span id="cb69-2"><a href=""></a>    <span class="kw">let</span> result <span class="op">=</span> divide(<span class="dv">10.0</span><span class="op">,</span> <span class="dv">2.0</span>)<span class="op">?;</span></span>
+<span id="cb69-3"><a href=""></a>    <span class="pp">println!</span>(<span class="st">"The answer is {result}"</span>)<span class="op">;</span></span>
+<span id="cb69-4"><a href=""></a>    <span class="cn">Ok</span>(())</span>
+<span id="cb69-5"><a href=""></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section></section>
+<section id="exercise-11" class="title-slide slide level1 center">
+<h1>Exercise</h1>
+
+</section>
+
+<section>
+<section id="adding-a-crate-anyhow" class="title-slide slide level1 center">
+<h1>Adding a crate: <code>anyhow</code></h1>
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Objective</strong></p>
+</div>
+<div class="callout-content">
+<p>Add your first dependency with <code>cargo add</code>. Use <code>anyhow</code> to propagate errors of (almost) any type with <code>?</code>.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="library-error-types" class="slide level2">
+<h2>Library error types</h2>
+<ul>
+<li class="fragment">We invented <code>String</code> errors ourselves</li>
+<li class="fragment">Usually we call <em>other people’s</em> code</li>
+<li class="fragment">Almost every library has its <strong>own</strong> error types</li>
+<li class="fragment">These are <code>enum</code>s listing every possible error</li>
+<li class="fragment">e.g.&nbsp;<code>.parse::&lt;f64&gt;()</code> errors with <code>std::num::ParseFloatError</code></li>
+</ul>
+</section>
+<section id="anyhow-to-the-rescue" class="slide level2">
+<h2><code>anyhow</code> to the rescue</h2>
+<ul>
+<li class="fragment">Naming every error type is a chore</li>
+<li class="fragment"><a href="https://docs.rs/anyhow"><code>anyhow</code></a> provides <code>anyhow::Result&lt;T&gt;</code></li>
+<li class="fragment">Lets you return (almost) <strong>any</strong> error type</li>
+<li class="fragment">Magic from Rust’s trait system (not today!)</li>
+<li class="fragment"><code>?</code> “just works” across different errors</li>
+</ul>
+</section>
+<section id="adding-a-dependency" class="slide level2">
+<h2>Adding a dependency</h2>
+<ul>
+<li class="fragment"><code>Cargo.toml</code> has had no dependencies so far</li>
+<li class="fragment">Add <code>anyhow</code> from the terminal:</li>
+</ul>
+<div class="fragment">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb70"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb70-1"><a href=""></a><span class="ex">cargo</span> add anyhow</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ul>
+<li class="fragment">Updates <code>[dependencies]</code> in <code>Cargo.toml</code>:</li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb71"><pre class="sourceCode numberSource toml number-lines code-with-copy"><code class="sourceCode toml"><span id="cb71-1"><a href=""></a><span class="kw">[dependencies]</span></span>
+<span id="cb71-2"><a href=""></a><span class="dt">anyhow</span> <span class="op">=</span> <span class="st">"1"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="using-anyhow" class="slide level2">
+<h2>Using <code>anyhow</code></h2>
+<ul>
+<li class="fragment">Bring <code>anyhow::Result</code> into scope</li>
+<li class="fragment"><code>?</code> propagates the parse error without naming it</li>
+</ul>
+<div class="fragment">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb72"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb72-1"><a href=""></a><span class="kw">use</span> <span class="pp">anyhow::</span><span class="dt">Result</span><span class="op">;</span></span>
+<span id="cb72-2"><a href=""></a></span>
+<span id="cb72-3"><a href=""></a><span class="kw">impl</span> Point <span class="op">{</span></span>
+<span id="cb72-4"><a href=""></a>    <span class="kw">fn</span> from_strings(x<span class="op">:</span> <span class="op">&amp;</span><span class="dt">str</span><span class="op">,</span> y<span class="op">:</span> <span class="op">&amp;</span><span class="dt">str</span>) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span><span class="dt">Self</span><span class="op">&gt;</span> <span class="op">{</span></span>
+<span id="cb72-5"><a href=""></a>        <span class="kw">let</span> x <span class="op">=</span> x<span class="op">.</span><span class="pp">parse::</span><span class="op">&lt;</span><span class="dt">f64</span><span class="op">&gt;</span>()<span class="op">?;</span></span>
+<span id="cb72-6"><a href=""></a>        <span class="kw">let</span> y <span class="op">=</span> y<span class="op">.</span><span class="pp">parse::</span><span class="op">&lt;</span><span class="dt">f64</span><span class="op">&gt;</span>()<span class="op">?;</span></span>
+<span id="cb72-7"><a href=""></a>        <span class="cn">Ok</span>(Point <span class="op">{</span> x<span class="op">,</span> y <span class="op">}</span>)</span>
+<span id="cb72-8"><a href=""></a>    <span class="op">}</span></span>
+<span id="cb72-9"><a href=""></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ul>
+<li class="fragment"><code>main</code> can return <code>anyhow::Result&lt;()&gt;</code> too, so errors bubble all the way up</li>
+</ul>
+</div>
+</section></section>
+<section id="exercise-12" class="title-slide slide level1 center">
 <h1>Exercise</h1>
 
 </section>
@@ -1920,7 +2102,7 @@ x after sorting:  [1, 3, 7, 10, 11]</code></pre>
         margin: 0.1,
 
         math: {
-          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js',
+          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js',
           config: 'TeX-AMS_HTML-full',
           tex2jax: {
             inlineMath: [['\\(','\\)']],
@@ -1947,190 +2129,173 @@ x after sorting:  [1, 3, 7, 10, 11]</code></pre>
       });
     </script>
     <script id="quarto-html-after-body" type="application/javascript">
-    window.document.addEventListener("DOMContentLoaded", function (event) {
-      const toggleBodyColorMode = (bsSheetEl) => {
-        const mode = bsSheetEl.getAttribute("data-mode");
-        const bodyEl = window.document.querySelector("body");
-        if (mode === "dark") {
-          bodyEl.classList.add("quarto-dark");
-          bodyEl.classList.remove("quarto-light");
-        } else {
-          bodyEl.classList.add("quarto-light");
-          bodyEl.classList.remove("quarto-dark");
-        }
-      }
-      const toggleBodyColorPrimary = () => {
-        const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
-        if (bsSheetEl) {
-          toggleBodyColorMode(bsSheetEl);
-        }
-      }
-      toggleBodyColorPrimary();  
-      const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
-      tabsets.forEach(function(tabset) {
-        const tabby = new Tabby('#' + tabset.id);
-      });
-      const isCodeAnnotation = (el) => {
-        for (const clz of el.classList) {
-          if (clz.startsWith('code-annotation-')) {                     
-            return true;
+      window.document.addEventListener("DOMContentLoaded", function (event) {
+        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+        tabsets.forEach(function(tabset) {
+          const tabby = new Tabby('#' + tabset.id);
+        });
+        const isCodeAnnotation = (el) => {
+          for (const clz of el.classList) {
+            if (clz.startsWith('code-annotation-')) {                     
+              return true;
+            }
           }
+          return false;
         }
-        return false;
-      }
-      const onCopySuccess = function(e) {
-        // button target
-        const button = e.trigger;
-        // don't keep focus
-        button.blur();
-        // flash "checked"
-        button.classList.add('code-copy-button-checked');
-        var currentTitle = button.getAttribute("title");
-        button.setAttribute("title", "Copied!");
-        let tooltip;
-        if (window.bootstrap) {
-          button.setAttribute("data-bs-toggle", "tooltip");
-          button.setAttribute("data-bs-placement", "left");
-          button.setAttribute("data-bs-title", "Copied!");
-          tooltip = new bootstrap.Tooltip(button, 
-            { trigger: "manual", 
-              customClass: "code-copy-button-tooltip",
-              offset: [0, -8]});
-          tooltip.show();    
-        }
-        setTimeout(function() {
-          if (tooltip) {
-            tooltip.hide();
-            button.removeAttribute("data-bs-title");
-            button.removeAttribute("data-bs-toggle");
-            button.removeAttribute("data-bs-placement");
+        const onCopySuccess = function(e) {
+          // button target
+          const button = e.trigger;
+          // don't keep focus
+          button.blur();
+          // flash "checked"
+          button.classList.add('code-copy-button-checked');
+          var currentTitle = button.getAttribute("title");
+          button.setAttribute("title", "Copied!");
+          let tooltip;
+          if (window.bootstrap) {
+            button.setAttribute("data-bs-toggle", "tooltip");
+            button.setAttribute("data-bs-placement", "left");
+            button.setAttribute("data-bs-title", "Copied!");
+            tooltip = new bootstrap.Tooltip(button, 
+              { trigger: "manual", 
+                customClass: "code-copy-button-tooltip",
+                offset: [0, -8]});
+            tooltip.show();    
           }
-          button.setAttribute("title", currentTitle);
-          button.classList.remove('code-copy-button-checked');
-        }, 1000);
-        // clear code selection
-        e.clearSelection();
-      }
-      const getTextToCopy = function(trigger) {
-          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          setTimeout(function() {
+            if (tooltip) {
+              tooltip.hide();
+              button.removeAttribute("data-bs-title");
+              button.removeAttribute("data-bs-toggle");
+              button.removeAttribute("data-bs-placement");
+            }
+            button.setAttribute("title", currentTitle);
+            button.classList.remove('code-copy-button-checked');
+          }, 1000);
+          // clear code selection
+          e.clearSelection();
+        }
+        const getTextToCopy = function(trigger) {
+          const outerScaffold = trigger.parentElement.cloneNode(true);
+          const codeEl = outerScaffold.querySelector('code');
           for (const childEl of codeEl.children) {
             if (isCodeAnnotation(childEl)) {
               childEl.remove();
             }
           }
           return codeEl.innerText;
-      }
-      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
-        text: getTextToCopy
-      });
-      clipboard.on('success', onCopySuccess);
-      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
-          text: getTextToCopy,
-          container: window.document.getElementById('quarto-embedded-source-code-modal')
-        });
-        clipboardModal.on('success', onCopySuccess);
-      }
-        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-        var mailtoRegex = new RegExp(/^mailto:/);
-          var filterRegex = new RegExp('/' + window.location.host + '/');
-        var isInternal = (href) => {
-            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
         }
-        // Inspect non-navigation links and adorn them if external
-     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
-        for (var i=0; i<links.length; i++) {
-          const link = links[i];
-          if (!isInternal(link.href)) {
-            // undo the damage that might have been done by quarto-nav.js in the case of
-            // links that we want to consider external
-            if (link.dataset.originalHref !== undefined) {
-              link.href = link.dataset.originalHref;
+        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+          text: getTextToCopy
+        });
+        clipboard.on('success', onCopySuccess);
+        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+            text: getTextToCopy,
+            container: window.document.getElementById('quarto-embedded-source-code-modal')
+          });
+          clipboardModal.on('success', onCopySuccess);
+        }
+          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var mailtoRegex = new RegExp(/^mailto:/);
+            var filterRegex = new RegExp('/' + window.location.host + '/');
+          var isInternal = (href) => {
+              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+          }
+          // Inspect non-navigation links and adorn them if external
+         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+          for (var i=0; i<links.length; i++) {
+            const link = links[i];
+            if (!isInternal(link.href)) {
+              // undo the damage that might have been done by quarto-nav.js in the case of
+              // links that we want to consider external
+              if (link.dataset.originalHref !== undefined) {
+                link.href = link.dataset.originalHref;
+              }
             }
           }
-        }
-      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
-        const config = {
-          allowHTML: true,
-          maxWidth: 500,
-          delay: 100,
-          arrow: false,
-          appendTo: function(el) {
-              return el.closest('section.slide') || el.parentElement;
-          },
-          interactive: true,
-          interactiveBorder: 10,
-          theme: 'light-border',
-          placement: 'bottom-start',
-        };
-        if (contentFn) {
-          config.content = contentFn;
-        }
-        if (onTriggerFn) {
-          config.onTrigger = onTriggerFn;
-        }
-        if (onUntriggerFn) {
-          config.onUntrigger = onUntriggerFn;
-        }
-          config['offset'] = [0,0];
-          config['maxWidth'] = 700;
-        window.tippy(el, config); 
-      }
-      const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
-      for (var i=0; i<noterefs.length; i++) {
-        const ref = noterefs[i];
-        tippyHover(ref, function() {
-          // use id or data attribute instead here
-          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
-          try { href = new URL(href).hash; } catch {}
-          const id = href.replace(/^#\/?/, "");
-          const note = window.document.getElementById(id);
-          if (note) {
-            return note.innerHTML;
-          } else {
-            return "";
+        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+          const config = {
+            allowHTML: true,
+            maxWidth: 500,
+            delay: 100,
+            arrow: false,
+            appendTo: function(el) {
+                return el.closest('section.slide') || el.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'light-border',
+            placement: 'bottom-start',
+          };
+          if (contentFn) {
+            config.content = contentFn;
           }
-        });
-      }
-      const findCites = (el) => {
-        const parentEl = el.parentElement;
-        if (parentEl) {
-          const cites = parentEl.dataset.cites;
-          if (cites) {
-            return {
-              el,
-              cites: cites.split(' ')
-            };
-          } else {
-            return findCites(el.parentElement)
+          if (onTriggerFn) {
+            config.onTrigger = onTriggerFn;
           }
-        } else {
-          return undefined;
+          if (onUntriggerFn) {
+            config.onUntrigger = onUntriggerFn;
+          }
+            config['offset'] = [0,0];
+            config['maxWidth'] = 700;
+          window.tippy(el, config); 
         }
-      };
-      var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
-      for (var i=0; i<bibliorefs.length; i++) {
-        const ref = bibliorefs[i];
-        const citeInfo = findCites(ref);
-        if (citeInfo) {
-          tippyHover(citeInfo.el, function() {
-            var popup = window.document.createElement('div');
-            citeInfo.cites.forEach(function(cite) {
-              var citeDiv = window.document.createElement('div');
-              citeDiv.classList.add('hanging-indent');
-              citeDiv.classList.add('csl-entry');
-              var biblioDiv = window.document.getElementById('ref-' + cite);
-              if (biblioDiv) {
-                citeDiv.innerHTML = biblioDiv.innerHTML;
-              }
-              popup.appendChild(citeDiv);
-            });
-            return popup.innerHTML;
+        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+        for (var i=0; i<noterefs.length; i++) {
+          const ref = noterefs[i];
+          tippyHover(ref, function() {
+            // use id or data attribute instead here
+            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+            try { href = new URL(href).hash; } catch {}
+            const id = href.replace(/^#\/?/, "");
+            const note = window.document.getElementById(id);
+            if (note) {
+              return note.innerHTML;
+            } else {
+              return "";
+            }
           });
         }
-      }
-    });
-    </script>
+        const findCites = (el) => {
+          const parentEl = el.parentElement;
+          if (parentEl) {
+            const cites = parentEl.dataset.cites;
+            if (cites) {
+              return {
+                el,
+                cites: cites.split(' ')
+              };
+            } else {
+              return findCites(el.parentElement)
+            }
+          } else {
+            return undefined;
+          }
+        };
+        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+        for (var i=0; i<bibliorefs.length; i++) {
+          const ref = bibliorefs[i];
+          const citeInfo = findCites(ref);
+          if (citeInfo) {
+            tippyHover(citeInfo.el, function() {
+              var popup = window.document.createElement('div');
+              citeInfo.cites.forEach(function(cite) {
+                var citeDiv = window.document.createElement('div');
+                citeDiv.classList.add('hanging-indent');
+                citeDiv.classList.add('csl-entry');
+                var biblioDiv = window.document.getElementById('ref-' + cite);
+                if (biblioDiv) {
+                  citeDiv.innerHTML = biblioDiv.innerHTML;
+                }
+                popup.appendChild(citeDiv);
+              });
+              return popup.innerHTML;
+            });
+          }
+        }
+      });
+      </script>
     
 
 </body></html>

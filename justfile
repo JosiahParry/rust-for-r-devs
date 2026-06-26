@@ -1,3 +1,6 @@
+default:
+    just --list
+
 preview:
     quarto preview --port 3333
 

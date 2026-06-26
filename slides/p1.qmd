@@ -79,7 +79,7 @@ intro-to-rust/
 ├── Cargo.toml      # Metadata & dependencies (like DESCRIPTION)
 ├── Cargo.lock      # Dependency versions (like renv.lock)
 └── src/
-    └── main.rs     # Entry point — like main.R
+    └── main.rs     # Entrypoint
 ```
 
 ## `main.rs`
@@ -282,6 +282,9 @@ fn main() {
     println!("Array: {:?}", arr);
 }
 ```
+:::{.aside}
+`{:?}` uses a "debug" print method. Good when a "display" method isn't available.
+:::
 
 ## Debug syntax
 
@@ -332,6 +335,12 @@ fn main() {
 ```
 :::
 
+. . . 
+
+
+:::{.aside}
+`<T>` is a placeholder for any _type_. Mostly used as a shorthand.
+:::
 
 ## Array / Vector methods
 
@@ -439,6 +448,8 @@ fn main() {
 :::
 
 # Exercise
+
+# Break 5 minutes
 
 # Mutability
 
@@ -846,6 +857,7 @@ fn main() {
 
 # Exercises
 
+# Break 5 minutes
 
 # Mapping over Iterators
 
