@@ -433,16 +433,13 @@ Cloning an extendr `Robj` (or other wrapper type) is cheap.
 ::: callout-tip
 ## Objective
 
-Use the newtype pattern to wrap a foreign type and add our own methods to it.
+Create your own struct from a "foreign" one.
 
 :::
 
-## The newtype pattern
+## The orphan rule
 
-- A "tuple struct" with the structure `struct NewType(OtherType)`
-- Helps us add our flair (aka. methods) to these structs
-
-. . .
+- Imagine `Shape` is owned by _another_ crate
 
 ```rust
 #[derive(Debug, Clone)]
@@ -454,23 +451,48 @@ enum Shape {
 }
 ```
 
+- Types owned by other crates cannot have a new `impl`
+- That is called the **"orphan rule"**
+
 ## The orphan rule
 
-- Structs and enums owned by other crates cannot have an `impl` added to them
-- That is called the **"orphan rule"**
-- We can side step this with a newtype struct
+- `Shape` is foreign, so we can't `impl` on it directly
+
+::: callout-important
+## Doesn't compile
+
+```rust
+impl Shape {
+    fn my_custom_method(&self) { ... }
+}
+```
+:::
+
+
+## Using Newtypes
+
+- Wrap type in our own struct via `struct NewType(OtherType)`
+- Now the type is _ours_, so we _can_ `impl` on it
 
 . . .
+
+::: callout-tip
+## Does compile
 
 ```rust
 #[derive(Debug, Clone)]
 #[extendr]
 struct RShape(Shape);
+
+impl RShape {
+    fn my_custom_method(&self) { ... }
+}
 ```
+:::
 
 ## Adding methods
 
-Now, with our own struct, we can add methods to it via an `impl` block!
+- We "own" `RShape`
 
 ```rust
 #[extendr]
@@ -489,7 +511,14 @@ impl RShape {
 
 ## Exporting our impl to R
 
-- Register the `impl` with `extendr_module! { impl RShape; }`
+- Register the `impl` in `extendr_module!`
+
+```rust
+extendr_module! {
+    mod package;
+    impl RShape;
+}
+```
 
 # Exercise
 

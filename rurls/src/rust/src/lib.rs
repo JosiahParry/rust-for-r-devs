@@ -211,12 +211,6 @@ fn url_path_segments(url: List) -> List {
         .collect()
 }
 
-// ---- setters: copy semantics, return new list of RUrl ----
-// Each setter clones the url out of the external pointer (so we never mutate the
-// caller's object in place), applies the change, and returns a brand new list of
-// `RUrl`s. The setter value is recycled over the urls with `.cycle()`, so a
-// length-1 value applies to every url—just like R's recycling rules.
-
 #[extendr]
 fn url_set_host(url: List, host: Strings) -> List {
     if (host.len() != url.len()) & (host.len() != 1) {
