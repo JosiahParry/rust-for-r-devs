@@ -1,60 +1,76 @@
-# S3 classes
+# Integrating with {vctrs}
 
 ::: callout-tip
 ## Objective
 
-Give our list of pointers an S3 class so R will print it nicely.
+- create a vctrs compatible vector for our ulrs
 
 :::
 
-We have a `format_*` function, but R doesn't know to *use* it. When you type the
-name of an object, R dispatches to a `print`/`format` method based on the
-object's **class**. So we need to give our list a class.
 
-## Classes are the whole hook
+the format function is helpful for us to actually print it our selves, but ideally,
+whenever we print our list of external pointers we see the url and not the external pointer
 
-R's S3 system is driven entirely by the `class` attribute. If an object has class
-`"foo"`, then calling a generic like `format()` on it looks for `format.foo()`.
-That's it—attach a class, define a method, and you plug straight into R.
+Since we're creating List objects from Rust, we can actually harness the s3 object system in R
+see my video: https://www.youtube.com/watch?v=V5M90oonAAg if you're not familiar
+
+s3 works by looking at the classes of an object. 
+
+
+
+we can define our own `format` method for our list. TO do this we need to do two things: 
+
+1. assign a class to the list
+2. create a R function generic 
+
 
 ## The `vctrs_vctr` class
 
-The [vctrs](https://vctrs.r-lib.org/) package defines a very general
-`vctrs_vctr` class that gives sensible default behavior for vector-like objects.
-We'll include it in our class vector so we get that behavior for free, ending
-with the underlying `list` type:
+The [vctrs](https://vctrs.r-lib.org/) package defines a generic
+`vctrs_vctr` class that gives sensible default behavior for vectors.
+
+we can assign this class to our list so that we automatically get vctrs behaviors for free! 
+
+in r terms we're going to add: 
 
 ```r
-c("myclass", "vctrs_vctr", "list")
+c("rurls", "vctrs_vctr", "list")
 ```
+
+to the list
 
 ## Setting the class from Rust
 
 We can assign a class to a **mutable** `Robj` with `.set_class()`. Because
 `set_class()` is fallible, the function returns a `Result`.
 
+it needs to be mutable because we're modifying the underlying R object
+
 ## Example
+
 
 ```rust
 #[extendr]
-fn parse_shapes(x: Strings) -> extendr_api::Result<List> {
-    let mut res = x
+fn parse_shapes(shapes: Strings) -> extendr_api::error::::Result<List> {
+    let mut res = shapes
         .into_iter()
-        .map(|xi| match Shape::new(xi) {
-            Ok(shape) => shape.into_robj(),
-            Err(_) => ().into_robj(),
-        })
+        .map(|vi| RShape::new(vi).unwrap())
         .collect::<List>();
 
     res.set_class(&["shapes", "vctrs_vctr", "list"])?;
     Ok(res)
 }
+
 ```
 
 ## The R method
 
-The class is only half the story—now define the method on the R side. In an R
-script (e.g. `R/rurls.R`), define `format.rurls` and have it call your Rust
+if you devtools::docuemnt() and devtools::load_all() from here you will see some basic print 
+but the format_urls() won't be used yet. 
+
+TO do that we need to create a real R function! 
+
+Create a new R script script (e.g. `R/rurls.R`), define `format.rurls` and have it call your Rust
 helper:
 
 ```r
@@ -66,7 +82,7 @@ format.rurls <- function(x, ...) {
 
 ## Exercise
 
-- Update `url_parse()` to return `extendr_api::Result<List>`
+- Update `url_parse()` to return `extendr_api::error::Result<List>`
 - Set the class to `c("rurls", "vctrs_vctr", "list")` on the result
 - Add the `format.rurls` method above in an R script
 - `devtools::document()` and `devtools::load_all()`, then print a parsed vector

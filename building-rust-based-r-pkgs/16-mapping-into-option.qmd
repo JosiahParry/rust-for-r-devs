@@ -11,10 +11,14 @@ Some methods don't return a plain value—they return an `Option`. For example, 
 url may or may not have a host, so `host_str()` returns `Option<&str>`. The
 getters in the last chapter won't work directly on these.
 
+Remember, the `Option` is essentially Rust's version of an NA! 
+
 ## `.map()` works on `Option` too
 
 Just like we `.map()` over the elements of an iterator, we can `.map()` over the
-value inside an `Option` or `Result`. The closure only runs if the value is
+value inside an `Option` or `Result`. 
+
+The closure inside of `.map()` is only applied when 
 `Some` (or `Ok`); if it's `None`, nothing happens and we still have `None`.
 
 ```rust
@@ -27,10 +31,7 @@ let still_nothing = nothing.map(|n| n * 2);
 // still_nothing == None
 ```
 
-This is exactly what we need: reach inside the `Option`, change the value, and
-keep the "missing" case intact.
-
-## Why we need it here
+## Why we need
 
 A method like `host_str()` returns `Option<&str>`—a *borrowed* string slice. To
 hand it to R we need an *owned* `String`. So we map into the option and call
@@ -41,20 +42,19 @@ rurl.0.host_str().map(|v| v.to_string())
 // Option<&str> -> Option<String>
 ```
 
-`Rstr::from()` knows how to turn an `Option<String>` into an `Rstr`—`None`
-becomes `NA` automatically.
-
+:::{.callout-tip}
+`Rstr::from(Option<String>)` turns a `None` in `NA` otherwise the value.
+:::
 ## Exercise
 
-Write a getter for each `Url` method that returns an `Option`:
+Write a getter for each `Url` method that returns an `Option` and collect into a `Strings`
 
 - `url_host()` calls `host_str()` (`Option<&str>`)
 - `url_query()` calls `query()` (`Option<&str>`)
 - `url_domain()` calls `domain()` (`Option<&str>`)
-- `url_port()` calls `port()` (`Option<u16>`, returns `Integers`)
+- `url_port()` calls `port()` (`Option<u16>`, collect into `Integers`)
 
-For the string ones, map with `.to_string()`. For `port`, map the `u16` to `i32`
-(R's integers are signed 32-bit) and return `Integers`.
+For the string ones, map with `.to_string()`. For `port`, map the `u16` to `i32` via `as i32`
 
 <details>
     <summary>View solution</summary>

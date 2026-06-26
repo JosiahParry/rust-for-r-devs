@@ -32,6 +32,31 @@ impl RShape {
             Shape::Hexagon => 5,
         }
     }
+
+    fn get_extptr(robj: Robj) -> extendr_api::Result<ExternalPtr<Self>> {
+        ExternalPtr::<Self>::try_from(robj)
+    }
+}
+
+#[extendr]
+fn parse_shapes(shapes: Strings) -> extendr_api::error::Result<List> {
+    let mut res = shapes
+        .into_iter()
+        .map(|vi| RShape::new(vi).unwrap())
+        .collect::<List>();
+
+    res.set_class(&["shapes", "vctrs_vctr", "list"])?;
+    Ok(res)
+}
+
+#[extendr]
+fn format_shapes(x: List) -> Strings {
+    x.into_iter()
+        .map(|(_, robj)| match RShape::get_extptr(robj) {
+            Ok(v) => Rstr::from(format!("{:?}", v.0)),
+            Err(_) => Rstr::na(),
+        })
+        .collect()
 }
 
 extendr_module! {

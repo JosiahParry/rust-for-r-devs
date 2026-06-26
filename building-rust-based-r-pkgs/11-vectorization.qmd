@@ -1,0 +1,51 @@
+in the previous exercise we worked with a single url
+in r we typically work with a vector of values, naturally, we won't want to work with just a single url at a time, we want to work with hundreds and thousands of them 
+
+so, how can we handle this? through vectorization (a fancy name for iteration and looping)
+
+now, an external pointer isn't any type of vector that im aware of! So? how do we store them? 
+
+Remember!!!!! Lists **are vectors** (see https://www.youtube.com/watch?v=V5M90oonAAg)
+
+lists can hold any r object in them that they want!! SO this is a natural way to contain multiple external pointers at a time!!!
+
+What we can do is use the `Strings` wrapper type (think of this as an NA-aware version of `Vec<String>`)
+
+## Strings wrapper type
+
+we can use `.into_iter()` to iterate through it. 
+each element is an RStr which is an NA aware `&str`—it is able to be used in most places that `&str` can be used
+
+## Colleciting into a list
+
+- we can `.collect()` directly into a List
+- every single wrapper type can be turned into an `Robj` (because everything is an SEXP! (link video again))
+- our external pointer can be turned into an RObj
+
+example 
+
+```rust
+#[extendr]
+fn parse_shapes(shapes: Strings) -> List {
+    shapes
+        .into_iter()
+        .map(|vi| RShape::new(vi).unwrap())
+        .collect()
+}
+```
+
+## Exercise 
+
+objective:  take a character vector (Strings) and create a list of external pointers
+- use `.unwrap()` to ignore the result for now
+- use `.collect::<List>()` to capture the results into a List
+
+```rust
+#[extendr]
+fn url_parse(url: Strings) -> List {
+    url.into_iter().map(|xi| {
+        RUrl::new(xi).unwrap()
+    }).collect::<List>()
+}
+
+```

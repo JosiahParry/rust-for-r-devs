@@ -35,8 +35,8 @@ impl RUrl {
 }
 
 #[extendr]
-fn url_parse(x: Strings) -> Result<List> {
-    let mut res = x
+fn url_parse(url: Strings) -> Result<List> {
+    let mut res = url
         .into_iter()
         .map(|xi| {
             if xi.is_na() {

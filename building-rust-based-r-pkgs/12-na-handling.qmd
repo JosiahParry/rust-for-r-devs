@@ -1,0 +1,35 @@
+# NA -handling
+
+- in the previous version of this we didn't handle errors and we didn't handle nas
+- we can add some checks and match statements to do safe error handling
+- there are different schools of thoughts here
+- some people thing that any error should cause the operation to fail
+- i believe, that for vectorized operations, errors shouldl be handled with grace
+  - and to me that means that we ignore them and return an `NA`
+- in the previouws example we used `.unwrap()`  i want us to improve that function with error handling
+
+- during the `.into_iter()` lets first check if the RStr is an na by using the `.is_na()` method
+  - if it is `true` then we retun a `NULL` we can do this by using `Robj::from(())`
+  - `()` is called the unit-type a special type of of nothingness in rust (technically an empty tuple)
+- otherwise we try to parse! 
+- then when we parse, we match on the result, if an error, same thing with `Robj::from(())`
+- otherwise we convret the result into an robj with `.into_robj()`
+- tip for multiple line expressions in an interator wrap it in a bracket! 
+
+```rust
+#[extendr]
+fn url_parse(url: Strings) -> List {
+    url
+        .into_iter()
+        .map(|xi| {
+            if xi.is_na() {
+                return ().into_robj();
+            }
+
+            match RUrl::new(xi) {
+                Ok(v) => v.into_robj(),
+                Err(_) => ().into_robj(),
+            }
+        })
+        .collect::<List>()
+}

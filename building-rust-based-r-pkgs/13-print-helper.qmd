@@ -22,14 +22,18 @@ R can't see inside an external pointer, so all it can show is the memory address
 We'd much rather see something meaningful. To do that, we write a function that
 walks the list, gets each Rust value back out, and produces a character vector.
 
-## A helper to get the pointer
+## Accessing the external pointer
 
-Reaching into the list and pulling out the external pointer is something we'll do
-over and over, so it's worth a small helper. Add this associated function to your
-`impl`:
+- external pointers are stored in a struct called.... `ExternalPtr` this a fancy type of struct
+- it has an associated type—as seen by this "turbo-fish" 
+- Rust needs to know what type is inside of the pointer so that it can give you access to the methods in it. 
+- Each type in Rust has a special called `try_from()` that fallibly tries to convert if it can't we get an error! 
+- extendr provides this ExternalPtr::try_from() so that we can **try** and get the pointer! 
+
+Here's how this works—since we refer to the type using `Self` this will work for any type with `#[extendr]` on it.
 
 ```rust
-impl RUrl {
+impl RShape {
     fn get_extptr(robj: Robj) -> extendr_api::Result<ExternalPtr<Self>> {
         ExternalPtr::<Self>::try_from(robj)
     }
@@ -38,7 +42,12 @@ impl RUrl {
 
 ## Iterating a list
 
-When we iterate over a `List`, each item is a **tuple**: the element's name and
+- When we iterate over a `List`, each item is a **tuple**
+- a tuple is like a list in R (or a tuple in python lol!)
+- it is a fixed sized thing where each element is unnamed and can have a different type.
+- the first element (accessed via `.0`) element is the name as a `&str` and then the second element via `.1` is an `Robj`
+
+the element's name and
 its value as an `Robj`. We usually ignore the name with `_`.
 
 For each value we try to get the pointer back. If we succeed, we borrow the inner
@@ -46,21 +55,24 @@ Rust value and produce a string from it. If not, we produce an `NA`.
 
 ## Example
 
-Here we turn a list of `Shape`s into a character vector of their vertex counts:
+Here we turn a list of `RShape`s into a character vector of their vertex counts:
 
 ```rust
 #[extendr]
 fn format_shapes(x: List) -> Strings {
     x.into_iter()
-        .map(|(_, vi)| match Shape::get_extptr(vi) {
-            Ok(shape) => Rstr::from(format!("{}-gon", shape.n_coords())),
+        .map(|(_, robj)| match RShape::get_extptr(robj) {
+            Ok(v) => Rstr::from(format!("{:?}", v.0)),
             Err(_) => Rstr::na(),
         })
-        .collect::<Strings>()
+        .collect()
 }
 ```
 
+
 ## Exercise
+
+Note that instead of using `foramt!()` you'll use `.to_string()` 
 
 - Write `format_rurls(x: List) -> Strings`
 - Iterate the list, destructuring each element as `(_, vi)`

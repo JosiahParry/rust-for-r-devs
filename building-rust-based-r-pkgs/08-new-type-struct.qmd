@@ -1,0 +1,58 @@
+- there is pattern in Rust called the "newtype" pattern
+- we create a special kind of struct called a "tuple struct" which takes the structure `struct NewType(OtherType)` 
+- This helps us be able add our flair (aka. methods) to these structs
+- For the sake of example lets say we have an enum 
+
+```rust
+#[derive(Debug, Clone)]
+enum Shape {
+    Triangle,
+    Rectangle,
+    Pentagon,
+    Hexagon,
+}
+```
+
+Lets pretend for the sake of example that this is owned by another crate.
+
+Structs and enums that are owned by other crates cannot have an `impl` added to it.
+
+That is called the **"orphan rule"**. We can actually side step this!
+We can create our own type on top of this by creating a "newtype" struct: 
+
+```rust
+#[derive(Debug, Clone)]
+#[extendr]
+struct RShape(Shape);
+```
+
+Now, with our own struct we can add methods to it via `impl` block! 
+
+```rust
+#[extendr]
+impl RShape {
+    fn new(x: &str) -> anyhow::Result<Self> {
+        match x {
+            "triangle" => Ok(Self(Shape::Triangle)),
+            "rectangle" => Ok(Self(Shape::Rectangle)),
+            "pentagon" => Ok(Self(Shape::Pentagon)),
+            "hexagon" => Ok(Self(Shape::Hexagon)),
+            _ => Err(anyhow::anyhow!("unknown shape: {x}")),
+        }
+    }
+```
+
+
+## Exporting our IMPL to R
+
+
+- use `extendr_module! { impl RShape}` 
+
+
+## Exercise  (2 minutes)
+
+- import url::Url
+- create a new type RUrl
+- add it to the edxtendr_module
+- devtools::document() && devtools::load_all()
+- print the RUrl to the console notice that it is an environment
