@@ -1,4 +1,4 @@
-# Setters & copy-on-write
+# 🐮 CoW & cloning 🐄
 
 ::: callout-tip
 ## Objective

@@ -1,4 +1,4 @@
-# Getters
+# Accessing Struct Methods from R
 
 ::: callout-tip
 ## Objective
@@ -7,22 +7,30 @@ Write a family of functions that call a method on each object and collect the re
 
 :::
 
-Now that we can hold objects in a list, we can expose their methods to R. These
-**getter** functions all look the same: walk the list, get each object back,
-call a method, collect the results.
+- Now that we can hold objects in a list, we can expose their methods to R. 
+- The `Url` struct has many methods that we can access from R and our vctr
+
+the approach to use these methods is frankly somewhat formulaic. 
+since we have multiple of these structs in our vector the approach is simple: 
+
+- iterate through the list
+- gracefully g4et the external pointer
+- call the method
+- collect the results into the right R type! 
+
 
 ## The pattern
 
-Every getter is the same shape we used for the print helper:
+Every method wrapper is generally the same shape as the print helper. 
 
 1. iterate the list (`(_, vi)` tuples)
 2. `get_extptr` to recover the object
 3. call the method on the borrowed value
-4. collect into a wrapper type, with `NA` on failure
+4. collect into a wrapper type, with `NA` or `NULL`  on failure
 
 ## Example
 
-A getter that returns the number of coordinates for each shape:
+A function that returns the number of coordinates for each shape:
 
 ```rust
 #[extendr]
