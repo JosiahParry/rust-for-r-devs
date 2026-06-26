@@ -3207,7 +3207,7 @@
     "href": "building-rust-based-r-pkgs/13-print-helper.html",
     "title": "31  A print helper",
     "section": "",
-    "text": "A helper to get the pointer\nWhen we print our list of objects, it’s ugly:\nR can’t see inside an external pointer, so all it can show is the memory address. We’d much rather see something meaningful. To do that, we write a function that walks the list, gets each Rust value back out, and produces a character vector.\nReaching into the list and pulling out the external pointer is something we’ll do over and over, so it’s worth a small helper. Add this associated function to your impl:",
+    "text": "Accessing the external pointer\nWhen we print our list of objects, it’s ugly:\nR can’t see inside an external pointer, so all it can show is the memory address. We’d much rather see something meaningful. To do that, we write a function that walks the list, gets each Rust value back out, and produces a character vector.\nHere’s how this works—since we refer to the type using Self this will work for any type with #[extendr] on it.",
     "crumbs": [
       "Building Rust based R Packages",
       "<span class='chapter-number'>31</span>  <span class='chapter-title'>A print helper</span>"
@@ -3229,7 +3229,7 @@
     "href": "building-rust-based-r-pkgs/13-print-helper.html#iterating-a-list",
     "title": "31  A print helper",
     "section": "Iterating a list",
-    "text": "Iterating a list\nWhen we iterate over a List, each item is a tuple: the element’s name and its value as an Robj. We usually ignore the name with _.\nFor each value we try to get the pointer back. If we succeed, we borrow the inner Rust value and produce a string from it. If not, we produce an NA.",
+    "text": "Iterating a list\n\nWhen we iterate over a List, each item is a tuple\nIt is a fixed sized thing where each element is unnamed and can have a different type\nThe first element (accessed via .0) is the name as a &str, and the second element (via .1) is the value as an Robj\n\nWe usually ignore the name with _.\nFor each value we try to get the pointer back. If we succeed, we borrow the inner Rust value and produce a string from it. If not, we produce an NA.",
     "crumbs": [
       "Building Rust based R Packages",
       "<span class='chapter-number'>31</span>  <span class='chapter-title'>A print helper</span>"
@@ -3240,7 +3240,7 @@
     "href": "building-rust-based-r-pkgs/13-print-helper.html#example",
     "title": "31  A print helper",
     "section": "Example",
-    "text": "Example\nHere we turn a list of Shapes into a character vector of their vertex counts:\n#[extendr]\nfn format_shapes(x: List) -&gt; Strings {\n    x.into_iter()\n        .map(|(_, vi)| match Shape::get_extptr(vi) {\n            Ok(shape) =&gt; Rstr::from(format!(\"{}-gon\", shape.n_coords())),\n            Err(_) =&gt; Rstr::na(),\n        })\n        .collect::&lt;Strings&gt;()\n}",
+    "text": "Example\nHere we turn a list of RShapes into a character vector of their vertex counts:\n#[extendr]\nfn format_shapes(x: List) -&gt; Strings {\n    x.into_iter()\n        .map(|(_, robj)| match RShape::get_extptr(robj) {\n            Ok(v) =&gt; Rstr::from(format!(\"{:?}\", v.0)),\n            Err(_) =&gt; Rstr::na(),\n        })\n        .collect()\n}",
     "crumbs": [
       "Building Rust based R Packages",
       "<span class='chapter-number'>31</span>  <span class='chapter-title'>A print helper</span>"
@@ -3251,7 +3251,7 @@
     "href": "building-rust-based-r-pkgs/13-print-helper.html#exercise",
     "title": "31  A print helper",
     "section": "Exercise",
-    "text": "Exercise\n\nWrite format_rurls(x: List) -&gt; Strings\nIterate the list, destructuring each element as (_, vi)\nUse RUrl::get_extptr() to get the pointer back\nOn success, turn the inner Url into a string with .to_string()\nOn failure, return Rstr::na()\n\n\n\nView solution\n\n#[extendr]\nfn format_rurls(x: List) -&gt; Strings {\n    x.into_iter()\n        .map(|(_, vi)| {\n            let vv = RUrl::get_extptr(vi);\n            match vv {\n                Ok(rurl) =&gt; Rstr::from(rurl.0.to_string()),\n                Err(_) =&gt; Rstr::na(),\n            }\n        })\n        .collect::&lt;Strings&gt;()\n}",
+    "text": "Exercise\nNote that instead of using format!() you’ll use .to_string().\n\nWrite format_rurls(x: List) -&gt; Strings\nIterate the list, destructuring each element as (_, vi)\nUse RUrl::get_extptr() to get the pointer back\nOn success, turn the inner Url into a string with .to_string()\nOn failure, return Rstr::na()\n\n\n\nView solution\n\n#[extendr]\nfn format_rurls(x: List) -&gt; Strings {\n    x.into_iter()\n        .map(|(_, vi)| {\n            let vv = RUrl::get_extptr(vi);\n            match vv {\n                Ok(rurl) =&gt; Rstr::from(rurl.0.to_string()),\n                Err(_) =&gt; Rstr::na(),\n            }\n        })\n        .collect::&lt;Strings&gt;()\n}",
     "crumbs": [
       "Building Rust based R Packages",
       "<span class='chapter-number'>31</span>  <span class='chapter-title'>A print helper</span>"
@@ -3260,144 +3260,144 @@
   {
     "objectID": "building-rust-based-r-pkgs/14-s3.html",
     "href": "building-rust-based-r-pkgs/14-s3.html",
-    "title": "32  S3 classes",
+    "title": "32  Integrating with",
     "section": "",
-    "text": "Classes are the whole hook\nWe have a format_* function, but R doesn’t know to use it. When you type the name of an object, R dispatches to a print/format method based on the object’s class. So we need to give our list a class.\nR’s S3 system is driven entirely by the class attribute. If an object has class \"foo\", then calling a generic like format() on it looks for format.foo(). That’s it—attach a class, define a method, and you plug straight into R.",
+    "text": "The vctrs_vctr class\nThe format function is helpful for us to actually print it ourselves, but ideally, whenever we print our list of external pointers we see the url and not the external pointer.\nSince we’re creating List objects from Rust, we can actually harness the S3 object system in R. See my video if you’re not familiar.\nS3 works by looking at the classes of an object.\nWe can define our own format method for our list. To do this we need to do two things:\nThe vctrs package defines a generic vctrs_vctr class that gives sensible default behavior for vectors.\nWe can assign this class to our list so that we automatically get vctrs behaviors for free!\nIn R terms we’re going to add:\nto the list.",
     "crumbs": [
       "Building Rust based R Packages",
-      "<span class='chapter-number'>32</span>  <span class='chapter-title'>S3 classes</span>"
+      "<span class='chapter-number'>32</span>  <span class='chapter-title'>Integrating with</span>"
     ]
   },
   {
     "objectID": "building-rust-based-r-pkgs/14-s3.html#the-vctrs_vctr-class",
     "href": "building-rust-based-r-pkgs/14-s3.html#the-vctrs_vctr-class",
-    "title": "32  S3 classes",
-    "section": "The vctrs_vctr class",
-    "text": "The vctrs_vctr class\nThe vctrs package defines a very general vctrs_vctr class that gives sensible default behavior for vector-like objects. We’ll include it in our class vector so we get that behavior for free, ending with the underlying list type:\nc(\"myclass\", \"vctrs_vctr\", \"list\")",
+    "title": "32  Integrating with",
+    "section": "",
+    "text": "c(\"rurls\", \"vctrs_vctr\", \"list\")",
     "crumbs": [
       "Building Rust based R Packages",
-      "<span class='chapter-number'>32</span>  <span class='chapter-title'>S3 classes</span>"
+      "<span class='chapter-number'>32</span>  <span class='chapter-title'>Integrating with</span>"
     ]
   },
   {
     "objectID": "building-rust-based-r-pkgs/14-s3.html#setting-the-class-from-rust",
     "href": "building-rust-based-r-pkgs/14-s3.html#setting-the-class-from-rust",
-    "title": "32  S3 classes",
+    "title": "32  Integrating with",
     "section": "Setting the class from Rust",
-    "text": "Setting the class from Rust\nWe can assign a class to a mutable Robj with .set_class(). Because set_class() is fallible, the function returns a Result.",
+    "text": "Setting the class from Rust\nWe can assign a class to a mutable Robj with .set_class(). Because set_class() is fallible, the function returns a Result.\nIt needs to be mutable because we’re modifying the underlying R object.",
     "crumbs": [
       "Building Rust based R Packages",
-      "<span class='chapter-number'>32</span>  <span class='chapter-title'>S3 classes</span>"
+      "<span class='chapter-number'>32</span>  <span class='chapter-title'>Integrating with</span>"
     ]
   },
   {
     "objectID": "building-rust-based-r-pkgs/14-s3.html#example",
     "href": "building-rust-based-r-pkgs/14-s3.html#example",
-    "title": "32  S3 classes",
+    "title": "32  Integrating with",
     "section": "Example",
-    "text": "Example\n#[extendr]\nfn parse_shapes(x: Strings) -&gt; extendr_api::Result&lt;List&gt; {\n    let mut res = x\n        .into_iter()\n        .map(|xi| match Shape::new(xi) {\n            Ok(shape) =&gt; shape.into_robj(),\n            Err(_) =&gt; ().into_robj(),\n        })\n        .collect::&lt;List&gt;();\n\n    res.set_class(&[\"shapes\", \"vctrs_vctr\", \"list\"])?;\n    Ok(res)\n}",
+    "text": "Example\n#[extendr]\nfn parse_shapes(shapes: Strings) -&gt; extendr_api::error::Result&lt;List&gt; {\n    let mut res = shapes\n        .into_iter()\n        .map(|vi| RShape::new(vi).unwrap())\n        .collect::&lt;List&gt;();\n\n    res.set_class(&[\"shapes\", \"vctrs_vctr\", \"list\"])?;\n    Ok(res)\n}",
     "crumbs": [
       "Building Rust based R Packages",
-      "<span class='chapter-number'>32</span>  <span class='chapter-title'>S3 classes</span>"
+      "<span class='chapter-number'>32</span>  <span class='chapter-title'>Integrating with</span>"
     ]
   },
   {
     "objectID": "building-rust-based-r-pkgs/14-s3.html#the-r-method",
     "href": "building-rust-based-r-pkgs/14-s3.html#the-r-method",
-    "title": "32  S3 classes",
+    "title": "32  Integrating with",
     "section": "The R method",
-    "text": "The R method\nThe class is only half the story—now define the method on the R side. In an R script (e.g. R/rurls.R), define format.rurls and have it call your Rust helper:\n#' @export\nformat.rurls &lt;- function(x, ...) {\n    format_rurls(x)\n}",
+    "text": "The R method\nIf you devtools::document() and devtools::load_all() from here you will see some basic print, but the format_rurls() won’t be used yet.\nTo do that we need to create a real R function!\nCreate a new R script (e.g. R/rurls.R), define format.rurls, and have it call your Rust helper:\n#' @export\nformat.rurls &lt;- function(x, ...) {\n    format_rurls(x)\n}",
     "crumbs": [
       "Building Rust based R Packages",
-      "<span class='chapter-number'>32</span>  <span class='chapter-title'>S3 classes</span>"
+      "<span class='chapter-number'>32</span>  <span class='chapter-title'>Integrating with</span>"
     ]
   },
   {
     "objectID": "building-rust-based-r-pkgs/14-s3.html#exercise",
     "href": "building-rust-based-r-pkgs/14-s3.html#exercise",
-    "title": "32  S3 classes",
+    "title": "32  Integrating with",
     "section": "Exercise",
-    "text": "Exercise\n\nUpdate url_parse() to return extendr_api::Result&lt;List&gt;\nSet the class to c(\"rurls\", \"vctrs_vctr\", \"list\") on the result\nAdd the format.rurls method above in an R script\ndevtools::document() and devtools::load_all(), then print a parsed vector\n\n\n\nView solution\n\n#[extendr]\nfn url_parse(x: Strings) -&gt; extendr_api::Result&lt;List&gt; {\n    let mut res = x\n        .into_iter()\n        .map(|xi| {\n            if xi.is_na() {\n                return ().into_robj();\n            }\n\n            match RUrl::new(xi) {\n                Ok(v) =&gt; v.into_robj(),\n                Err(_) =&gt; ().into_robj(),\n            }\n        })\n        .collect::&lt;List&gt;();\n\n    res.set_class(&[\"rurls\", \"vctrs_vctr\", \"list\"])?;\n    Ok(res)\n}\n#' @export\nformat.rurls &lt;- function(x, ...) {\n    format_rurls(x)\n}",
+    "text": "Exercise\n\nUpdate url_parse() to return extendr_api::error::Result&lt;List&gt;\nSet the class to c(\"rurls\", \"vctrs_vctr\", \"list\") on the result\nAdd the format.rurls method above in an R script\ndevtools::document() and devtools::load_all(), then print a parsed vector\n\n\n\nView solution\n\n#[extendr]\nfn url_parse(x: Strings) -&gt; extendr_api::Result&lt;List&gt; {\n    let mut res = x\n        .into_iter()\n        .map(|xi| {\n            if xi.is_na() {\n                return ().into_robj();\n            }\n\n            match RUrl::new(xi) {\n                Ok(v) =&gt; v.into_robj(),\n                Err(_) =&gt; ().into_robj(),\n            }\n        })\n        .collect::&lt;List&gt;();\n\n    res.set_class(&[\"rurls\", \"vctrs_vctr\", \"list\"])?;\n    Ok(res)\n}\n#' @export\nformat.rurls &lt;- function(x, ...) {\n    format_rurls(x)\n}",
     "crumbs": [
       "Building Rust based R Packages",
-      "<span class='chapter-number'>32</span>  <span class='chapter-title'>S3 classes</span>"
+      "<span class='chapter-number'>32</span>  <span class='chapter-title'>Integrating with</span>"
     ]
   },
   {
     "objectID": "building-rust-based-r-pkgs/15-url-getters.html",
     "href": "building-rust-based-r-pkgs/15-url-getters.html",
-    "title": "33  Getters",
+    "title": "33  Accessing Struct Methods from R",
     "section": "",
-    "text": "The pattern\nNow that we can hold objects in a list, we can expose their methods to R. These getter functions all look the same: walk the list, get each object back, call a method, collect the results.\nEvery getter is the same shape we used for the print helper:",
+    "text": "The pattern\nNow that we can hold objects in a list, we can expose their methods to R. The Url struct has many methods that we can access from R and our vctr.\nThe approach to use these methods is frankly somewhat formulaic. Since we have multiple of these structs in our vector, the approach is simple:\nEvery method wrapper is generally the same shape as the print helper.",
     "crumbs": [
       "Building Rust based R Packages",
-      "<span class='chapter-number'>33</span>  <span class='chapter-title'>Getters</span>"
+      "<span class='chapter-number'>33</span>  <span class='chapter-title'>Accessing Struct Methods from R</span>"
     ]
   },
   {
     "objectID": "building-rust-based-r-pkgs/15-url-getters.html#the-pattern",
     "href": "building-rust-based-r-pkgs/15-url-getters.html#the-pattern",
-    "title": "33  Getters",
+    "title": "33  Accessing Struct Methods from R",
     "section": "",
-    "text": "iterate the list ((_, vi) tuples)\nget_extptr to recover the object\ncall the method on the borrowed value\ncollect into a wrapper type, with NA on failure",
+    "text": "Iterate the list ((_, vi) tuples)\nget_extptr to recover the object\nCall the method on the borrowed value\nCollect into a wrapper type, with NA or NULL on failure",
     "crumbs": [
       "Building Rust based R Packages",
-      "<span class='chapter-number'>33</span>  <span class='chapter-title'>Getters</span>"
+      "<span class='chapter-number'>33</span>  <span class='chapter-title'>Accessing Struct Methods from R</span>"
     ]
   },
   {
     "objectID": "building-rust-based-r-pkgs/15-url-getters.html#example",
     "href": "building-rust-based-r-pkgs/15-url-getters.html#example",
-    "title": "33  Getters",
+    "title": "33  Accessing Struct Methods from R",
     "section": "Example",
-    "text": "Example\nA getter that returns the number of coordinates for each shape:\n#[extendr]\nfn shape_coords(x: List) -&gt; Integers {\n    x.into_iter()\n        .map(|(_, vi)| match Shape::get_extptr(vi) {\n            Ok(shape) =&gt; Rint::from(shape.n_coords() as i32),\n            Err(_) =&gt; Rint::na(),\n        })\n        .collect::&lt;Integers&gt;()\n}\nOnce you’ve written one, the rest are copy-paste with a different method name.",
+    "text": "Example\nA function that returns the number of coordinates for each shape:\n#[extendr]\nfn shape_coords(x: List) -&gt; Integers {\n    x.into_iter()\n        .map(|(_, vi)| match RShape::get_extptr(vi) {\n            Ok(shape) =&gt; Rint::from(shape.n_coords() as i32),\n            Err(_) =&gt; Rint::na(),\n        })\n        .collect::&lt;Integers&gt;()\n}\nOnce you’ve written one, the rest are copy-paste with a different method name.",
     "crumbs": [
       "Building Rust based R Packages",
-      "<span class='chapter-number'>33</span>  <span class='chapter-title'>Getters</span>"
+      "<span class='chapter-number'>33</span>  <span class='chapter-title'>Accessing Struct Methods from R</span>"
     ]
   },
   {
     "objectID": "building-rust-based-r-pkgs/15-url-getters.html#finding-the-methods",
     "href": "building-rust-based-r-pkgs/15-url-getters.html#finding-the-methods",
-    "title": "33  Getters",
+    "title": "33  Accessing Struct Methods from R",
     "section": "Finding the methods",
-    "text": "Finding the methods\nA Url has many methods. The two best ways to discover them:\n\nthe docs page: https://docs.rs/url/latest/url/struct.Url.html#implementations\nthe LSP autocomplete—type rurl.0. and let rust-analyzer list them\n\nSome methods return a plain &str (like scheme()); these are the easy ones and we’ll do them first. Others return an Option—we’ll handle those in the next chapter.",
+    "text": "Finding the methods\nA Url has many methods. The two best ways to discover them:\n\nThe docs page: https://docs.rs/url/latest/url/struct.Url.html#implementations\nThe LSP autocomplete—type rurl.0. and let rust-analyzer list them\n\nSome methods return a plain &str (like scheme()); these are the easy ones and we’ll do them first. Others return an Option—we’ll handle those in the next chapter.",
     "crumbs": [
       "Building Rust based R Packages",
-      "<span class='chapter-number'>33</span>  <span class='chapter-title'>Getters</span>"
+      "<span class='chapter-number'>33</span>  <span class='chapter-title'>Accessing Struct Methods from R</span>"
     ]
   },
   {
     "objectID": "building-rust-based-r-pkgs/15-url-getters.html#exercise",
     "href": "building-rust-based-r-pkgs/15-url-getters.html#exercise",
-    "title": "33  Getters",
+    "title": "33  Accessing Struct Methods from R",
     "section": "Exercise",
     "text": "Exercise\nWrite a getter for each Url method that returns a plain &str (no Option):\n\nurl_scheme() calls scheme()\nurl_path() calls path()\nurl_authority() calls authority()\n\nEach takes a List and returns Strings.\n\n\nView solution\n\n#[extendr]\nfn url_scheme(url: List) -&gt; Strings {\n    url.into_iter()\n        .map(|(_, vi)| match RUrl::get_extptr(vi) {\n            Ok(rurl) =&gt; Rstr::from(rurl.0.scheme()),\n            Err(_) =&gt; Rstr::na(),\n        })\n        .collect()\n}\n\n#[extendr]\nfn url_path(url: List) -&gt; Strings {\n    url.into_iter()\n        .map(|(_, vi)| match RUrl::get_extptr(vi) {\n            Ok(rurl) =&gt; Rstr::from(rurl.0.path()),\n            Err(_) =&gt; Rstr::na(),\n        })\n        .collect()\n}\n\n#[extendr]\nfn url_authority(url: List) -&gt; Strings {\n    url.into_iter()\n        .map(|(_, vi)| match RUrl::get_extptr(vi) {\n            Ok(rurl) =&gt; Rstr::from(rurl.0.authority()),\n            Err(_) =&gt; Rstr::na(),\n        })\n        .collect()\n}",
     "crumbs": [
       "Building Rust based R Packages",
-      "<span class='chapter-number'>33</span>  <span class='chapter-title'>Getters</span>"
+      "<span class='chapter-number'>33</span>  <span class='chapter-title'>Accessing Struct Methods from R</span>"
     ]
   },
   {
     "objectID": "building-rust-based-r-pkgs/16-mapping-into-option.html",
     "href": "building-rust-based-r-pkgs/16-mapping-into-option.html",
-    "title": "34  Mapping into an Option",
+    "title": "34  Modifying an Option<T>",
     "section": "",
-    "text": ".map() works on Option too\nSome methods don’t return a plain value—they return an Option. For example, a url may or may not have a host, so host_str() returns Option&lt;&str&gt;. The getters in the last chapter won’t work directly on these.\nJust like we .map() over the elements of an iterator, we can .map() over the value inside an Option or Result. The closure only runs if the value is Some (or Ok); if it’s None, nothing happens and we still have None.\nThis is exactly what we need: reach inside the Option, change the value, and keep the “missing” case intact.",
+    "text": ".map() works on Option too\nSome methods don’t return a plain value—they return an Option. For example, a url may or may not have a host, so host_str() returns Option&lt;&str&gt;.\nThe approach we used in the last exercise doesn’t work as see4mlessley here\nRemember, the Option is essentially Rust’s version of an NA!\nJust like we .map() over the elements of an iterator, we can .map() over the value inside an Option or Result.\nThe closure inside of .map() is only applied when Some (or Ok); if it’s None, nothing happens and we still have None.",
     "crumbs": [
       "Building Rust based R Packages",
-      "<span class='chapter-number'>34</span>  <span class='chapter-title'>Mapping into an `Option`</span>"
+      "<span class='chapter-number'>34</span>  <span class='chapter-title'>Modifying an `Option<T>`</span>"
     ]
   },
   {
     "objectID": "building-rust-based-r-pkgs/16-mapping-into-option.html#map-works-on-option-too",
     "href": "building-rust-based-r-pkgs/16-mapping-into-option.html#map-works-on-option-too",
-    "title": "34  Mapping into an Option",
+    "title": "34  Modifying an Option<T>",
     "section": "",
     "text": "let maybe_num: Option&lt;i32&gt; = Some(10);\nlet doubled = maybe_num.map(|n| n * 2);\n// doubled == Some(20)\n\nlet nothing: Option&lt;i32&gt; = None;\nlet still_nothing = nothing.map(|n| n * 2);\n// still_nothing == None",
     "crumbs": [
       "Building Rust based R Packages",
-      "<span class='chapter-number'>34</span>  <span class='chapter-title'>Mapping into an `Option`</span>"
+      "<span class='chapter-number'>34</span>  <span class='chapter-title'>Modifying an `Option<T>`</span>"
     ]
   },
   {
@@ -3414,56 +3414,56 @@
   {
     "objectID": "building-rust-based-r-pkgs/16-mapping-into-option.html#exercise",
     "href": "building-rust-based-r-pkgs/16-mapping-into-option.html#exercise",
-    "title": "34  Mapping into an Option",
+    "title": "34  Modifying an Option<T>",
     "section": "Exercise",
-    "text": "Exercise\nWrite a getter for each Url method that returns an Option:\n\nurl_host() calls host_str() (Option&lt;&str&gt;)\nurl_query() calls query() (Option&lt;&str&gt;)\nurl_domain() calls domain() (Option&lt;&str&gt;)\nurl_port() calls port() (Option&lt;u16&gt;, returns Integers)\n\nFor the string ones, map with .to_string(). For port, map the u16 to i32 (R’s integers are signed 32-bit) and return Integers.\n\n\nView solution\n\n#[extendr]\nfn url_host(url: List) -&gt; Strings {\n    url.into_iter()\n        .map(|(_, vi)| match RUrl::get_extptr(vi) {\n            Ok(rurl) =&gt; Rstr::from(rurl.0.host_str().map(|v| v.to_string())),\n            Err(_) =&gt; Rstr::na(),\n        })\n        .collect()\n}\n\n#[extendr]\nfn url_query(url: List) -&gt; Strings {\n    url.into_iter()\n        .map(|(_, vi)| match RUrl::get_extptr(vi) {\n            Ok(rurl) =&gt; Rstr::from(rurl.0.query().map(|v| v.to_string())),\n            Err(_) =&gt; Rstr::na(),\n        })\n        .collect()\n}\n\n#[extendr]\nfn url_domain(url: List) -&gt; Strings {\n    url.into_iter()\n        .map(|(_, vi)| match RUrl::get_extptr(vi) {\n            Ok(rurl) =&gt; Rstr::from(rurl.0.domain().map(|v| v.to_string())),\n            Err(_) =&gt; Rstr::na(),\n        })\n        .collect()\n}\n\n#[extendr]\nfn url_port(url: List) -&gt; Integers {\n    url.into_iter()\n        .map(|(_, vi)| match RUrl::get_extptr(vi) {\n            Ok(rurl) =&gt; Rint::from(rurl.0.port().map(|inner| inner as i32)),\n            Err(_) =&gt; Rint::na(),\n        })\n        .collect()\n}",
+    "text": "Exercise\nWrite a getter for each Url method that returns an Option and collect into a Strings\n\nurl_host() calls host_str() (Option&lt;&str&gt;)\nurl_query() calls query() (Option&lt;&str&gt;)\nurl_domain() calls domain() (Option&lt;&str&gt;)\nurl_port() calls port() (Option&lt;u16&gt;, collect into Integers)\n\nFor the string ones, map with .to_string(). For port, map the u16 to i32 via as i32\n\n\nView solution\n\n#[extendr]\nfn url_host(url: List) -&gt; Strings {\n    url.into_iter()\n        .map(|(_, vi)| match RUrl::get_extptr(vi) {\n            Ok(rurl) =&gt; Rstr::from(rurl.0.host_str().map(|v| v.to_string())),\n            Err(_) =&gt; Rstr::na(),\n        })\n        .collect()\n}\n\n#[extendr]\nfn url_query(url: List) -&gt; Strings {\n    url.into_iter()\n        .map(|(_, vi)| match RUrl::get_extptr(vi) {\n            Ok(rurl) =&gt; Rstr::from(rurl.0.query().map(|v| v.to_string())),\n            Err(_) =&gt; Rstr::na(),\n        })\n        .collect()\n}\n\n#[extendr]\nfn url_domain(url: List) -&gt; Strings {\n    url.into_iter()\n        .map(|(_, vi)| match RUrl::get_extptr(vi) {\n            Ok(rurl) =&gt; Rstr::from(rurl.0.domain().map(|v| v.to_string())),\n            Err(_) =&gt; Rstr::na(),\n        })\n        .collect()\n}\n\n#[extendr]\nfn url_port(url: List) -&gt; Integers {\n    url.into_iter()\n        .map(|(_, vi)| match RUrl::get_extptr(vi) {\n            Ok(rurl) =&gt; Rint::from(rurl.0.port().map(|inner| inner as i32)),\n            Err(_) =&gt; Rint::na(),\n        })\n        .collect()\n}",
     "crumbs": [
       "Building Rust based R Packages",
-      "<span class='chapter-number'>34</span>  <span class='chapter-title'>Mapping into an `Option`</span>"
+      "<span class='chapter-number'>34</span>  <span class='chapter-title'>Modifying an `Option<T>`</span>"
     ]
   },
   {
     "objectID": "building-rust-based-r-pkgs/17-setters-cow.html",
     "href": "building-rust-based-r-pkgs/17-setters-cow.html",
-    "title": "35  Setters & copy-on-write",
+    "title": "35  🐮 CoWs and Modifying in place",
     "section": "",
-    "text": "A helper to clone\nGetters read from a url. Setters change one. But R has a rule we need to respect: copy-on-write. When you modify an object in R, you don’t change it in place. R makes a copy first and modifies the copy.\nWe saw earlier that R owns our external pointers, so we shouldn’t mutate them in place anyways. Both reasons point to the same approach. To set a value, we clone the Rust object out of the pointer, modify the clone, and return a brand new object.\nGetting a fresh, owned copy out of a pointer is its own little dance: get the pointer, borrow with as_ref(), then .clone(). We’ll do this in every setter, so here’s a helper to add to your impl:\nThis requires RUrl to derive Clone, which we did back when we defined it.",
+    "text": "A helper to clone\nThe Url struct has methods to modfiy parts of the url in place. We want to be able to do that, but doing so goes against the philosopby of R a bit TO handle this we want to create a clone of the Url before we modify it.\nFor now we’ll take a single String as the second argument and apply it to every url. In the next chapter we’ll learn how to take a whole vector instead.\nTo set a value, we clone the Rust object out of the pointer, modify the clone, and return a brand new object.\nGetting a fresh, owned copy out of a pointer is its own little dance:\nWe’ll do this in every method that modifies the Url struct in place. To help, we can make a small method on the RUrl\nThis requires RUrl to derive Clone, which we did back when we defined it.",
     "crumbs": [
       "Building Rust based R Packages",
-      "<span class='chapter-number'>35</span>  <span class='chapter-title'>Setters & copy-on-write</span>"
+      "<span class='chapter-number'>35</span>  <span class='chapter-title'>🐮 CoWs and Modifying in place</span>"
     ]
   },
   {
     "objectID": "building-rust-based-r-pkgs/17-setters-cow.html#a-helper-to-clone",
     "href": "building-rust-based-r-pkgs/17-setters-cow.html#a-helper-to-clone",
-    "title": "35  Setters & copy-on-write",
+    "title": "35  🐮 CoWs and Modifying in place",
     "section": "",
-    "text": "impl RUrl {\n    fn clone_from_robj(robj: Robj) -&gt; anyhow::Result&lt;Self&gt; {\n        match ExternalPtr::&lt;RUrl&gt;::try_from(robj) {\n            Ok(v) =&gt; Ok(v.as_ref().clone()),\n            Err(e) =&gt; Err(anyhow!(\"Expected an object of class `rurl`:\\n{e}\")),\n        }\n    }\n}",
+    "text": "get the pointer\nborrow its data with as_ref(), then .clone()\n\n\nimpl RUrl {\n    fn clone_from_robj(robj: Robj) -&gt; anyhow::Result&lt;Self&gt; {\n        match ExternalPtr::&lt;RUrl&gt;::try_from(robj) {\n            Ok(v) =&gt; Ok(v.as_ref().clone()),\n            Err(e) =&gt; Err(anyhow!(\"Expected an object of class `rurl`:\\n{e}\")),\n        }\n    }\n}",
     "crumbs": [
       "Building Rust based R Packages",
-      "<span class='chapter-number'>35</span>  <span class='chapter-title'>Setters & copy-on-write</span>"
+      "<span class='chapter-number'>35</span>  <span class='chapter-title'>🐮 CoWs and Modifying in place</span>"
     ]
   },
   {
     "objectID": "building-rust-based-r-pkgs/17-setters-cow.html#mutable-values",
     "href": "building-rust-based-r-pkgs/17-setters-cow.html#mutable-values",
-    "title": "35  Setters & copy-on-write",
+    "title": "35  🐮 CoWs and Modifying in place",
     "section": "Mutable values",
     "text": "Mutable values\nOnce we have an owned clone, we can mark it mut and call a method that takes &mut self. The setter methods on Url look like this:\npub fn set_host(&mut self, host: Option&lt;&str&gt;) -&gt; Result&lt;(), ()&gt;\nThe host is an Option because passing None removes the host. We always want to set one, so we pass Some(host).",
     "crumbs": [
       "Building Rust based R Packages",
-      "<span class='chapter-number'>35</span>  <span class='chapter-title'>Setters & copy-on-write</span>"
+      "<span class='chapter-number'>35</span>  <span class='chapter-title'>🐮 CoWs and Modifying in place</span>"
     ]
   },
   {
     "objectID": "building-rust-based-r-pkgs/17-setters-cow.html#exercise",
     "href": "building-rust-based-r-pkgs/17-setters-cow.html#exercise",
-    "title": "35  Setters & copy-on-write",
+    "title": "35  🐮 CoWs and Modifying in place",
     "section": "Exercise",
-    "text": "Exercise\n\nWrite url_set_host(url: List, host: Strings) -&gt; List\nZip the urls together with the hosts\nIf the url is NULL or the host is NA, return NULL for that element\nOtherwise clone the url with clone_from_robj, set the host, and return the new object\nCollect into a List\n\nFor now, assume url and host are the same length. We’ll handle recycling and length checks in the next chapter.\n\n\nView solution\n\n#[extendr]\nfn url_set_host(url: List, host: Strings) -&gt; List {\n    url.into_iter()\n        .zip(host.into_iter())\n        .map(|((_, url), host)| {\n            if url.is_null() || host.is_na() {\n                return ().into_robj();\n            }\n\n            match RUrl::clone_from_robj(url) {\n                Ok(mut rurl) =&gt; match rurl.0.set_host(Some(host)) {\n                    Ok(_) =&gt; rurl.into_robj(),\n                    Err(_) =&gt; ().into_robj(),\n                },\n                Err(_) =&gt; ().into_robj(),\n            }\n        })\n        .collect()\n}",
+    "text": "Exercise\n\nWrite url_set_host(url: List, host: String) -&gt; List\nFor each url, if it is NULL, return NULL for that element\nOtherwise clone the url with clone_from_robj, set the host, and return the new object\nCollect into a List\n\nWe take a single host and apply it to every url. We’ll learn how to take a vector of hosts in the next chapter.\n\n\nView solution\n\n#[extendr]\nfn url_set_host(url: List, host: String) -&gt; List {\n    url.into_iter()\n        .map(|(_, url)| {\n            if url.is_null() {\n                return ().into_robj();\n            }\n\n            match RUrl::clone_from_robj(url) {\n                Ok(mut rurl) =&gt; match rurl.0.set_host(Some(&host)) {\n                    Ok(_) =&gt; rurl.into_robj(),\n                    Err(_) =&gt; ().into_robj(),\n                },\n                Err(_) =&gt; ().into_robj(),\n            }\n        })\n        .collect()\n}",
     "crumbs": [
       "Building Rust based R Packages",
-      "<span class='chapter-number'>35</span>  <span class='chapter-title'>Setters & copy-on-write</span>"
+      "<span class='chapter-number'>35</span>  <span class='chapter-title'>🐮 CoWs and Modifying in place</span>"
     ]
   },
   {
@@ -3684,6 +3684,358 @@
     "crumbs": [
       "Building Rust based R Packages",
       "<span class='chapter-number'>21</span>  <span class='chapter-title'>Workshop Scope</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/07-use-crate-url.html",
+    "href": "building-rust-based-r-pkgs/07-use-crate-url.html",
+    "title": "25  Adding the url crate",
+    "section": "",
+    "text": "Cargo.toml\nDependencies in Rust are managed by the Cargo.toml file. R will let you use packages that are on your machine even if you do not explicitly declare them as dependencies. Rust will not. You must declare dependencies.\nThe Cargo.toml is akin to the DESCRIPTION file. Dependencies are set via the [dependencies] table.\nWe can add dependencies manually, using cargo add crate-name, or via rextendr::use_crate(\"cratename\").",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>25</span>  <span class='chapter-title'>Adding the `url` crate</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/07-use-crate-url.html#cargo.toml",
+    "href": "building-rust-based-r-pkgs/07-use-crate-url.html#cargo.toml",
+    "title": "25  Adding the url crate",
+    "section": "",
+    "text": "[package]\nname = \"rurl\"\npublish = false\nversion = \"0.1.0\"\nedition = \"2021\"\nrust-version = \"1.65\"\n\n[lib]\ncrate-type = [ \"staticlib\" ]\nname = \"rurl\"\n\n[dependencies]\nextendr-api = \"*\"\n\n\nRust dependencies use semantic versionining (semver). The \"*\" is a shorthand for specifying the latest stable release.",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>25</span>  <span class='chapter-title'>Adding the `url` crate</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/07-use-crate-url.html#importing-items-from-dependencies",
+    "href": "building-rust-based-r-pkgs/07-use-crate-url.html#importing-items-from-dependencies",
+    "title": "25  Adding the url crate",
+    "section": "Importing items from dependencies",
+    "text": "Importing items from dependencies\nWhen dependencies are added to a crate, the items from the dependency are accessed via namespace similar to R. If we look at lib.rs we see at the top\nuse extendr_api::prelude::*;\nThis has the format of crate_name::module::item. The * is a wildcard for importing everything from the module.\nThe prelude is a common module name. It re-exports the commonly used items from a crate all together so you do not have to manually list them.\nMultiple items can be imported using {} for example:\nuse crate_name::{StructName, function_name};",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>25</span>  <span class='chapter-title'>Adding the `url` crate</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/07-use-crate-url.html#exercise",
+    "href": "building-rust-based-r-pkgs/07-use-crate-url.html#exercise",
+    "title": "25  Adding the url crate",
+    "section": "Exercise",
+    "text": "Exercise\n\nAdd the url crate as a dependency\nImport the Url struct from url in lib.rs\nWhile we’re here, add anyhow too—we’ll use it for error handling\n\n\n\nView solution\n\nFrom the R terminal run:\nrextendr::use_crate(\"url\")\nrextendr::use_crate(\"anyhow\")\nThis will add the url and anyhow dependencies.\nOpen src/rust/src/lib.rs and add the following below use extendr_api::prelude::*;\nuse url::Url;",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>25</span>  <span class='chapter-title'>Adding the `url` crate</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/08-r-type-system.html",
+    "href": "building-rust-based-r-pkgs/08-r-type-system.html",
+    "title": "26  R’s Type System",
+    "section": "",
+    "text": "Vector SEXP types\nIn R, everything is an SEXP.\nTo extendr, an SEXP is an Robj—it can be anything.\nThere are a subset of SEXP types that we actually care about—the vector kinds. For the sake of simplicity, we’ll only talk about the numeric vector types.",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>26</span>  <span class='chapter-title'>R's Type System</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/08-r-type-system.html#vector-sexp-types",
+    "href": "building-rust-based-r-pkgs/08-r-type-system.html#vector-sexp-types",
+    "title": "26  R’s Type System",
+    "section": "",
+    "text": "SEXP numeric types\n\n\n\nIntegers are represented by 32 bit integers i32 in Rust.\nDoubles are represented by 64 bit floats f64 in Rust.",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>26</span>  <span class='chapter-title'>R's Type System</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/08-r-type-system.html#scalar-types",
+    "href": "building-rust-based-r-pkgs/08-r-type-system.html#scalar-types",
+    "title": "26  R’s Type System",
+    "section": "Scalar types",
+    "text": "Scalar types\ni32 and f64 do not have a concept of NA or missing. How do we address this?\nextendr provides scalar types such as:\n\nRfloat\nRint\nRstr\nRbool\n\nand others.\nThese scalar types are created using ScalarType::from(). For example:\nlet my_float = Rfloat::from(3.14);\nOr, NAs can be created explicitly by using the associated method ScalarType::na()\nlet my_na = Rfloat::na();\n\nMissingness can also be checked by using the my_na.is_na() method.\nTo access the inner type—e.g. f64 or i32 we can use the .inner() method.",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>26</span>  <span class='chapter-title'>R's Type System</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/08-r-type-system.html#wrapper-types",
+    "href": "building-rust-based-r-pkgs/08-r-type-system.html#wrapper-types",
+    "title": "26  R’s Type System",
+    "section": "Wrapper types",
+    "text": "Wrapper types\nTo work with vectors, we work with their wrapper types. These are:\n\nDoubles\nIntegers\nLogicals\nStrings\n\nWe should always prefer these types over using Vec&lt;f64&gt; or Vec&lt;i32&gt;.\n\n\n\n\n\n\nNoteWhen in doubt, clone it out\n\n\n\n\n\nCloning an extendr Robj (or other wrapper type) is quite cheap. When cloning an Robj, we are only incrementing a reference count and not performing a full copy like we do when working in R.\n\n\n\n\n\n\nWrapper types",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>26</span>  <span class='chapter-title'>R's Type System</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/08-r-type-system.html#a-quick-taste",
+    "href": "building-rust-based-r-pkgs/08-r-type-system.html#a-quick-taste",
+    "title": "26  R’s Type System",
+    "section": "A quick taste",
+    "text": "A quick taste\nA vectorized extendr function takes a wrapper type in, iterates over its scalar elements, and collects back into a wrapper type. For example, doubling every value of a numeric vector:\n#[extendr]\nfn double_it(x: Doubles) -&gt; Doubles {\n    x.into_iter()\n        .map(|xi| Rfloat::from(xi.inner() * 2.0))\n        .collect::&lt;Doubles&gt;()\n}\nWe’ll put this exact shape to work in our first warm-up exercise.",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>26</span>  <span class='chapter-title'>R's Type System</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/09-new-type-struct.html",
+    "href": "building-rust-based-r-pkgs/09-new-type-struct.html",
+    "title": "27  New types",
+    "section": "",
+    "text": "The orphan rule\nThere is a pattern in Rust called the “newtype” pattern. We create a special kind of struct called a “tuple struct” which takes the structure struct NewType(OtherType). This helps us be able to add our flair (aka. methods) to these structs.\nFor the sake of example, lets say we have an enum.\nLets pretend for the sake of example that this is owned by another crate. Structs and enums that are owned by other crates cannot have an impl added to them. That is called the “orphan rule”.\nWe can actually side step this! We can create our own type on top of this by creating a “newtype” struct:",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>27</span>  <span class='chapter-title'>New types</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/09-new-type-struct.html#the-orphan-rule",
+    "href": "building-rust-based-r-pkgs/09-new-type-struct.html#the-orphan-rule",
+    "title": "27  New types",
+    "section": "",
+    "text": "#[derive(Debug, Clone)]\nenum Shape {\n    Triangle,\n    Rectangle,\n    Pentagon,\n    Hexagon,\n}\n\n\n#[derive(Debug, Clone)]\n#[extendr]\nstruct RShape(Shape);",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>27</span>  <span class='chapter-title'>New types</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/09-new-type-struct.html#adding-methods",
+    "href": "building-rust-based-r-pkgs/09-new-type-struct.html#adding-methods",
+    "title": "27  New types",
+    "section": "Adding methods",
+    "text": "Adding methods\nNow, with our own struct, we can add methods to it via an impl block!\n#[extendr]\nimpl RShape {\n    fn new(x: &str) -&gt; anyhow::Result&lt;Self&gt; {\n        match x {\n            \"triangle\" =&gt; Ok(Self(Shape::Triangle)),\n            \"rectangle\" =&gt; Ok(Self(Shape::Rectangle)),\n            \"pentagon\" =&gt; Ok(Self(Shape::Pentagon)),\n            \"hexagon\" =&gt; Ok(Self(Shape::Hexagon)),\n            _ =&gt; Err(anyhow::anyhow!(\"unknown shape: {x}\")),\n        }\n    }\n}",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>27</span>  <span class='chapter-title'>New types</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/09-new-type-struct.html#exporting-our-impl-to-r",
+    "href": "building-rust-based-r-pkgs/09-new-type-struct.html#exporting-our-impl-to-r",
+    "title": "27  New types",
+    "section": "Exporting our impl to R",
+    "text": "Exporting our impl to R\nTo make these methods available from R, we register the impl with extendr_module! { impl RShape; }.",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>27</span>  <span class='chapter-title'>New types</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/09-new-type-struct.html#exercise-2-minutes",
+    "href": "building-rust-based-r-pkgs/09-new-type-struct.html#exercise-2-minutes",
+    "title": "27  New types",
+    "section": "Exercise (2 minutes)",
+    "text": "Exercise (2 minutes)\n\nImport url::Url\nCreate a new type RUrl\nAdd it to the extendr_module!\nRun devtools::document() and devtools::load_all()\nPrint the RUrl to the console and notice that it is an environment\n\n\n\nView solution\n\n#[derive(Clone)]\n#[extendr]\nstruct RUrl(Url);\n\n#[extendr]\nimpl RUrl {\n    fn new(url: &str) -&gt; anyhow::Result&lt;Self&gt; {\n        Ok(Self(Url::parse(url)?))\n    }\n}\n\nextendr_module! {\n    mod rurls;\n    impl RUrl;\n}",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>27</span>  <span class='chapter-title'>New types</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/10-external-pointers.html",
+    "href": "building-rust-based-r-pkgs/10-external-pointers.html",
+    "title": "28  External pointers",
+    "section": "",
+    "text": "What is an external pointer?\nWhen we created the new type and exported that impl, that created an environment for the struct type, and its methods are stored as functions in that R environment. But we didn’t actually create any methods that we could call on an instance of it.\nWhat we really want is to be able to create that struct in Rust and hold onto it in R. This is possible through something called an external pointer.\nAn external pointer is a special type of object that essentially says “oh, i know where that is!” and lets you use it from other languages. For the rspatial nerds in the house, this is how the super fast geos package works.\nR doesn’t know how to work with an external pointer, it just knows how to keep track of it and keep it alive.",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>28</span>  <span class='chapter-title'>External pointers</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/10-external-pointers.html#a-constructor",
+    "href": "building-rust-based-r-pkgs/10-external-pointers.html#a-constructor",
+    "title": "28  External pointers",
+    "section": "A constructor",
+    "text": "A constructor\nTo create one of these we need to have a helper to construct the type. We typically do this via a new() method on the struct like so:\nimpl RShape {\n    fn new(x: &str) -&gt; anyhow::Result&lt;Self&gt; {\n        match x {\n            \"triangle\" =&gt; Ok(Self(Shape::Triangle)),\n            \"rectangle\" =&gt; Ok(Self(Shape::Rectangle)),\n            \"pentagon\" =&gt; Ok(Self(Shape::Pentagon)),\n            \"hexagon\" =&gt; Ok(Self(Shape::Hexagon)),\n            _ =&gt; Err(anyhow::anyhow!(\"unknown shape: {x}\")),\n        }\n    }\n}\nIn this case it is fallible because it can error out.\nWhen we include the impl in extendr_module! {}, these methods are available from the environment.\nextendr_module! {\n    mod mypackage;\n    impl RShape;\n}\nNow RShape$new(\"triangle\") returns an R object that holds a Rust RShape.",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>28</span>  <span class='chapter-title'>External pointers</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/10-external-pointers.html#exercise",
+    "href": "building-rust-based-r-pkgs/10-external-pointers.html#exercise",
+    "title": "28  External pointers",
+    "section": "Exercise",
+    "text": "Exercise\nWe’re going to build a type RUrl that wraps a url::Url.\n\nDefine struct RUrl(Url) (a newtype) and derive Clone\nPut #[extendr] on both the struct and an impl RUrl block\nWrite an associated function new(url: &str) that parses the string with Url::parse() and returns anyhow::Result&lt;Self&gt;\nRegister it with impl RUrl; in extendr_module! {}\nRun devtools::document() and devtools::load_all()\n\nThen call the constructor directly from R with https://google.com:\nRUrl$new(\"https://google.com\")\n#&gt; &lt;pointer: 0x6000021b9c60&gt;\n#&gt; attr(,\"class\")\n#&gt; [1] \"RUrl\"\n\n\nView solution\n\n#[derive(Clone)]\n#[extendr]\nstruct RUrl(Url);\n\n#[extendr]\nimpl RUrl {\n    fn new(url: &str) -&gt; anyhow::Result&lt;Self&gt; {\n        Ok(Self(Url::parse(url)?))\n    }\n}",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>28</span>  <span class='chapter-title'>External pointers</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/11-vectorization.html",
+    "href": "building-rust-based-r-pkgs/11-vectorization.html",
+    "title": "29  Vectorization",
+    "section": "",
+    "text": "Strings wrapper type\nIn the previous exercise we worked with a single url. In R we typically work with a vector of values. Naturally, we won’t want to work with just a single url at a time, we want to work with hundreds and thousands of them.\nSo, how can we handle this? Through vectorization (a fancy name for iteration and looping).\nNow, an external pointer isn’t any type of vector that im aware of! So how do we store them?\nRemember!! Lists are vectors (see this video).\nLists can hold any R object in them that they want!! So this is a natural way to contain multiple external pointers at a time!!!\nWhat we can do is use the Strings wrapper type (think of this as an NA-aware version of Vec&lt;String&gt;).\nWe can use .into_iter() to iterate through it. Each element is an Rstr, which is an NA aware &str—it is able to be used in most places that &str can be used.",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>29</span>  <span class='chapter-title'>Vectorization</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/11-vectorization.html#collecting-into-a-list",
+    "href": "building-rust-based-r-pkgs/11-vectorization.html#collecting-into-a-list",
+    "title": "29  Vectorization",
+    "section": "Collecting into a list",
+    "text": "Collecting into a list\n\nWe can .collect() directly into a List\nEvery single wrapper type can be turned into an Robj (because everything is an SEXP!)\nOur external pointer can be turned into an Robj\n\nFor example:\n#[extendr]\nfn parse_shapes(shapes: Strings) -&gt; List {\n    shapes\n        .into_iter()\n        .map(|vi| RShape::new(vi).unwrap())\n        .collect()\n}",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>29</span>  <span class='chapter-title'>Vectorization</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/11-vectorization.html#exercise",
+    "href": "building-rust-based-r-pkgs/11-vectorization.html#exercise",
+    "title": "29  Vectorization",
+    "section": "Exercise",
+    "text": "Exercise\nTake a character vector (Strings) and create a list of external pointers.\n\nUse .unwrap() to ignore the result for now\nUse .collect::&lt;List&gt;() to capture the results into a List\n\n\n\nView solution\n\n#[extendr]\nfn url_parse(url: Strings) -&gt; List {\n    url.into_iter().map(|xi| {\n        RUrl::new(xi).unwrap()\n    }).collect::&lt;List&gt;()\n}",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>29</span>  <span class='chapter-title'>Vectorization</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/12-na-handling.html",
+    "href": "building-rust-based-r-pkgs/12-na-handling.html",
+    "title": "30  NA handling",
+    "section": "",
+    "text": "Handling NAs and errors\nIn the previous version of this we didn’t handle errors and we didn’t handle NAs. We can add some checks and match statements to do safe error handling.\nThere are different schools of thought here. Some people think that any error should cause the operation to fail. I believe that for vectorized operations, errors should be handled with grace. To me that means that we ignore them and return an NA.\nIn the previous example we used .unwrap(). I want us to improve that function with error handling.",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>30</span>  <span class='chapter-title'>NA handling</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/12-na-handling.html#handling-nas-and-errors",
+    "href": "building-rust-based-r-pkgs/12-na-handling.html#handling-nas-and-errors",
+    "title": "30  NA handling",
+    "section": "",
+    "text": "During the .into_iter(), lets first check if the Rstr is an NA by using the .is_na() method\n\nIf it is true, then we return a NULL. We can do this by using Robj::from(())\n() is called the unit-type, a special type of nothingness in Rust (technically an empty tuple)\n\nOtherwise we try to parse!\nThen when we parse, we match on the result. If an error, same thing with Robj::from(())\nOtherwise we convert the result into an Robj with .into_robj()\n\n\n\n\n\n\n\nA tip for multiple line expressions in an iterator: wrap it in a bracket!",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>30</span>  <span class='chapter-title'>NA handling</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/12-na-handling.html#exercise",
+    "href": "building-rust-based-r-pkgs/12-na-handling.html#exercise",
+    "title": "30  NA handling",
+    "section": "Exercise",
+    "text": "Exercise\nImprove url_parse() so that NAs and parse errors both become NULL instead of panicking.\n\nCheck each element for NA with .is_na() and return ().into_robj() if so\nOtherwise match on RUrl::new(xi) and return ().into_robj() on Err\nCollect into a List\n\n\n\nView solution\n\n#[extendr]\nfn url_parse(url: Strings) -&gt; List {\n    url\n        .into_iter()\n        .map(|xi| {\n            if xi.is_na() {\n                return ().into_robj();\n            }\n\n            match RUrl::new(xi) {\n                Ok(v) =&gt; v.into_robj(),\n                Err(_) =&gt; ().into_robj(),\n            }\n        })\n        .collect::&lt;List&gt;()\n}",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>30</span>  <span class='chapter-title'>NA handling</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/13-print-helper.html#accessing-the-external-pointer",
+    "href": "building-rust-based-r-pkgs/13-print-helper.html#accessing-the-external-pointer",
+    "title": "31  A print helper",
+    "section": "",
+    "text": "External pointers are stored in a struct called…. ExternalPtr, this is a fancy type of struct\nIt has an associated type—as seen by this “turbo-fish”\nRust needs to know what type is inside of the pointer so that it can give you access to the methods in it\nEach type in Rust has a special method called try_from() that fallibly tries to convert. If it can’t, we get an error!\nextendr provides this ExternalPtr::try_from() so that we can try and get the pointer!\n\n\nimpl RShape {\n    fn get_extptr(robj: Robj) -&gt; extendr_api::Result&lt;ExternalPtr&lt;Self&gt;&gt; {\n        ExternalPtr::&lt;Self&gt;::try_from(robj)\n    }\n}",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>31</span>  <span class='chapter-title'>A print helper</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/16-mapping-into-option.html#why-we-need",
+    "href": "building-rust-based-r-pkgs/16-mapping-into-option.html#why-we-need",
+    "title": "34  Modifying an Option<T>",
+    "section": "Why we need",
+    "text": "Why we need\nA method like host_str() returns Option&lt;&str&gt;—a borrowed string slice. To hand it to R we need an owned String. So we map into the option and call .to_string() on the inner &str:\nrurl.0.host_str().map(|v| v.to_string())\n// Option&lt;&str&gt; -&gt; Option&lt;String&gt;\n\n\n\n\n\n\nRstr::from(Option&lt;String&gt;) turns a None in NA otherwise the value.",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>34</span>  <span class='chapter-title'>Modifying an `Option<T>`</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/18-combining-iterators.html",
+    "href": "building-rust-based-r-pkgs/18-combining-iterators.html",
+    "title": "36  Combining iterators",
+    "section": "",
+    "text": ".zip()\nPreviously we only used a scalar string value for our methods that modified the url struct.\nTypically we want to be able to take EITHER a scalar string and apply it to every element of the first argument in a vectorized manner OR a vector that is the same length as the first argument.\nTo do this effectively we can combine iterators using .zip(). It pairs up the elements of two iterators, one at a time, into a tuple.\nEach step of the combined iterator gives us a tuple of ((name, url), host). We destructure it in the closure and ignore the name with _.\n.zip() works best when both vectors are the same length. For now we’ll take a host that is the same length as url. In the next chapter we’ll handle the case where they aren’t.",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>36</span>  <span class='chapter-title'>Combining iterators</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/18-combining-iterators.html#zip",
+    "href": "building-rust-based-r-pkgs/18-combining-iterators.html#zip",
+    "title": "36  Combining iterators",
+    "section": "",
+    "text": "url.into_iter().zip(host.into_iter())",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>36</span>  <span class='chapter-title'>Combining iterators</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/18-combining-iterators.html#exercise",
+    "href": "building-rust-based-r-pkgs/18-combining-iterators.html#exercise",
+    "title": "36  Combining iterators",
+    "section": "Exercise",
+    "text": "Exercise\n\nWrite url_set_host(url: List, host: Strings) -&gt; List\nZip the urls together with the hosts\nIf the url is NULL or the host is NA, return NULL for that element\nOtherwise clone the url with clone_from_robj, set the host, and return the new object\nCollect into a List\n\nFor now, assume url and host are the same length.\n\n\nView solution\n\n#[extendr]\nfn url_set_host(url: List, host: Strings) -&gt; List {\n    url.into_iter()\n        .zip(host.into_iter())\n        .map(|((_, url), host)| {\n            if url.is_null() || host.is_na() {\n                return ().into_robj();\n            }\n\n            match RUrl::clone_from_robj(url) {\n                Ok(mut rurl) =&gt; match rurl.0.set_host(Some(host)) {\n                    Ok(_) =&gt; rurl.into_robj(),\n                    Err(_) =&gt; ().into_robj(),\n                },\n                Err(_) =&gt; ().into_robj(),\n            }\n        })\n        .collect()\n}",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>36</span>  <span class='chapter-title'>Combining iterators</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/19-recycling-and-errors.html",
+    "href": "building-rust-based-r-pkgs/19-recycling-and-errors.html",
+    "title": "37  Recycling & errors",
+    "section": "",
+    "text": "Recycling with .cycle()\nOur url_set_host() assumed the urls and hosts were the same length. But R users expect recycling. If you give a length-1 value, it should apply to every element.\nThat single \"https\" should be reused for all the urls.\nThe .cycle() method takes an iterator and repeats it forever. When we zip a cycled iterator against our urls, the shorter one keeps repeating to cover every url.\nA length-1 scheme now applies to every url. A length-3 scheme lines up with three urls as you’d expect.",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>37</span>  <span class='chapter-title'>Recycling & errors</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/19-recycling-and-errors.html#recycling-with-.cycle",
+    "href": "building-rust-based-r-pkgs/19-recycling-and-errors.html#recycling-with-.cycle",
+    "title": "37  Recycling & errors",
+    "section": "",
+    "text": "url.into_iter().zip(scheme.into_iter().cycle())",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>37</span>  <span class='chapter-title'>Recycling & errors</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/19-recycling-and-errors.html#length-checks-with-throw_r_error",
+    "href": "building-rust-based-r-pkgs/19-recycling-and-errors.html#length-checks-with-throw_r_error",
+    "title": "37  Recycling & errors",
+    "section": "Length checks with throw_r_error",
+    "text": "Length checks with throw_r_error\nRecycling only makes sense in two cases. The value is a scalar, or it’s exactly the same length as the urls. Anything else is a mistake, and we should tell the user instead of silently doing something weird.\nWhen an argument is invalid, we don’t return NA for that element. The whole call is wrong, so we stop the function with an error. We do that with throw_r_error().\nif (scheme.len() != url.len()) & (scheme.len() != 1) {\n    throw_r_error(\"`scheme` must be a scalar or the same length as `url`\");\n}\nThe condition reads: error when the length is neither equal to the url length nor equal to one.",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>37</span>  <span class='chapter-title'>Recycling & errors</span>"
+    ]
+  },
+  {
+    "objectID": "building-rust-based-r-pkgs/19-recycling-and-errors.html#exercise",
+    "href": "building-rust-based-r-pkgs/19-recycling-and-errors.html#exercise",
+    "title": "37  Recycling & errors",
+    "section": "Exercise",
+    "text": "Exercise\nWrite the remaining mutable methods, each with a length check up front and .cycle() for recycling:\n\nurl_set_path() calls set_path(), which is infallible (returns ())\nurl_set_port() calls set_port(), which takes Option&lt;u16&gt; and returns a Result\nurl_set_scheme() calls set_scheme(), which returns a Result\n\n\n\nView solution\n\n#[extendr]\nfn url_set_path(url: List, path: Strings) -&gt; List {\n    if (path.len() != url.len()) & (path.len() != 1) {\n        throw_r_error(\"`path` must be a scalar or the same length as `url`\");\n    }\n    url.into_iter()\n        .zip(path.into_iter().cycle())\n        .map(|((_, url), path)| {\n            if url.is_null() || path.is_na() {\n                return ().into_robj();\n            }\n\n            match RUrl::clone_from_robj(url) {\n                Ok(mut rurl) =&gt; {\n                    rurl.0.set_path(path);\n                    rurl.into_robj()\n                }\n                Err(_) =&gt; ().into_robj(),\n            }\n        })\n        .collect()\n}\n\n#[extendr]\nfn url_set_port(url: List, port: Integers) -&gt; List {\n    if (port.len() != url.len()) & (port.len() != 1) {\n        throw_r_error(\"`port` must be a scalar or the same length as `url`\");\n    }\n    url.into_iter()\n        .zip(port.into_iter().cycle())\n        .map(|((_, url), port)| {\n            if url.is_null() || port.is_na() {\n                return ().into_robj();\n            }\n\n            match RUrl::clone_from_robj(url) {\n                Ok(mut rurl) =&gt; match rurl.0.set_port(Some(port.0 as u16)) {\n                    Ok(_) =&gt; rurl.into_robj(),\n                    Err(_) =&gt; ().into_robj(),\n                },\n                Err(_) =&gt; ().into_robj(),\n            }\n        })\n        .collect()\n}\n\n#[extendr]\nfn url_set_scheme(url: List, scheme: Strings) -&gt; List {\n    if (scheme.len() != url.len()) & (scheme.len() != 1) {\n        throw_r_error(\"`scheme` must be a scalar or the same length as `url`\");\n    }\n    url.into_iter()\n        .zip(scheme.into_iter().cycle())\n        .map(|((_, url), scheme)| {\n            if url.is_null() || scheme.is_na() {\n                return ().into_robj();\n            }\n\n            match RUrl::clone_from_robj(url) {\n                Ok(mut rurl) =&gt; match rurl.0.set_scheme(scheme) {\n                    Ok(_) =&gt; rurl.into_robj(),\n                    Err(_) =&gt; ().into_robj(),\n                },\n                Err(_) =&gt; ().into_robj(),\n            }\n        })\n        .collect()\n}",
+    "crumbs": [
+      "Building Rust based R Packages",
+      "<span class='chapter-number'>37</span>  <span class='chapter-title'>Recycling & errors</span>"
     ]
   }
 ]

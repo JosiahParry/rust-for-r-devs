@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>33&nbsp; Getters – Rust for R Developers</title>
+<title>33&nbsp; Accessing Struct Methods from R – Rust for R Developers</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -118,7 +118,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../building-rust-based-r-pkgs/index.html">Building Rust based R Packages</a></li><li class="breadcrumb-item"><a href="../building-rust-based-r-pkgs/15-url-getters.html"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Getters</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../building-rust-based-r-pkgs/index.html">Building Rust based R Packages</a></li><li class="breadcrumb-item"><a href="../building-rust-based-r-pkgs/15-url-getters.html"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Accessing Struct Methods from R</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -320,38 +320,38 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../building-rust-based-r-pkgs/07-r-type-system.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">R’s Type System</span></span></a>
+  <a href="../building-rust-based-r-pkgs/07-use-crate-url.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Adding the <code>url</code> crate</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../building-rust-based-r-pkgs/08-na-handling.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Handle NAs gracefully</span></span></a>
+  <a href="../building-rust-based-r-pkgs/08-r-type-system.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">R’s Type System</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../building-rust-based-r-pkgs/09-centroid.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Warm-up: <code>centroid()</code></span></span></a>
+  <a href="../building-rust-based-r-pkgs/09-new-type-struct.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">New types</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../building-rust-based-r-pkgs/10-use-crate-url.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Adding the <code>url</code> crate</span></span></a>
+  <a href="../building-rust-based-r-pkgs/10-external-pointers.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">External pointers</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../building-rust-based-r-pkgs/11-external-pointers.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">External pointers</span></span></a>
+  <a href="../building-rust-based-r-pkgs/11-vectorization.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Vectorization</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../building-rust-based-r-pkgs/12-lists-of-pointers.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Lists of pointers</span></span></a>
+  <a href="../building-rust-based-r-pkgs/12-na-handling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">NA handling</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -363,37 +363,37 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../building-rust-based-r-pkgs/14-s3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">S3 classes</span></span></a>
+ <span class="menu-text"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">Integrating with</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../building-rust-based-r-pkgs/15-url-getters.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Getters</span></span></a>
+ <span class="menu-text"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Accessing Struct Methods from R</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../building-rust-based-r-pkgs/16-mapping-into-option.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Mapping into an <code>Option</code></span></span></a>
+ <span class="menu-text"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Modifying an `Option<t>`</t></span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../building-rust-based-r-pkgs/17-setters-cow.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">Setters &amp; copy-on-write</span></span></a>
+ <span class="menu-text"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">🐮 CoWs and Modifying in place</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../building-rust-based-r-pkgs/18-recycling-and-errors.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">36</span>&nbsp; <span class="chapter-title">Recycling &amp; errors</span></span></a>
+  <a href="../building-rust-based-r-pkgs/18-combining-iterators.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">36</span>&nbsp; <span class="chapter-title">Combining iterators</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../building-rust-based-r-pkgs/19-path-segments.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">37</span>&nbsp; <span class="chapter-title">Path segments</span></span></a>
+  <a href="../building-rust-based-r-pkgs/19-recycling-and-errors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">37</span>&nbsp; <span class="chapter-title">Recycling &amp; errors</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -436,9 +436,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../building-rust-based-r-pkgs/index.html">Building Rust based R Packages</a></li><li class="breadcrumb-item"><a href="../building-rust-based-r-pkgs/15-url-getters.html"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Getters</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../building-rust-based-r-pkgs/index.html">Building Rust based R Packages</a></li><li class="breadcrumb-item"><a href="../building-rust-based-r-pkgs/15-url-getters.html"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Accessing Struct Methods from R</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Getters</span></h1>
+<h1 class="title"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Accessing Struct Methods from R</span></h1>
 </div>
 
 
@@ -468,24 +468,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Write a family of functions that call a method on each object and collect the result.</p>
 </div>
 </div>
-<p>Now that we can hold objects in a list, we can expose their methods to R. These <strong>getter</strong> functions all look the same: walk the list, get each object back, call a method, collect the results.</p>
+<p>Now that we can hold objects in a list, we can expose their methods to R. The <code>Url</code> struct has many methods that we can access from R and our vctr.</p>
+<p>The approach to use these methods is frankly somewhat formulaic. Since we have multiple of these structs in our vector, the approach is simple:</p>
+<ul>
+<li>Iterate through the list</li>
+<li>Gracefully get the external pointer</li>
+<li>Call the method</li>
+<li>Collect the results into the right R type!</li>
+</ul>
 <section id="the-pattern" class="level2">
 <h2 class="anchored" data-anchor-id="the-pattern">The pattern</h2>
-<p>Every getter is the same shape we used for the print helper:</p>
+<p>Every method wrapper is generally the same shape as the print helper.</p>
 <ol type="1">
-<li>iterate the list (<code>(_, vi)</code> tuples)</li>
+<li>Iterate the list (<code>(_, vi)</code> tuples)</li>
 <li><code>get_extptr</code> to recover the object</li>
-<li>call the method on the borrowed value</li>
-<li>collect into a wrapper type, with <code>NA</code> on failure</li>
+<li>Call the method on the borrowed value</li>
+<li>Collect into a wrapper type, with <code>NA</code> or <code>NULL</code> on failure</li>
 </ol>
 </section>
 <section id="example" class="level2">
 <h2 class="anchored" data-anchor-id="example">Example</h2>
-<p>A getter that returns the number of coordinates for each shape:</p>
+<p>A function that returns the number of coordinates for each shape:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>extendr<span class="at">]</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> shape_coords(x<span class="op">:</span> List) <span class="op">-&gt;</span> Integers <span class="op">{</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    x<span class="op">.</span>into_iter()</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span>map(<span class="op">|</span>(_<span class="op">,</span> vi)<span class="op">|</span> <span class="cf">match</span> <span class="pp">Shape::</span>get_extptr(vi) <span class="op">{</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span>map(<span class="op">|</span>(_<span class="op">,</span> vi)<span class="op">|</span> <span class="cf">match</span> <span class="pp">RShape::</span>get_extptr(vi) <span class="op">{</span></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>            <span class="cn">Ok</span>(shape) <span class="op">=&gt;</span> <span class="pp">Rint::</span>from(shape<span class="op">.</span>n_coords() <span class="kw">as</span> <span class="dt">i32</span>)<span class="op">,</span></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>            <span class="cn">Err</span>(_) <span class="op">=&gt;</span> <span class="pp">Rint::</span>na()<span class="op">,</span></span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span>)</span>
@@ -497,8 +504,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="finding-the-methods">Finding the methods</h2>
 <p>A <code>Url</code> has many methods. The two best ways to discover them:</p>
 <ul>
-<li>the docs page: <a href="https://docs.rs/url/latest/url/struct.Url.html#implementations" class="uri">https://docs.rs/url/latest/url/struct.Url.html#implementations</a></li>
-<li>the LSP autocomplete—type <code>rurl.0.</code> and let rust-analyzer list them</li>
+<li>The docs page: <a href="https://docs.rs/url/latest/url/struct.Url.html#implementations" class="uri">https://docs.rs/url/latest/url/struct.Url.html#implementations</a></li>
+<li>The LSP autocomplete—type <code>rurl.0.</code> and let rust-analyzer list them</li>
 </ul>
 <p>Some methods return a plain <code>&amp;str</code> (like <code>scheme()</code>); these are the easy ones and we’ll do them first. Others return an <code>Option</code>—we’ll handle those in the next chapter.</p>
 </section>
@@ -952,13 +959,13 @@ View solution
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../building-rust-based-r-pkgs/14-s3.html" class="pagination-link" aria-label="S3 classes">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">S3 classes</span></span>
+      <a href="../building-rust-based-r-pkgs/14-s3.html" class="pagination-link" aria-label="Integrating with">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">Integrating with</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../building-rust-based-r-pkgs/16-mapping-into-option.html" class="pagination-link" aria-label="Mapping into an `Option`">
-        <span class="nav-page-text"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Mapping into an <code>Option</code></span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../building-rust-based-r-pkgs/16-mapping-into-option.html" class="pagination-link" aria-label="Modifying an `Option<T>`">
+        <span class="nav-page-text"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Modifying an <code>Option&lt;T&gt;</code></span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

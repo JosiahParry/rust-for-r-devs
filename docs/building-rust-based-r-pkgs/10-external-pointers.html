@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>35&nbsp; 🐮 CoWs and Modifying in place – Rust for R Developers</title>
+<title>28&nbsp; External pointers – Rust for R Developers</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -65,8 +65,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../building-rust-based-r-pkgs/18-combining-iterators.html" rel="next">
-<link href="../building-rust-based-r-pkgs/16-mapping-into-option.html" rel="prev">
+<link href="../building-rust-based-r-pkgs/11-vectorization.html" rel="next">
+<link href="../building-rust-based-r-pkgs/09-new-type-struct.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
@@ -118,7 +118,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../building-rust-based-r-pkgs/index.html">Building Rust based R Packages</a></li><li class="breadcrumb-item"><a href="../building-rust-based-r-pkgs/17-setters-cow.html"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">🐮 CoWs and Modifying in place</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../building-rust-based-r-pkgs/index.html">Building Rust based R Packages</a></li><li class="breadcrumb-item"><a href="../building-rust-based-r-pkgs/10-external-pointers.html"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">External pointers</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -338,7 +338,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../building-rust-based-r-pkgs/10-external-pointers.html" class="sidebar-item-text sidebar-link">
+  <a href="../building-rust-based-r-pkgs/10-external-pointers.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">External pointers</span></span></a>
   </div>
 </li>
@@ -380,7 +380,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../building-rust-based-r-pkgs/17-setters-cow.html" class="sidebar-item-text sidebar-link active">
+  <a href="../building-rust-based-r-pkgs/17-setters-cow.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">🐮 CoWs and Modifying in place</span></span></a>
   </div>
 </li>
@@ -426,18 +426,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#a-helper-to-clone" id="toc-a-helper-to-clone" class="nav-link active" data-scroll-target="#a-helper-to-clone">A helper to clone</a></li>
-  <li><a href="#mutable-values" id="toc-mutable-values" class="nav-link" data-scroll-target="#mutable-values">Mutable values</a></li>
+  <li><a href="#what-is-an-external-pointer" id="toc-what-is-an-external-pointer" class="nav-link active" data-scroll-target="#what-is-an-external-pointer">What is an external pointer?</a></li>
+  <li><a href="#a-constructor" id="toc-a-constructor" class="nav-link" data-scroll-target="#a-constructor">A constructor</a></li>
   <li><a href="#exercise" id="toc-exercise" class="nav-link" data-scroll-target="#exercise">Exercise</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/JosiahParry/2025-cascadia-rust-for-r-devs/edit/main/building-rust-based-r-pkgs/17-setters-cow.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/JosiahParry/2025-cascadia-rust-for-r-devs/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/JosiahParry/2025-cascadia-rust-for-r-devs/edit/main/building-rust-based-r-pkgs/10-external-pointers.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/JosiahParry/2025-cascadia-rust-for-r-devs/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../building-rust-based-r-pkgs/index.html">Building Rust based R Packages</a></li><li class="breadcrumb-item"><a href="../building-rust-based-r-pkgs/17-setters-cow.html"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">🐮 CoWs and Modifying in place</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../building-rust-based-r-pkgs/index.html">Building Rust based R Packages</a></li><li class="breadcrumb-item"><a href="../building-rust-based-r-pkgs/10-external-pointers.html"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">External pointers</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">🐮 CoWs and Modifying in place</span></h1>
+<h1 class="title"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">External pointers</span></h1>
 </div>
 
 
@@ -464,83 +464,67 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Modify a value held in an external pointer without mutating the original.</p>
+<p>Use an <code>#[extendr]</code> impl to store a Rust struct inside an R object, and learn how to get it back out again.</p>
 </div>
 </div>
-<ul>
-<li>the idea of mutability is alien to R 👽</li>
-<li>R uses the idea copy-on-write (CoW) semantics 🐮</li>
-<li>When you modify an object in R, you don’t change it in place.</li>
-<li>R makes a copy first and modifies the copy.</li>
-</ul>
-<p>The <code>Url</code> struct has methods to modfiy parts of the url <em>in place</em>. We want to be able to do that, but doing so goes against the philosopby of R a bit TO handle this we want to create a <strong>clone</strong> of the Url before we modify it.</p>
-<p>For now we’ll take a single <code>String</code> as the second argument and apply it to every url. In the next chapter we’ll learn how to take a whole vector instead.</p>
-<div class="callout callout-style-simple callout-important">
-<div class="callout-body d-flex">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-body-container">
-<p>Cloning an <code>ExternalPtr&lt;T&gt;</code> only clones the external pointer and <strong>not</strong> the underlying data.</p>
-</div>
-</div>
-</div>
-<p>To set a value, we clone the Rust object out of the pointer, modify the clone, and return a brand new object.</p>
-<section id="a-helper-to-clone" class="level2">
-<h2 class="anchored" data-anchor-id="a-helper-to-clone">A helper to clone</h2>
-<p>Getting a fresh, owned copy out of a pointer is its own little dance:</p>
-<ul>
-<li>get the pointer</li>
-<li>borrow its data with <code>as_ref()</code>, then <code>.clone()</code></li>
-</ul>
-<p>We’ll do this in every method that modifies the <code>Url</code> struct in place. To help, we can make a small method on the <code>RUrl</code></p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">impl</span> RUrl <span class="op">{</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">fn</span> clone_from_robj(robj<span class="op">:</span> Robj) <span class="op">-&gt;</span> <span class="pp">anyhow::</span><span class="dt">Result</span><span class="op">&lt;</span><span class="dt">Self</span><span class="op">&gt;</span> <span class="op">{</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">match</span> <span class="pp">ExternalPtr::</span><span class="op">&lt;</span>RUrl<span class="op">&gt;</span><span class="pp">::</span>try_from(robj) <span class="op">{</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>            <span class="cn">Ok</span>(v) <span class="op">=&gt;</span> <span class="cn">Ok</span>(v<span class="op">.</span>as_ref()<span class="op">.</span>clone())<span class="op">,</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>            <span class="cn">Err</span>(e) <span class="op">=&gt;</span> <span class="cn">Err</span>(<span class="pp">anyhow!</span>(<span class="st">"Expected an object of class `rurl`:</span><span class="sc">\n</span><span class="st">{e}"</span>))<span class="op">,</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>This requires <code>RUrl</code> to derive <code>Clone</code>, which we did back when we defined it.</p>
+<p>When we created the new type and exported that impl, that created an environment for the struct type, and its methods are stored as functions in that R environment. But we didn’t actually create any methods that we could call on an instance of it.</p>
+<p>What we <em>really</em> want is to be able to create that struct in Rust and hold onto it in R. This is possible through something called an <strong>external pointer</strong>.</p>
+<section id="what-is-an-external-pointer" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-an-external-pointer">What is an external pointer?</h2>
+<p>An external pointer is a special type of object that essentially says “oh, i know where that is!” and lets you use it from other languages. For the rspatial nerds in the house, this is how the super fast geos package works.</p>
+<p>R doesn’t know how to work with an external pointer, it just knows how to keep track of it and keep it alive.</p>
 </section>
-<section id="mutable-values" class="level2">
-<h2 class="anchored" data-anchor-id="mutable-values">Mutable values</h2>
-<p>Once we have an owned clone, we can mark it <code>mut</code> and call a method that takes <code>&amp;mut self</code>. The setter methods on <code>Url</code> look like this:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> set_host(<span class="op">&amp;</span><span class="kw">mut</span> <span class="kw">self</span><span class="op">,</span> host<span class="op">:</span> <span class="dt">Option</span><span class="op">&lt;&amp;</span><span class="dt">str</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span>()<span class="op">,</span> ()<span class="op">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>The <code>host</code> is an <code>Option</code> because passing <code>None</code> removes the host. We always want to set one, so we pass <code>Some(host)</code>.</p>
+<section id="a-constructor" class="level2">
+<h2 class="anchored" data-anchor-id="a-constructor">A constructor</h2>
+<p>To create one of these we need to have a helper to construct the type. We typically do this via a <code>new()</code> method on the struct like so:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">impl</span> RShape <span class="op">{</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">fn</span> new(x<span class="op">:</span> <span class="op">&amp;</span><span class="dt">str</span>) <span class="op">-&gt;</span> <span class="pp">anyhow::</span><span class="dt">Result</span><span class="op">&lt;</span><span class="dt">Self</span><span class="op">&gt;</span> <span class="op">{</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">match</span> x <span class="op">{</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>            <span class="st">"triangle"</span> <span class="op">=&gt;</span> <span class="cn">Ok</span>(<span class="dt">Self</span>(<span class="pp">Shape::</span>Triangle))<span class="op">,</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>            <span class="st">"rectangle"</span> <span class="op">=&gt;</span> <span class="cn">Ok</span>(<span class="dt">Self</span>(<span class="pp">Shape::</span>Rectangle))<span class="op">,</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>            <span class="st">"pentagon"</span> <span class="op">=&gt;</span> <span class="cn">Ok</span>(<span class="dt">Self</span>(<span class="pp">Shape::</span>Pentagon))<span class="op">,</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>            <span class="st">"hexagon"</span> <span class="op">=&gt;</span> <span class="cn">Ok</span>(<span class="dt">Self</span>(<span class="pp">Shape::</span>Hexagon))<span class="op">,</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>            _ <span class="op">=&gt;</span> <span class="cn">Err</span>(<span class="pp">anyhow::anyhow!</span>(<span class="st">"unknown shape: {x}"</span>))<span class="op">,</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>In this case it is <strong>fallible</strong> because it can error out.</p>
+<p>When we include the impl in <code>extendr_module! {}</code>, these methods are available from the environment.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="pp">extendr_module!</span> <span class="op">{</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">mod</span> mypackage<span class="op">;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">impl</span> RShape<span class="op">;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Now <code>RShape$new("triangle")</code> returns an R object that holds a Rust <code>RShape</code>.</p>
 </section>
 <section id="exercise" class="level2">
 <h2 class="anchored" data-anchor-id="exercise">Exercise</h2>
+<p>We’re going to build a type <code>RUrl</code> that wraps a <code>url::Url</code>.</p>
 <ul>
-<li>Write <code>url_set_host(url: List, host: String) -&gt; List</code></li>
-<li>For each url, if it is <code>NULL</code>, return <code>NULL</code> for that element</li>
-<li>Otherwise clone the url with <code>clone_from_robj</code>, set the host, and return the new object</li>
-<li>Collect into a <code>List</code></li>
+<li>Define <code>struct RUrl(Url)</code> (a newtype) and derive <code>Clone</code></li>
+<li>Put <code>#[extendr]</code> on both the struct and an <code>impl RUrl</code> block</li>
+<li>Write an associated function <code>new(url: &amp;str)</code> that parses the string with <code>Url::parse()</code> and returns <code>anyhow::Result&lt;Self&gt;</code></li>
+<li>Register it with <code>impl RUrl;</code> in <code>extendr_module! {}</code></li>
+<li>Run <code>devtools::document()</code> and <code>devtools::load_all()</code></li>
 </ul>
-<p>We take a single <code>host</code> and apply it to every url. We’ll learn how to take a vector of hosts in the next chapter.</p>
+<p>Then call the constructor directly from R with <code>https://google.com</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>RUrl<span class="sc">$</span><span class="fu">new</span>(<span class="st">"https://google.com"</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;pointer: 0x6000021b9c60&gt;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; attr(,"class")</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] "RUrl"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <details>
 <summary>
 View solution
 </summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>extendr<span class="at">]</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> url_set_host(url<span class="op">:</span> List<span class="op">,</span> host<span class="op">:</span> <span class="dt">String</span>) <span class="op">-&gt;</span> List <span class="op">{</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    url<span class="op">.</span>into_iter()</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span>map(<span class="op">|</span>(_<span class="op">,</span> url)<span class="op">|</span> <span class="op">{</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> url<span class="op">.</span>is_null() <span class="op">{</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>                <span class="cf">return</span> ()<span class="op">.</span>into_robj()<span class="op">;</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>            <span class="cf">match</span> <span class="pp">RUrl::</span>clone_from_robj(url) <span class="op">{</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>                <span class="cn">Ok</span>(<span class="kw">mut</span> rurl) <span class="op">=&gt;</span> <span class="cf">match</span> rurl<span class="op">.</span><span class="dv">0</span><span class="op">.</span>set_host(<span class="cn">Some</span>(<span class="op">&amp;</span>host)) <span class="op">{</span></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>                    <span class="cn">Ok</span>(_) <span class="op">=&gt;</span> rurl<span class="op">.</span>into_robj()<span class="op">,</span></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>                    <span class="cn">Err</span>(_) <span class="op">=&gt;</span> ()<span class="op">.</span>into_robj()<span class="op">,</span></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>                <span class="op">},</span></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>                <span class="cn">Err</span>(_) <span class="op">=&gt;</span> ()<span class="op">.</span>into_robj()<span class="op">,</span></span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span>)</span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span>collect()</span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="at">)]</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>extendr<span class="at">]</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> RUrl(Url)<span class="op">;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>extendr<span class="at">]</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="kw">impl</span> RUrl <span class="op">{</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">fn</span> new(url<span class="op">:</span> <span class="op">&amp;</span><span class="dt">str</span>) <span class="op">-&gt;</span> <span class="pp">anyhow::</span><span class="dt">Result</span><span class="op">&lt;</span><span class="dt">Self</span><span class="op">&gt;</span> <span class="op">{</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>        <span class="cn">Ok</span>(<span class="dt">Self</span>(<span class="pp">Url::</span>parse(url)<span class="op">?</span>))</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 
 
@@ -949,13 +933,13 @@ View solution
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../building-rust-based-r-pkgs/16-mapping-into-option.html" class="pagination-link" aria-label="Modifying an `Option<T>`">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Modifying an <code>Option&lt;T&gt;</code></span></span>
+      <a href="../building-rust-based-r-pkgs/09-new-type-struct.html" class="pagination-link" aria-label="New types">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">New types</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../building-rust-based-r-pkgs/18-combining-iterators.html" class="pagination-link" aria-label="Combining iterators">
-        <span class="nav-page-text"><span class="chapter-number">36</span>&nbsp; <span class="chapter-title">Combining iterators</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../building-rust-based-r-pkgs/11-vectorization.html" class="pagination-link" aria-label="Vectorization">
+        <span class="nav-page-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Vectorization</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
@@ -964,4 +948,4 @@ View solution
 
 
 
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/JosiahParry/2025-cascadia-rust-for-r-devs/edit/main/building-rust-based-r-pkgs/17-setters-cow.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/JosiahParry/2025-cascadia-rust-for-r-devs/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/JosiahParry/2025-cascadia-rust-for-r-devs/edit/main/building-rust-based-r-pkgs/10-external-pointers.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/JosiahParry/2025-cascadia-rust-for-r-devs/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

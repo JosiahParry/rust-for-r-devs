@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>34&nbsp; Mapping into an Option – Rust for R Developers</title>
+<title>34&nbsp; Modifying an Option&lt;T&gt; – Rust for R Developers</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -118,7 +118,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../building-rust-based-r-pkgs/index.html">Building Rust based R Packages</a></li><li class="breadcrumb-item"><a href="../building-rust-based-r-pkgs/16-mapping-into-option.html"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Mapping into an <code>Option</code></span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../building-rust-based-r-pkgs/index.html">Building Rust based R Packages</a></li><li class="breadcrumb-item"><a href="../building-rust-based-r-pkgs/16-mapping-into-option.html"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Modifying an `Option<t>`</t></span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -320,38 +320,38 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../building-rust-based-r-pkgs/07-r-type-system.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">R’s Type System</span></span></a>
+  <a href="../building-rust-based-r-pkgs/07-use-crate-url.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Adding the <code>url</code> crate</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../building-rust-based-r-pkgs/08-na-handling.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Handle NAs gracefully</span></span></a>
+  <a href="../building-rust-based-r-pkgs/08-r-type-system.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">R’s Type System</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../building-rust-based-r-pkgs/09-centroid.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Warm-up: <code>centroid()</code></span></span></a>
+  <a href="../building-rust-based-r-pkgs/09-new-type-struct.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">New types</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../building-rust-based-r-pkgs/10-use-crate-url.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Adding the <code>url</code> crate</span></span></a>
+  <a href="../building-rust-based-r-pkgs/10-external-pointers.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">External pointers</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../building-rust-based-r-pkgs/11-external-pointers.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">External pointers</span></span></a>
+  <a href="../building-rust-based-r-pkgs/11-vectorization.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Vectorization</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../building-rust-based-r-pkgs/12-lists-of-pointers.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Lists of pointers</span></span></a>
+  <a href="../building-rust-based-r-pkgs/12-na-handling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">NA handling</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -363,37 +363,37 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../building-rust-based-r-pkgs/14-s3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">S3 classes</span></span></a>
+ <span class="menu-text"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">Integrating with</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../building-rust-based-r-pkgs/15-url-getters.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Getters</span></span></a>
+ <span class="menu-text"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Accessing Struct Methods from R</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../building-rust-based-r-pkgs/16-mapping-into-option.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Mapping into an <code>Option</code></span></span></a>
+ <span class="menu-text"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Modifying an `Option<t>`</t></span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../building-rust-based-r-pkgs/17-setters-cow.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">Setters &amp; copy-on-write</span></span></a>
+ <span class="menu-text"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">🐮 CoWs and Modifying in place</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../building-rust-based-r-pkgs/18-recycling-and-errors.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">36</span>&nbsp; <span class="chapter-title">Recycling &amp; errors</span></span></a>
+  <a href="../building-rust-based-r-pkgs/18-combining-iterators.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">36</span>&nbsp; <span class="chapter-title">Combining iterators</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../building-rust-based-r-pkgs/19-path-segments.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">37</span>&nbsp; <span class="chapter-title">Path segments</span></span></a>
+  <a href="../building-rust-based-r-pkgs/19-recycling-and-errors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">37</span>&nbsp; <span class="chapter-title">Recycling &amp; errors</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -427,7 +427,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#map-works-on-option-too" id="toc-map-works-on-option-too" class="nav-link active" data-scroll-target="#map-works-on-option-too"><code>.map()</code> works on <code>Option</code> too</a></li>
-  <li><a href="#why-we-need-it-here" id="toc-why-we-need-it-here" class="nav-link" data-scroll-target="#why-we-need-it-here">Why we need it here</a></li>
+  <li><a href="#why-we-need" id="toc-why-we-need" class="nav-link" data-scroll-target="#why-we-need">Why we need</a></li>
   <li><a href="#exercise" id="toc-exercise" class="nav-link" data-scroll-target="#exercise">Exercise</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/JosiahParry/2025-cascadia-rust-for-r-devs/edit/main/building-rust-based-r-pkgs/16-mapping-into-option.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/JosiahParry/2025-cascadia-rust-for-r-devs/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
@@ -435,9 +435,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../building-rust-based-r-pkgs/index.html">Building Rust based R Packages</a></li><li class="breadcrumb-item"><a href="../building-rust-based-r-pkgs/16-mapping-into-option.html"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Mapping into an <code>Option</code></span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../building-rust-based-r-pkgs/index.html">Building Rust based R Packages</a></li><li class="breadcrumb-item"><a href="../building-rust-based-r-pkgs/16-mapping-into-option.html"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Modifying an `Option<t>`</t></span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Mapping into an <code>Option</code></span></h1>
+<h1 class="title"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Modifying an <code>Option&lt;T&gt;</code></span></h1>
 </div>
 
 
@@ -467,10 +467,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Transform the value <em>inside</em> an <code>Option</code> (or <code>Result</code>) without unwrapping it.</p>
 </div>
 </div>
-<p>Some methods don’t return a plain value—they return an <code>Option</code>. For example, a url may or may not have a host, so <code>host_str()</code> returns <code>Option&lt;&amp;str&gt;</code>. The getters in the last chapter won’t work directly on these.</p>
+<p>Some methods don’t return a plain value—they return an <code>Option</code>. For example, a url may or may not have a host, so <code>host_str()</code> returns <code>Option&lt;&amp;str&gt;</code>.</p>
+<p>The approach we used in the last exercise doesn’t work as see4mlessley here</p>
+<p>Remember, the <code>Option</code> is essentially Rust’s version of an NA!</p>
 <section id="map-works-on-option-too" class="level2">
 <h2 class="anchored" data-anchor-id="map-works-on-option-too"><code>.map()</code> works on <code>Option</code> too</h2>
-<p>Just like we <code>.map()</code> over the elements of an iterator, we can <code>.map()</code> over the value inside an <code>Option</code> or <code>Result</code>. The closure only runs if the value is <code>Some</code> (or <code>Ok</code>); if it’s <code>None</code>, nothing happens and we still have <code>None</code>.</p>
+<p>Just like we <code>.map()</code> over the elements of an iterator, we can <code>.map()</code> over the value inside an <code>Option</code> or <code>Result</code>.</p>
+<p>The closure inside of <code>.map()</code> is only applied when <code>Some</code> (or <code>Ok</code>); if it’s <code>None</code>, nothing happens and we still have <code>None</code>.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> maybe_num<span class="op">:</span> <span class="dt">Option</span><span class="op">&lt;</span><span class="dt">i32</span><span class="op">&gt;</span> <span class="op">=</span> <span class="cn">Some</span>(<span class="dv">10</span>)<span class="op">;</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> doubled <span class="op">=</span> maybe_num<span class="op">.</span>map(<span class="op">|</span>n<span class="op">|</span> n <span class="op">*</span> <span class="dv">2</span>)<span class="op">;</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">// doubled == Some(20)</span></span>
@@ -478,25 +481,33 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> nothing<span class="op">:</span> <span class="dt">Option</span><span class="op">&lt;</span><span class="dt">i32</span><span class="op">&gt;</span> <span class="op">=</span> <span class="cn">None</span><span class="op">;</span></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> still_nothing <span class="op">=</span> nothing<span class="op">.</span>map(<span class="op">|</span>n<span class="op">|</span> n <span class="op">*</span> <span class="dv">2</span>)<span class="op">;</span></span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">// still_nothing == None</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>This is exactly what we need: reach inside the <code>Option</code>, change the value, and keep the “missing” case intact.</p>
 </section>
-<section id="why-we-need-it-here" class="level2">
-<h2 class="anchored" data-anchor-id="why-we-need-it-here">Why we need it here</h2>
+<section id="why-we-need" class="level2">
+<h2 class="anchored" data-anchor-id="why-we-need">Why we need</h2>
 <p>A method like <code>host_str()</code> returns <code>Option&lt;&amp;str&gt;</code>—a <em>borrowed</em> string slice. To hand it to R we need an <em>owned</em> <code>String</code>. So we map into the option and call <code>.to_string()</code> on the inner <code>&amp;str</code>:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>rurl<span class="op">.</span><span class="dv">0</span><span class="op">.</span>host_str()<span class="op">.</span>map(<span class="op">|</span>v<span class="op">|</span> v<span class="op">.</span>to_string())</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">// Option&lt;&amp;str&gt; -&gt; Option&lt;String&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><code>Rstr::from()</code> knows how to turn an <code>Option&lt;String&gt;</code> into an <code>Rstr</code>—<code>None</code> becomes <code>NA</code> automatically.</p>
+<div class="callout callout-style-simple callout-tip">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><code>Rstr::from(Option&lt;String&gt;)</code> turns a <code>None</code> in <code>NA</code> otherwise the value.</p>
+</div>
+</div>
+</div>
 </section>
 <section id="exercise" class="level2">
 <h2 class="anchored" data-anchor-id="exercise">Exercise</h2>
-<p>Write a getter for each <code>Url</code> method that returns an <code>Option</code>:</p>
+<p>Write a getter for each <code>Url</code> method that returns an <code>Option</code> and collect into a <code>Strings</code></p>
 <ul>
 <li><code>url_host()</code> calls <code>host_str()</code> (<code>Option&lt;&amp;str&gt;</code>)</li>
 <li><code>url_query()</code> calls <code>query()</code> (<code>Option&lt;&amp;str&gt;</code>)</li>
 <li><code>url_domain()</code> calls <code>domain()</code> (<code>Option&lt;&amp;str&gt;</code>)</li>
-<li><code>url_port()</code> calls <code>port()</code> (<code>Option&lt;u16&gt;</code>, returns <code>Integers</code>)</li>
+<li><code>url_port()</code> calls <code>port()</code> (<code>Option&lt;u16&gt;</code>, collect into <code>Integers</code>)</li>
 </ul>
-<p>For the string ones, map with <code>.to_string()</code>. For <code>port</code>, map the <code>u16</code> to <code>i32</code> (R’s integers are signed 32-bit) and return <code>Integers</code>.</p>
+<p>For the string ones, map with <code>.to_string()</code>. For <code>port</code>, map the <code>u16</code> to <code>i32</code> via <code>as i32</code></p>
 <details>
 <summary>
 View solution
@@ -948,13 +959,13 @@ View solution
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../building-rust-based-r-pkgs/15-url-getters.html" class="pagination-link" aria-label="Getters">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Getters</span></span>
+      <a href="../building-rust-based-r-pkgs/15-url-getters.html" class="pagination-link" aria-label="Accessing Struct Methods from R">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Accessing Struct Methods from R</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../building-rust-based-r-pkgs/17-setters-cow.html" class="pagination-link" aria-label="Setters &amp; copy-on-write">
-        <span class="nav-page-text"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">Setters &amp; copy-on-write</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../building-rust-based-r-pkgs/17-setters-cow.html" class="pagination-link" aria-label="🐮 CoWs and Modifying in place">
+        <span class="nav-page-text"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">🐮 CoWs and Modifying in place</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

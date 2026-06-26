@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>35&nbsp; 🐮 CoWs and Modifying in place – Rust for R Developers</title>
+<title>26&nbsp; R’s Type System – Rust for R Developers</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -65,8 +65,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../building-rust-based-r-pkgs/18-combining-iterators.html" rel="next">
-<link href="../building-rust-based-r-pkgs/16-mapping-into-option.html" rel="prev">
+<link href="../building-rust-based-r-pkgs/09-new-type-struct.html" rel="next">
+<link href="../building-rust-based-r-pkgs/07-use-crate-url.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
@@ -118,7 +118,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../building-rust-based-r-pkgs/index.html">Building Rust based R Packages</a></li><li class="breadcrumb-item"><a href="../building-rust-based-r-pkgs/17-setters-cow.html"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">🐮 CoWs and Modifying in place</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../building-rust-based-r-pkgs/index.html">Building Rust based R Packages</a></li><li class="breadcrumb-item"><a href="../building-rust-based-r-pkgs/08-r-type-system.html"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">R’s Type System</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -326,7 +326,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../building-rust-based-r-pkgs/08-r-type-system.html" class="sidebar-item-text sidebar-link">
+  <a href="../building-rust-based-r-pkgs/08-r-type-system.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">R’s Type System</span></span></a>
   </div>
 </li>
@@ -380,7 +380,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../building-rust-based-r-pkgs/17-setters-cow.html" class="sidebar-item-text sidebar-link active">
+  <a href="../building-rust-based-r-pkgs/17-setters-cow.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">🐮 CoWs and Modifying in place</span></span></a>
   </div>
 </li>
@@ -426,18 +426,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#a-helper-to-clone" id="toc-a-helper-to-clone" class="nav-link active" data-scroll-target="#a-helper-to-clone">A helper to clone</a></li>
-  <li><a href="#mutable-values" id="toc-mutable-values" class="nav-link" data-scroll-target="#mutable-values">Mutable values</a></li>
-  <li><a href="#exercise" id="toc-exercise" class="nav-link" data-scroll-target="#exercise">Exercise</a></li>
+  <li><a href="#vector-sexp-types" id="toc-vector-sexp-types" class="nav-link active" data-scroll-target="#vector-sexp-types">Vector SEXP types</a></li>
+  <li><a href="#scalar-types" id="toc-scalar-types" class="nav-link" data-scroll-target="#scalar-types">Scalar types</a></li>
+  <li><a href="#wrapper-types" id="toc-wrapper-types" class="nav-link" data-scroll-target="#wrapper-types">Wrapper types</a></li>
+  <li><a href="#a-quick-taste" id="toc-a-quick-taste" class="nav-link" data-scroll-target="#a-quick-taste">A quick taste</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/JosiahParry/2025-cascadia-rust-for-r-devs/edit/main/building-rust-based-r-pkgs/17-setters-cow.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/JosiahParry/2025-cascadia-rust-for-r-devs/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/JosiahParry/2025-cascadia-rust-for-r-devs/edit/main/building-rust-based-r-pkgs/08-r-type-system.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/JosiahParry/2025-cascadia-rust-for-r-devs/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../building-rust-based-r-pkgs/index.html">Building Rust based R Packages</a></li><li class="breadcrumb-item"><a href="../building-rust-based-r-pkgs/17-setters-cow.html"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">🐮 CoWs and Modifying in place</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../building-rust-based-r-pkgs/index.html">Building Rust based R Packages</a></li><li class="breadcrumb-item"><a href="../building-rust-based-r-pkgs/08-r-type-system.html"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">R’s Type System</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">🐮 CoWs and Modifying in place</span></h1>
+<h1 class="title"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">R’s Type System</span></h1>
 </div>
 
 
@@ -464,84 +465,240 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Modify a value held in an external pointer without mutating the original.</p>
+<p>Get a basic grip on R’s type system and develop an intuition for how Rust types map to R types.</p>
 </div>
 </div>
-<ul>
-<li>the idea of mutability is alien to R 👽</li>
-<li>R uses the idea copy-on-write (CoW) semantics 🐮</li>
-<li>When you modify an object in R, you don’t change it in place.</li>
-<li>R makes a copy first and modifies the copy.</li>
-</ul>
-<p>The <code>Url</code> struct has methods to modfiy parts of the url <em>in place</em>. We want to be able to do that, but doing so goes against the philosopby of R a bit TO handle this we want to create a <strong>clone</strong> of the Url before we modify it.</p>
-<p>For now we’ll take a single <code>String</code> as the second argument and apply it to every url. In the next chapter we’ll learn how to take a whole vector instead.</p>
-<div class="callout callout-style-simple callout-important">
+<p>In R, everything is an <strong><code>SEXP</code></strong>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../images/all-sexp.png" class="img-fluid figure-img" style="width:70.0%"></p>
+<figcaption>All SEXP everything</figcaption>
+</figure>
+</div>
+<details>
+<summary>
+All SEXP types
+</summary>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>no</th>
+<th><code>SEXPTYPE</code></th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td><code>NILSXP</code></td>
+<td>NULL</td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td><code>SYMSXP</code></td>
+<td>symbols</td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td><code>LISTSXP</code></td>
+<td>pairlists</td>
+</tr>
+<tr class="even">
+<td>3</td>
+<td><code>CLOSXP</code></td>
+<td>closures</td>
+</tr>
+<tr class="odd">
+<td>4</td>
+<td><code>ENVSXP</code></td>
+<td>environments</td>
+</tr>
+<tr class="even">
+<td>5</td>
+<td><code>PROMSXP</code></td>
+<td>promises</td>
+</tr>
+<tr class="odd">
+<td>6</td>
+<td><code>LANGSXP</code></td>
+<td>language objects</td>
+</tr>
+<tr class="even">
+<td>7</td>
+<td><code>SPECIALSXP</code></td>
+<td>special functions</td>
+</tr>
+<tr class="odd">
+<td>8</td>
+<td><code>BUILTINSXP</code></td>
+<td>builtin functions</td>
+</tr>
+<tr class="even">
+<td>9</td>
+<td><code>CHARSXP</code></td>
+<td>internal character strings</td>
+</tr>
+<tr class="odd">
+<td>10</td>
+<td><code>LGLSXP</code></td>
+<td>logical vectors</td>
+</tr>
+<tr class="even">
+<td>13</td>
+<td><code>INTSXP</code></td>
+<td>integer vectors</td>
+</tr>
+<tr class="odd">
+<td>14</td>
+<td><code>REALSXP</code></td>
+<td>numeric vectors</td>
+</tr>
+<tr class="even">
+<td>15</td>
+<td><code>CPLXSXP</code></td>
+<td>complex vectors</td>
+</tr>
+<tr class="odd">
+<td>16</td>
+<td><code>STRSXP</code></td>
+<td>character vectors</td>
+</tr>
+<tr class="even">
+<td>17</td>
+<td><code>DOTSXP</code></td>
+<td>dot-dot-dot object</td>
+</tr>
+<tr class="odd">
+<td>18</td>
+<td><code>ANYSXP</code></td>
+<td>make “any” args work</td>
+</tr>
+<tr class="even">
+<td>19</td>
+<td><code>VECSXP</code></td>
+<td>list (generic vector)</td>
+</tr>
+<tr class="odd">
+<td>20</td>
+<td><code>EXPRSXP</code></td>
+<td>expression vector</td>
+</tr>
+<tr class="even">
+<td>21</td>
+<td><code>BCODESXP</code></td>
+<td>byte code</td>
+</tr>
+<tr class="odd">
+<td>22</td>
+<td><code>EXTPTRSXP</code></td>
+<td>external pointer</td>
+</tr>
+<tr class="even">
+<td>23</td>
+<td><code>WEAKREFSXP</code></td>
+<td>weak reference</td>
+</tr>
+<tr class="odd">
+<td>24</td>
+<td><code>RAWSXP</code></td>
+<td>raw vector</td>
+</tr>
+<tr class="even">
+<td>25</td>
+<td><code>OBJSXP</code></td>
+<td>objects not of simple type</td>
+</tr>
+</tbody>
+</table>
+</details>
+<p>To extendr, an SEXP is an <code>Robj</code>—it can be <em>anything</em>.</p>
+<div class="callout callout-style-simple callout-note">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-body-container">
-<p>Cloning an <code>ExternalPtr&lt;T&gt;</code> only clones the external pointer and <strong>not</strong> the underlying data.</p>
+<p>Notice <code>EXTPTRSXP</code>, the <strong>external pointer</strong>. Later, when we hold onto a parsed <code>Url</code> in R, that’s the SEXP type we’ll be using. More on that soon.</p>
 </div>
 </div>
 </div>
-<p>To set a value, we clone the Rust object out of the pointer, modify the clone, and return a brand new object.</p>
-<section id="a-helper-to-clone" class="level2">
-<h2 class="anchored" data-anchor-id="a-helper-to-clone">A helper to clone</h2>
-<p>Getting a fresh, owned copy out of a pointer is its own little dance:</p>
+<section id="vector-sexp-types" class="level2">
+<h2 class="anchored" data-anchor-id="vector-sexp-types">Vector SEXP types</h2>
+<p>There are a subset of SEXP types that we actually care about—the vector kinds. For the sake of simplicity, we’ll only talk about the numeric vector types.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../images/sexp-no-rust-types.svg" class="img-fluid figure-img" style="width:75.0%"></p>
+<figcaption>SEXP numeric types</figcaption>
+</figure>
+</div>
 <ul>
-<li>get the pointer</li>
-<li>borrow its data with <code>as_ref()</code>, then <code>.clone()</code></li>
+<li>Integers are represented by 32 bit integers <code>i32</code> in Rust.</li>
+<li>Doubles are represented by 64 bit floats <code>f64</code> in Rust.</li>
 </ul>
-<p>We’ll do this in every method that modifies the <code>Url</code> struct in place. To help, we can make a small method on the <code>RUrl</code></p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">impl</span> RUrl <span class="op">{</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">fn</span> clone_from_robj(robj<span class="op">:</span> Robj) <span class="op">-&gt;</span> <span class="pp">anyhow::</span><span class="dt">Result</span><span class="op">&lt;</span><span class="dt">Self</span><span class="op">&gt;</span> <span class="op">{</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">match</span> <span class="pp">ExternalPtr::</span><span class="op">&lt;</span>RUrl<span class="op">&gt;</span><span class="pp">::</span>try_from(robj) <span class="op">{</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>            <span class="cn">Ok</span>(v) <span class="op">=&gt;</span> <span class="cn">Ok</span>(v<span class="op">.</span>as_ref()<span class="op">.</span>clone())<span class="op">,</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>            <span class="cn">Err</span>(e) <span class="op">=&gt;</span> <span class="cn">Err</span>(<span class="pp">anyhow!</span>(<span class="st">"Expected an object of class `rurl`:</span><span class="sc">\n</span><span class="st">{e}"</span>))<span class="op">,</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>This requires <code>RUrl</code> to derive <code>Clone</code>, which we did back when we defined it.</p>
 </section>
-<section id="mutable-values" class="level2">
-<h2 class="anchored" data-anchor-id="mutable-values">Mutable values</h2>
-<p>Once we have an owned clone, we can mark it <code>mut</code> and call a method that takes <code>&amp;mut self</code>. The setter methods on <code>Url</code> look like this:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> set_host(<span class="op">&amp;</span><span class="kw">mut</span> <span class="kw">self</span><span class="op">,</span> host<span class="op">:</span> <span class="dt">Option</span><span class="op">&lt;&amp;</span><span class="dt">str</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span>()<span class="op">,</span> ()<span class="op">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>The <code>host</code> is an <code>Option</code> because passing <code>None</code> removes the host. We always want to set one, so we pass <code>Some(host)</code>.</p>
-</section>
-<section id="exercise" class="level2">
-<h2 class="anchored" data-anchor-id="exercise">Exercise</h2>
+<section id="scalar-types" class="level2">
+<h2 class="anchored" data-anchor-id="scalar-types">Scalar types</h2>
+<p><code>i32</code> and <code>f64</code> do not have a concept of <code>NA</code> or missing. How do we address this?</p>
+<p>extendr provides scalar types such as:</p>
 <ul>
-<li>Write <code>url_set_host(url: List, host: String) -&gt; List</code></li>
-<li>For each url, if it is <code>NULL</code>, return <code>NULL</code> for that element</li>
-<li>Otherwise clone the url with <code>clone_from_robj</code>, set the host, and return the new object</li>
-<li>Collect into a <code>List</code></li>
+<li><code>Rfloat</code></li>
+<li><code>Rint</code></li>
+<li><code>Rstr</code></li>
+<li><code>Rbool</code></li>
 </ul>
-<p>We take a single <code>host</code> and apply it to every url. We’ll learn how to take a vector of hosts in the next chapter.</p>
-<details>
-<summary>
-View solution
-</summary>
+<p>and others.</p>
+<p>These scalar types are created using <code>ScalarType::from()</code>. For example:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> my_float <span class="op">=</span> <span class="pp">Rfloat::</span>from(<span class="dv">3.14</span>)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Or, NAs can be created explicitly by using the associated method <code>ScalarType::na()</code></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> my_na <span class="op">=</span> <span class="pp">Rfloat::</span>na()<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ul>
+<li>Missingness can also be <em>checked</em> by using the <code>my_na.is_na()</code> method.</li>
+<li>To access the inner type—e.g.&nbsp;<code>f64</code> or <code>i32</code> we can use the <code>.inner()</code> method.</li>
+</ul>
+</section>
+<section id="wrapper-types" class="level2">
+<h2 class="anchored" data-anchor-id="wrapper-types">Wrapper types</h2>
+<p>To work with vectors, we work with their wrapper types. These are:</p>
+<ul>
+<li><code>Doubles</code></li>
+<li><code>Integers</code></li>
+<li><code>Logicals</code></li>
+<li><code>Strings</code></li>
+</ul>
+<p>We should always prefer these types over using <code>Vec&lt;f64&gt;</code> or <code>Vec&lt;i32&gt;</code>.</p>
+<div class="callout callout-style-simple callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>When in doubt, clone it out
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Cloning an extendr <code>Robj</code> (or other wrapper type) is quite cheap. When cloning an <code>Robj</code>, we are only incrementing a <em>reference count</em> and <strong>not</strong> performing a full copy like we do when working in R.</p>
+</div>
+</div>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../images/sexp-wrapper-types.svg" class="img-fluid figure-img" style="width:70.0%"></p>
+<figcaption>Wrapper types</figcaption>
+</figure>
+</div>
+</section>
+<section id="a-quick-taste" class="level2">
+<h2 class="anchored" data-anchor-id="a-quick-taste">A quick taste</h2>
+<p>A vectorized extendr function takes a wrapper type in, iterates over its scalar elements, and collects back into a wrapper type. For example, doubling every value of a numeric vector:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>extendr<span class="at">]</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> url_set_host(url<span class="op">:</span> List<span class="op">,</span> host<span class="op">:</span> <span class="dt">String</span>) <span class="op">-&gt;</span> List <span class="op">{</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    url<span class="op">.</span>into_iter()</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span>map(<span class="op">|</span>(_<span class="op">,</span> url)<span class="op">|</span> <span class="op">{</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> url<span class="op">.</span>is_null() <span class="op">{</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>                <span class="cf">return</span> ()<span class="op">.</span>into_robj()<span class="op">;</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>            <span class="cf">match</span> <span class="pp">RUrl::</span>clone_from_robj(url) <span class="op">{</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>                <span class="cn">Ok</span>(<span class="kw">mut</span> rurl) <span class="op">=&gt;</span> <span class="cf">match</span> rurl<span class="op">.</span><span class="dv">0</span><span class="op">.</span>set_host(<span class="cn">Some</span>(<span class="op">&amp;</span>host)) <span class="op">{</span></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>                    <span class="cn">Ok</span>(_) <span class="op">=&gt;</span> rurl<span class="op">.</span>into_robj()<span class="op">,</span></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>                    <span class="cn">Err</span>(_) <span class="op">=&gt;</span> ()<span class="op">.</span>into_robj()<span class="op">,</span></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>                <span class="op">},</span></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>                <span class="cn">Err</span>(_) <span class="op">=&gt;</span> ()<span class="op">.</span>into_robj()<span class="op">,</span></span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span>)</span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span>collect()</span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> double_it(x<span class="op">:</span> Doubles) <span class="op">-&gt;</span> Doubles <span class="op">{</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    x<span class="op">.</span>into_iter()</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span>map(<span class="op">|</span>xi<span class="op">|</span> <span class="pp">Rfloat::</span>from(xi<span class="op">.</span>inner() <span class="op">*</span> <span class="dv">2.0</span>))</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="pp">collect::</span><span class="op">&lt;</span>Doubles<span class="op">&gt;</span>()</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>We’ll put this exact shape to work in our first warm-up exercise.</p>
 
 
 </section>
@@ -949,13 +1106,13 @@ View solution
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../building-rust-based-r-pkgs/16-mapping-into-option.html" class="pagination-link" aria-label="Modifying an `Option<T>`">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Modifying an <code>Option&lt;T&gt;</code></span></span>
+      <a href="../building-rust-based-r-pkgs/07-use-crate-url.html" class="pagination-link" aria-label="Adding the `url` crate">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Adding the <code>url</code> crate</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../building-rust-based-r-pkgs/18-combining-iterators.html" class="pagination-link" aria-label="Combining iterators">
-        <span class="nav-page-text"><span class="chapter-number">36</span>&nbsp; <span class="chapter-title">Combining iterators</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../building-rust-based-r-pkgs/09-new-type-struct.html" class="pagination-link" aria-label="New types">
+        <span class="nav-page-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">New types</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
@@ -964,4 +1121,4 @@ View solution
 
 
 
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/JosiahParry/2025-cascadia-rust-for-r-devs/edit/main/building-rust-based-r-pkgs/17-setters-cow.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/JosiahParry/2025-cascadia-rust-for-r-devs/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/JosiahParry/2025-cascadia-rust-for-r-devs/edit/main/building-rust-based-r-pkgs/08-r-type-system.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/JosiahParry/2025-cascadia-rust-for-r-devs/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

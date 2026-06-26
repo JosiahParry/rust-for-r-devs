@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>35&nbsp; 🐮 CoWs and Modifying in place – Rust for R Developers</title>
+<title>37&nbsp; Recycling &amp; errors – Rust for R Developers</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -65,8 +65,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../building-rust-based-r-pkgs/18-combining-iterators.html" rel="next">
-<link href="../building-rust-based-r-pkgs/16-mapping-into-option.html" rel="prev">
+<link href="../building-rust-based-r-pkgs/20-query-pairs.html" rel="next">
+<link href="../building-rust-based-r-pkgs/18-combining-iterators.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
@@ -118,7 +118,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../building-rust-based-r-pkgs/index.html">Building Rust based R Packages</a></li><li class="breadcrumb-item"><a href="../building-rust-based-r-pkgs/17-setters-cow.html"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">🐮 CoWs and Modifying in place</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../building-rust-based-r-pkgs/index.html">Building Rust based R Packages</a></li><li class="breadcrumb-item"><a href="../building-rust-based-r-pkgs/19-recycling-and-errors.html"><span class="chapter-number">37</span>&nbsp; <span class="chapter-title">Recycling &amp; errors</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -380,7 +380,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../building-rust-based-r-pkgs/17-setters-cow.html" class="sidebar-item-text sidebar-link active">
+  <a href="../building-rust-based-r-pkgs/17-setters-cow.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">🐮 CoWs and Modifying in place</span></span></a>
   </div>
 </li>
@@ -392,7 +392,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../building-rust-based-r-pkgs/19-recycling-and-errors.html" class="sidebar-item-text sidebar-link">
+  <a href="../building-rust-based-r-pkgs/19-recycling-and-errors.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">37</span>&nbsp; <span class="chapter-title">Recycling &amp; errors</span></span></a>
   </div>
 </li>
@@ -426,18 +426,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#a-helper-to-clone" id="toc-a-helper-to-clone" class="nav-link active" data-scroll-target="#a-helper-to-clone">A helper to clone</a></li>
-  <li><a href="#mutable-values" id="toc-mutable-values" class="nav-link" data-scroll-target="#mutable-values">Mutable values</a></li>
+  <li><a href="#recycling-with-.cycle" id="toc-recycling-with-.cycle" class="nav-link active" data-scroll-target="#recycling-with-.cycle">Recycling with <code>.cycle()</code></a></li>
+  <li><a href="#length-checks-with-throw_r_error" id="toc-length-checks-with-throw_r_error" class="nav-link" data-scroll-target="#length-checks-with-throw_r_error">Length checks with <code>throw_r_error</code></a></li>
   <li><a href="#exercise" id="toc-exercise" class="nav-link" data-scroll-target="#exercise">Exercise</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/JosiahParry/2025-cascadia-rust-for-r-devs/edit/main/building-rust-based-r-pkgs/17-setters-cow.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/JosiahParry/2025-cascadia-rust-for-r-devs/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/JosiahParry/2025-cascadia-rust-for-r-devs/edit/main/building-rust-based-r-pkgs/19-recycling-and-errors.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/JosiahParry/2025-cascadia-rust-for-r-devs/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../building-rust-based-r-pkgs/index.html">Building Rust based R Packages</a></li><li class="breadcrumb-item"><a href="../building-rust-based-r-pkgs/17-setters-cow.html"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">🐮 CoWs and Modifying in place</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../building-rust-based-r-pkgs/index.html">Building Rust based R Packages</a></li><li class="breadcrumb-item"><a href="../building-rust-based-r-pkgs/19-recycling-and-errors.html"><span class="chapter-number">37</span>&nbsp; <span class="chapter-title">Recycling &amp; errors</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">🐮 CoWs and Modifying in place</span></h1>
+<h1 class="title"><span class="chapter-number">37</span>&nbsp; <span class="chapter-title">Recycling &amp; errors</span></h1>
 </div>
 
 
@@ -464,83 +464,107 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Modify a value held in an external pointer without mutating the original.</p>
+<p>Recycle a scalar argument over a vector and throw an error when lengths don’t line up.</p>
 </div>
 </div>
-<ul>
-<li>the idea of mutability is alien to R 👽</li>
-<li>R uses the idea copy-on-write (CoW) semantics 🐮</li>
-<li>When you modify an object in R, you don’t change it in place.</li>
-<li>R makes a copy first and modifies the copy.</li>
-</ul>
-<p>The <code>Url</code> struct has methods to modfiy parts of the url <em>in place</em>. We want to be able to do that, but doing so goes against the philosopby of R a bit TO handle this we want to create a <strong>clone</strong> of the Url before we modify it.</p>
-<p>For now we’ll take a single <code>String</code> as the second argument and apply it to every url. In the next chapter we’ll learn how to take a whole vector instead.</p>
-<div class="callout callout-style-simple callout-important">
-<div class="callout-body d-flex">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-body-container">
-<p>Cloning an <code>ExternalPtr&lt;T&gt;</code> only clones the external pointer and <strong>not</strong> the underlying data.</p>
-</div>
-</div>
-</div>
-<p>To set a value, we clone the Rust object out of the pointer, modify the clone, and return a brand new object.</p>
-<section id="a-helper-to-clone" class="level2">
-<h2 class="anchored" data-anchor-id="a-helper-to-clone">A helper to clone</h2>
-<p>Getting a fresh, owned copy out of a pointer is its own little dance:</p>
-<ul>
-<li>get the pointer</li>
-<li>borrow its data with <code>as_ref()</code>, then <code>.clone()</code></li>
-</ul>
-<p>We’ll do this in every method that modifies the <code>Url</code> struct in place. To help, we can make a small method on the <code>RUrl</code></p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">impl</span> RUrl <span class="op">{</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">fn</span> clone_from_robj(robj<span class="op">:</span> Robj) <span class="op">-&gt;</span> <span class="pp">anyhow::</span><span class="dt">Result</span><span class="op">&lt;</span><span class="dt">Self</span><span class="op">&gt;</span> <span class="op">{</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">match</span> <span class="pp">ExternalPtr::</span><span class="op">&lt;</span>RUrl<span class="op">&gt;</span><span class="pp">::</span>try_from(robj) <span class="op">{</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>            <span class="cn">Ok</span>(v) <span class="op">=&gt;</span> <span class="cn">Ok</span>(v<span class="op">.</span>as_ref()<span class="op">.</span>clone())<span class="op">,</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>            <span class="cn">Err</span>(e) <span class="op">=&gt;</span> <span class="cn">Err</span>(<span class="pp">anyhow!</span>(<span class="st">"Expected an object of class `rurl`:</span><span class="sc">\n</span><span class="st">{e}"</span>))<span class="op">,</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>This requires <code>RUrl</code> to derive <code>Clone</code>, which we did back when we defined it.</p>
+<p>Our <code>url_set_host()</code> assumed the urls and hosts were the same length. But R users expect <strong>recycling</strong>. If you give a length-1 value, it should apply to every element.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">url_set_scheme</span>(urls, <span class="st">"https"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>That single <code>"https"</code> should be reused for all the urls.</p>
+<section id="recycling-with-.cycle" class="level2">
+<h2 class="anchored" data-anchor-id="recycling-with-.cycle">Recycling with <code>.cycle()</code></h2>
+<p>The <code>.cycle()</code> method takes an iterator and repeats it forever. When we zip a cycled iterator against our urls, the shorter one keeps repeating to cover every url.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>url<span class="op">.</span>into_iter()<span class="op">.</span>zip(scheme<span class="op">.</span>into_iter()<span class="op">.</span>cycle())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>A length-1 <code>scheme</code> now applies to every url. A length-3 <code>scheme</code> lines up with three urls as you’d expect.</p>
 </section>
-<section id="mutable-values" class="level2">
-<h2 class="anchored" data-anchor-id="mutable-values">Mutable values</h2>
-<p>Once we have an owned clone, we can mark it <code>mut</code> and call a method that takes <code>&amp;mut self</code>. The setter methods on <code>Url</code> look like this:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> set_host(<span class="op">&amp;</span><span class="kw">mut</span> <span class="kw">self</span><span class="op">,</span> host<span class="op">:</span> <span class="dt">Option</span><span class="op">&lt;&amp;</span><span class="dt">str</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span>()<span class="op">,</span> ()<span class="op">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>The <code>host</code> is an <code>Option</code> because passing <code>None</code> removes the host. We always want to set one, so we pass <code>Some(host)</code>.</p>
+<section id="length-checks-with-throw_r_error" class="level2">
+<h2 class="anchored" data-anchor-id="length-checks-with-throw_r_error">Length checks with <code>throw_r_error</code></h2>
+<p>Recycling only makes sense in two cases. The value is a scalar, or it’s exactly the same length as the urls. Anything else is a mistake, and we should tell the user instead of silently doing something weird.</p>
+<p>When an argument is invalid, we don’t return <code>NA</code> for that element. The whole call is wrong, so we stop the function with an error. We do that with <code>throw_r_error()</code>.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (scheme<span class="op">.</span>len() <span class="op">!=</span> url<span class="op">.</span>len()) <span class="op">&amp;</span> (scheme<span class="op">.</span>len() <span class="op">!=</span> <span class="dv">1</span>) <span class="op">{</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    throw_r_error(<span class="st">"`scheme` must be a scalar or the same length as `url`"</span>)<span class="op">;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The condition reads: error when the length is neither equal to the url length nor equal to one.</p>
 </section>
 <section id="exercise" class="level2">
 <h2 class="anchored" data-anchor-id="exercise">Exercise</h2>
+<p>Write the remaining mutable methods, each with a length check up front and <code>.cycle()</code> for recycling:</p>
 <ul>
-<li>Write <code>url_set_host(url: List, host: String) -&gt; List</code></li>
-<li>For each url, if it is <code>NULL</code>, return <code>NULL</code> for that element</li>
-<li>Otherwise clone the url with <code>clone_from_robj</code>, set the host, and return the new object</li>
-<li>Collect into a <code>List</code></li>
+<li><code>url_set_path()</code> calls <code>set_path()</code>, which is infallible (returns <code>()</code>)</li>
+<li><code>url_set_port()</code> calls <code>set_port()</code>, which takes <code>Option&lt;u16&gt;</code> and returns a <code>Result</code></li>
+<li><code>url_set_scheme()</code> calls <code>set_scheme()</code>, which returns a <code>Result</code></li>
 </ul>
-<p>We take a single <code>host</code> and apply it to every url. We’ll learn how to take a vector of hosts in the next chapter.</p>
 <details>
 <summary>
 View solution
 </summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>extendr<span class="at">]</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> url_set_host(url<span class="op">:</span> List<span class="op">,</span> host<span class="op">:</span> <span class="dt">String</span>) <span class="op">-&gt;</span> List <span class="op">{</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    url<span class="op">.</span>into_iter()</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span>map(<span class="op">|</span>(_<span class="op">,</span> url)<span class="op">|</span> <span class="op">{</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> url<span class="op">.</span>is_null() <span class="op">{</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>                <span class="cf">return</span> ()<span class="op">.</span>into_robj()<span class="op">;</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>            <span class="cf">match</span> <span class="pp">RUrl::</span>clone_from_robj(url) <span class="op">{</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>                <span class="cn">Ok</span>(<span class="kw">mut</span> rurl) <span class="op">=&gt;</span> <span class="cf">match</span> rurl<span class="op">.</span><span class="dv">0</span><span class="op">.</span>set_host(<span class="cn">Some</span>(<span class="op">&amp;</span>host)) <span class="op">{</span></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>                    <span class="cn">Ok</span>(_) <span class="op">=&gt;</span> rurl<span class="op">.</span>into_robj()<span class="op">,</span></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>                    <span class="cn">Err</span>(_) <span class="op">=&gt;</span> ()<span class="op">.</span>into_robj()<span class="op">,</span></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>                <span class="op">},</span></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>                <span class="cn">Err</span>(_) <span class="op">=&gt;</span> ()<span class="op">.</span>into_robj()<span class="op">,</span></span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span>)</span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span>collect()</span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>extendr<span class="at">]</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> url_set_path(url<span class="op">:</span> List<span class="op">,</span> path<span class="op">:</span> Strings) <span class="op">-&gt;</span> List <span class="op">{</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (path<span class="op">.</span>len() <span class="op">!=</span> url<span class="op">.</span>len()) <span class="op">&amp;</span> (path<span class="op">.</span>len() <span class="op">!=</span> <span class="dv">1</span>) <span class="op">{</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>        throw_r_error(<span class="st">"`path` must be a scalar or the same length as `url`"</span>)<span class="op">;</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    url<span class="op">.</span>into_iter()</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span>zip(path<span class="op">.</span>into_iter()<span class="op">.</span>cycle())</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span>map(<span class="op">|</span>((_<span class="op">,</span> url)<span class="op">,</span> path)<span class="op">|</span> <span class="op">{</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> url<span class="op">.</span>is_null() <span class="op">||</span> path<span class="op">.</span>is_na() <span class="op">{</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>                <span class="cf">return</span> ()<span class="op">.</span>into_robj()<span class="op">;</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>            <span class="cf">match</span> <span class="pp">RUrl::</span>clone_from_robj(url) <span class="op">{</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>                <span class="cn">Ok</span>(<span class="kw">mut</span> rurl) <span class="op">=&gt;</span> <span class="op">{</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>                    rurl<span class="op">.</span><span class="dv">0</span><span class="op">.</span>set_path(path)<span class="op">;</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>                    rurl<span class="op">.</span>into_robj()</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>                <span class="cn">Err</span>(_) <span class="op">=&gt;</span> ()<span class="op">.</span>into_robj()<span class="op">,</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span>)</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span>collect()</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>extendr<span class="at">]</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> url_set_port(url<span class="op">:</span> List<span class="op">,</span> port<span class="op">:</span> Integers) <span class="op">-&gt;</span> List <span class="op">{</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (port<span class="op">.</span>len() <span class="op">!=</span> url<span class="op">.</span>len()) <span class="op">&amp;</span> (port<span class="op">.</span>len() <span class="op">!=</span> <span class="dv">1</span>) <span class="op">{</span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>        throw_r_error(<span class="st">"`port` must be a scalar or the same length as `url`"</span>)<span class="op">;</span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>    url<span class="op">.</span>into_iter()</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span>zip(port<span class="op">.</span>into_iter()<span class="op">.</span>cycle())</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span>map(<span class="op">|</span>((_<span class="op">,</span> url)<span class="op">,</span> port)<span class="op">|</span> <span class="op">{</span></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> url<span class="op">.</span>is_null() <span class="op">||</span> port<span class="op">.</span>is_na() <span class="op">{</span></span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>                <span class="cf">return</span> ()<span class="op">.</span>into_robj()<span class="op">;</span></span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>            <span class="cf">match</span> <span class="pp">RUrl::</span>clone_from_robj(url) <span class="op">{</span></span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>                <span class="cn">Ok</span>(<span class="kw">mut</span> rurl) <span class="op">=&gt;</span> <span class="cf">match</span> rurl<span class="op">.</span><span class="dv">0</span><span class="op">.</span>set_port(<span class="cn">Some</span>(port<span class="op">.</span><span class="dv">0</span> <span class="kw">as</span> <span class="dt">u16</span>)) <span class="op">{</span></span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>                    <span class="cn">Ok</span>(_) <span class="op">=&gt;</span> rurl<span class="op">.</span>into_robj()<span class="op">,</span></span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>                    <span class="cn">Err</span>(_) <span class="op">=&gt;</span> ()<span class="op">.</span>into_robj()<span class="op">,</span></span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>                <span class="op">},</span></span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>                <span class="cn">Err</span>(_) <span class="op">=&gt;</span> ()<span class="op">.</span>into_robj()<span class="op">,</span></span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span>)</span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span>collect()</span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>extendr<span class="at">]</span></span>
+<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> url_set_scheme(url<span class="op">:</span> List<span class="op">,</span> scheme<span class="op">:</span> Strings) <span class="op">-&gt;</span> List <span class="op">{</span></span>
+<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (scheme<span class="op">.</span>len() <span class="op">!=</span> url<span class="op">.</span>len()) <span class="op">&amp;</span> (scheme<span class="op">.</span>len() <span class="op">!=</span> <span class="dv">1</span>) <span class="op">{</span></span>
+<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a>        throw_r_error(<span class="st">"`scheme` must be a scalar or the same length as `url`"</span>)<span class="op">;</span></span>
+<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb4-52"><a href="#cb4-52" aria-hidden="true" tabindex="-1"></a>    url<span class="op">.</span>into_iter()</span>
+<span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span>zip(scheme<span class="op">.</span>into_iter()<span class="op">.</span>cycle())</span>
+<span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span>map(<span class="op">|</span>((_<span class="op">,</span> url)<span class="op">,</span> scheme)<span class="op">|</span> <span class="op">{</span></span>
+<span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> url<span class="op">.</span>is_null() <span class="op">||</span> scheme<span class="op">.</span>is_na() <span class="op">{</span></span>
+<span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a>                <span class="cf">return</span> ()<span class="op">.</span>into_robj()<span class="op">;</span></span>
+<span id="cb4-57"><a href="#cb4-57" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-59"><a href="#cb4-59" aria-hidden="true" tabindex="-1"></a>            <span class="cf">match</span> <span class="pp">RUrl::</span>clone_from_robj(url) <span class="op">{</span></span>
+<span id="cb4-60"><a href="#cb4-60" aria-hidden="true" tabindex="-1"></a>                <span class="cn">Ok</span>(<span class="kw">mut</span> rurl) <span class="op">=&gt;</span> <span class="cf">match</span> rurl<span class="op">.</span><span class="dv">0</span><span class="op">.</span>set_scheme(scheme) <span class="op">{</span></span>
+<span id="cb4-61"><a href="#cb4-61" aria-hidden="true" tabindex="-1"></a>                    <span class="cn">Ok</span>(_) <span class="op">=&gt;</span> rurl<span class="op">.</span>into_robj()<span class="op">,</span></span>
+<span id="cb4-62"><a href="#cb4-62" aria-hidden="true" tabindex="-1"></a>                    <span class="cn">Err</span>(_) <span class="op">=&gt;</span> ()<span class="op">.</span>into_robj()<span class="op">,</span></span>
+<span id="cb4-63"><a href="#cb4-63" aria-hidden="true" tabindex="-1"></a>                <span class="op">},</span></span>
+<span id="cb4-64"><a href="#cb4-64" aria-hidden="true" tabindex="-1"></a>                <span class="cn">Err</span>(_) <span class="op">=&gt;</span> ()<span class="op">.</span>into_robj()<span class="op">,</span></span>
+<span id="cb4-65"><a href="#cb4-65" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb4-66"><a href="#cb4-66" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span>)</span>
+<span id="cb4-67"><a href="#cb4-67" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span>collect()</span>
+<span id="cb4-68"><a href="#cb4-68" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 
 
@@ -949,13 +973,13 @@ View solution
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../building-rust-based-r-pkgs/16-mapping-into-option.html" class="pagination-link" aria-label="Modifying an `Option<T>`">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Modifying an <code>Option&lt;T&gt;</code></span></span>
+      <a href="../building-rust-based-r-pkgs/18-combining-iterators.html" class="pagination-link" aria-label="Combining iterators">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">36</span>&nbsp; <span class="chapter-title">Combining iterators</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../building-rust-based-r-pkgs/18-combining-iterators.html" class="pagination-link" aria-label="Combining iterators">
-        <span class="nav-page-text"><span class="chapter-number">36</span>&nbsp; <span class="chapter-title">Combining iterators</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../building-rust-based-r-pkgs/20-query-pairs.html" class="pagination-link" aria-label="Query pairs">
+        <span class="nav-page-text"><span class="chapter-number">38</span>&nbsp; <span class="chapter-title">Query pairs</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
@@ -964,4 +988,4 @@ View solution
 
 
 
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/JosiahParry/2025-cascadia-rust-for-r-devs/edit/main/building-rust-based-r-pkgs/17-setters-cow.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/JosiahParry/2025-cascadia-rust-for-r-devs/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/JosiahParry/2025-cascadia-rust-for-r-devs/edit/main/building-rust-based-r-pkgs/19-recycling-and-errors.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/JosiahParry/2025-cascadia-rust-for-r-devs/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

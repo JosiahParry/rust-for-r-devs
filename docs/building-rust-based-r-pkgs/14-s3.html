@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>32&nbsp; S3 classes – Rust for R Developers</title>
+<title>32&nbsp; Integrating with – Rust for R Developers</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -118,7 +118,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../building-rust-based-r-pkgs/index.html">Building Rust based R Packages</a></li><li class="breadcrumb-item"><a href="../building-rust-based-r-pkgs/14-s3.html"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">S3 classes</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../building-rust-based-r-pkgs/index.html">Building Rust based R Packages</a></li><li class="breadcrumb-item"><a href="../building-rust-based-r-pkgs/14-s3.html"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">Integrating with</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -320,38 +320,38 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../building-rust-based-r-pkgs/07-r-type-system.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">R’s Type System</span></span></a>
+  <a href="../building-rust-based-r-pkgs/07-use-crate-url.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Adding the <code>url</code> crate</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../building-rust-based-r-pkgs/08-na-handling.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Handle NAs gracefully</span></span></a>
+  <a href="../building-rust-based-r-pkgs/08-r-type-system.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">R’s Type System</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../building-rust-based-r-pkgs/09-centroid.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Warm-up: <code>centroid()</code></span></span></a>
+  <a href="../building-rust-based-r-pkgs/09-new-type-struct.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">New types</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../building-rust-based-r-pkgs/10-use-crate-url.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Adding the <code>url</code> crate</span></span></a>
+  <a href="../building-rust-based-r-pkgs/10-external-pointers.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">External pointers</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../building-rust-based-r-pkgs/11-external-pointers.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">External pointers</span></span></a>
+  <a href="../building-rust-based-r-pkgs/11-vectorization.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Vectorization</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../building-rust-based-r-pkgs/12-lists-of-pointers.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Lists of pointers</span></span></a>
+  <a href="../building-rust-based-r-pkgs/12-na-handling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">NA handling</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -363,37 +363,37 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../building-rust-based-r-pkgs/14-s3.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">S3 classes</span></span></a>
+ <span class="menu-text"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">Integrating with</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../building-rust-based-r-pkgs/15-url-getters.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Getters</span></span></a>
+ <span class="menu-text"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Accessing Struct Methods from R</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../building-rust-based-r-pkgs/16-mapping-into-option.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Mapping into an <code>Option</code></span></span></a>
+ <span class="menu-text"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Modifying an `Option<t>`</t></span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../building-rust-based-r-pkgs/17-setters-cow.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">Setters &amp; copy-on-write</span></span></a>
+ <span class="menu-text"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">🐮 CoWs and Modifying in place</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../building-rust-based-r-pkgs/18-recycling-and-errors.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">36</span>&nbsp; <span class="chapter-title">Recycling &amp; errors</span></span></a>
+  <a href="../building-rust-based-r-pkgs/18-combining-iterators.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">36</span>&nbsp; <span class="chapter-title">Combining iterators</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../building-rust-based-r-pkgs/19-path-segments.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">37</span>&nbsp; <span class="chapter-title">Path segments</span></span></a>
+  <a href="../building-rust-based-r-pkgs/19-recycling-and-errors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">37</span>&nbsp; <span class="chapter-title">Recycling &amp; errors</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -426,8 +426,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#classes-are-the-whole-hook" id="toc-classes-are-the-whole-hook" class="nav-link active" data-scroll-target="#classes-are-the-whole-hook">Classes are the whole hook</a></li>
-  <li><a href="#the-vctrs_vctr-class" id="toc-the-vctrs_vctr-class" class="nav-link" data-scroll-target="#the-vctrs_vctr-class">The <code>vctrs_vctr</code> class</a></li>
+  <li><a href="#the-vctrs_vctr-class" id="toc-the-vctrs_vctr-class" class="nav-link active" data-scroll-target="#the-vctrs_vctr-class">The <code>vctrs_vctr</code> class</a></li>
   <li><a href="#setting-the-class-from-rust" id="toc-setting-the-class-from-rust" class="nav-link" data-scroll-target="#setting-the-class-from-rust">Setting the class from Rust</a></li>
   <li><a href="#example" id="toc-example" class="nav-link" data-scroll-target="#example">Example</a></li>
   <li><a href="#the-r-method" id="toc-the-r-method" class="nav-link" data-scroll-target="#the-r-method">The R method</a></li>
@@ -438,9 +437,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../building-rust-based-r-pkgs/index.html">Building Rust based R Packages</a></li><li class="breadcrumb-item"><a href="../building-rust-based-r-pkgs/14-s3.html"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">S3 classes</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../building-rust-based-r-pkgs/index.html">Building Rust based R Packages</a></li><li class="breadcrumb-item"><a href="../building-rust-based-r-pkgs/14-s3.html"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">Integrating with</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">S3 classes</span></h1>
+<h1 class="title"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">Integrating with</span></h1>
 </div>
 
 
@@ -467,42 +466,48 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Give our list of pointers an S3 class so R will print it nicely.</p>
+<p>Create a vctrs compatible vector for our urls.</p>
 </div>
 </div>
-<p>We have a <code>format_*</code> function, but R doesn’t know to <em>use</em> it. When you type the name of an object, R dispatches to a <code>print</code>/<code>format</code> method based on the object’s <strong>class</strong>. So we need to give our list a class.</p>
-<section id="classes-are-the-whole-hook" class="level2">
-<h2 class="anchored" data-anchor-id="classes-are-the-whole-hook">Classes are the whole hook</h2>
-<p>R’s S3 system is driven entirely by the <code>class</code> attribute. If an object has class <code>"foo"</code>, then calling a generic like <code>format()</code> on it looks for <code>format.foo()</code>. That’s it—attach a class, define a method, and you plug straight into R.</p>
-</section>
+<p>The format function is helpful for us to actually print it ourselves, but ideally, whenever we print our list of external pointers we see the url and not the external pointer.</p>
+<p>Since we’re creating <code>List</code> objects from Rust, we can actually harness the S3 object system in R. See <a href="https://www.youtube.com/watch?v=V5M90oonAAg">my video</a> if you’re not familiar.</p>
+<p>S3 works by looking at the classes of an object.</p>
+<p>We can define our own <code>format</code> method for our list. To do this we need to do two things:</p>
+<ol type="1">
+<li>Assign a class to the list</li>
+<li>Create an R function generic</li>
+</ol>
 <section id="the-vctrs_vctr-class" class="level2">
 <h2 class="anchored" data-anchor-id="the-vctrs_vctr-class">The <code>vctrs_vctr</code> class</h2>
-<p>The <a href="https://vctrs.r-lib.org/">vctrs</a> package defines a very general <code>vctrs_vctr</code> class that gives sensible default behavior for vector-like objects. We’ll include it in our class vector so we get that behavior for free, ending with the underlying <code>list</code> type:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="st">"myclass"</span>, <span class="st">"vctrs_vctr"</span>, <span class="st">"list"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The <a href="https://vctrs.r-lib.org/">vctrs</a> package defines a generic <code>vctrs_vctr</code> class that gives sensible default behavior for vectors.</p>
+<p>We can assign this class to our list so that we automatically get vctrs behaviors for free!</p>
+<p>In R terms we’re going to add:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="st">"rurls"</span>, <span class="st">"vctrs_vctr"</span>, <span class="st">"list"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>to the list.</p>
 </section>
 <section id="setting-the-class-from-rust" class="level2">
 <h2 class="anchored" data-anchor-id="setting-the-class-from-rust">Setting the class from Rust</h2>
 <p>We can assign a class to a <strong>mutable</strong> <code>Robj</code> with <code>.set_class()</code>. Because <code>set_class()</code> is fallible, the function returns a <code>Result</code>.</p>
+<p>It needs to be mutable because we’re modifying the underlying R object.</p>
 </section>
 <section id="example" class="level2">
 <h2 class="anchored" data-anchor-id="example">Example</h2>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>extendr<span class="at">]</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> parse_shapes(x<span class="op">:</span> Strings) <span class="op">-&gt;</span> <span class="pp">extendr_api::</span><span class="dt">Result</span><span class="op">&lt;</span>List<span class="op">&gt;</span> <span class="op">{</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> <span class="kw">mut</span> res <span class="op">=</span> x</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> parse_shapes(shapes<span class="op">:</span> Strings) <span class="op">-&gt;</span> <span class="pp">extendr_api::error::</span><span class="dt">Result</span><span class="op">&lt;</span>List<span class="op">&gt;</span> <span class="op">{</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> <span class="kw">mut</span> res <span class="op">=</span> shapes</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span>into_iter()</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span>map(<span class="op">|</span>xi<span class="op">|</span> <span class="cf">match</span> <span class="pp">Shape::</span>new(xi) <span class="op">{</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>            <span class="cn">Ok</span>(shape) <span class="op">=&gt;</span> shape<span class="op">.</span>into_robj()<span class="op">,</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>            <span class="cn">Err</span>(_) <span class="op">=&gt;</span> ()<span class="op">.</span>into_robj()<span class="op">,</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span>)</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="pp">collect::</span><span class="op">&lt;</span>List<span class="op">&gt;</span>()<span class="op">;</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    res<span class="op">.</span>set_class(<span class="op">&amp;</span>[<span class="st">"shapes"</span><span class="op">,</span> <span class="st">"vctrs_vctr"</span><span class="op">,</span> <span class="st">"list"</span>])<span class="op">?;</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    <span class="cn">Ok</span>(res)</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span>map(<span class="op">|</span>vi<span class="op">|</span> <span class="pp">RShape::</span>new(vi)<span class="op">.</span>unwrap())</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="pp">collect::</span><span class="op">&lt;</span>List<span class="op">&gt;</span>()<span class="op">;</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    res<span class="op">.</span>set_class(<span class="op">&amp;</span>[<span class="st">"shapes"</span><span class="op">,</span> <span class="st">"vctrs_vctr"</span><span class="op">,</span> <span class="st">"list"</span>])<span class="op">?;</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="cn">Ok</span>(res)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="the-r-method" class="level2">
 <h2 class="anchored" data-anchor-id="the-r-method">The R method</h2>
-<p>The class is only half the story—now define the method on the R side. In an R script (e.g.&nbsp;<code>R/rurls.R</code>), define <code>format.rurls</code> and have it call your Rust helper:</p>
+<p>If you <code>devtools::document()</code> and <code>devtools::load_all()</code> from here you will see some basic print, but the <code>format_rurls()</code> won’t be used yet.</p>
+<p>To do that we need to create a real R function!</p>
+<p>Create a new R script (e.g.&nbsp;<code>R/rurls.R</code>), define <code>format.rurls</code>, and have it call your Rust helper:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#' @export</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>format.rurls <span class="ot">&lt;-</span> <span class="cf">function</span>(x, ...) {</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">format_rurls</span>(x)</span>
@@ -511,7 +516,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="exercise" class="level2">
 <h2 class="anchored" data-anchor-id="exercise">Exercise</h2>
 <ul>
-<li>Update <code>url_parse()</code> to return <code>extendr_api::Result&lt;List&gt;</code></li>
+<li>Update <code>url_parse()</code> to return <code>extendr_api::error::Result&lt;List&gt;</code></li>
 <li>Set the class to <code>c("rurls", "vctrs_vctr", "list")</code> on the result</li>
 <li>Add the <code>format.rurls</code> method above in an R script</li>
 <li><code>devtools::document()</code> and <code>devtools::load_all()</code>, then print a parsed vector</li>
@@ -956,8 +961,8 @@ View solution
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../building-rust-based-r-pkgs/15-url-getters.html" class="pagination-link" aria-label="Getters">
-        <span class="nav-page-text"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Getters</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../building-rust-based-r-pkgs/15-url-getters.html" class="pagination-link" aria-label="Accessing Struct Methods from R">
+        <span class="nav-page-text"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Accessing Struct Methods from R</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
