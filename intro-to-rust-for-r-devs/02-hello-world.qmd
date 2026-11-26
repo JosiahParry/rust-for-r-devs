@@ -10,7 +10,7 @@ Learn how to create a new Rust crate and understand its file structure. You will
 
 Rust uses a tool called `cargo` for managing its dependencies and build lifecycle. This is installed for you when you used `rustup` to install Rust.
 
-Rust doesn't create libraries, instead its code is are called **crates**.
+Rust doesn't have libraries. Instead a collection of Rust code called a **crate**.
 
 To create a new Rust crate, use `cargo new name-of-crate`. This creates a new directory called `name-of-crate`. Be sure to `cd` into that directory.
 
